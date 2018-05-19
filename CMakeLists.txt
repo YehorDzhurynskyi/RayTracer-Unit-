@@ -20,14 +20,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 ###
 
 ### Configuring compiler
-# set(CMAKE_C_COMPILER "gcc")
-set(CMAKE_C_FLAGS_DEBUG "-g -O0")
-set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
-set(CMAKE_C_FLAGS "-Wall -Werror -Wextra")
+if(MSVC)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
+	# Default debug flags are OK 
+	set(CMAKE_C_FLAGS_RELEASE "{CMAKE_C_FLAGS_RELEASE} /O2")
+else()
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -DDEBUG")
+	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
+endif()
 ###
 
 ### Preparing dependecies
 find_package(SDL2 REQUIRED)
+find_package(OpenCL REQUIRED)
 
 include_directories(Dependencies/libft)
 add_subdirectory(Dependencies/libft)
@@ -40,9 +46,12 @@ add_executable(${PROJECT_NAME} "")
 include(src/CMakeLists.txt)
 include_directories(
 	${SDL2_INCLUDE_DIRS}
+	${OpenCL_INCLUDE_DIRS}
+	./include
 )
 target_link_libraries(${PROJECT_NAME}
 	${SDL2_LIBRARIES}
+	${OpenCL_LIBRARIES}
 	ft
 	CSONParser
 )
