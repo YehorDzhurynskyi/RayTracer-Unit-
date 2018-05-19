@@ -3,7 +3,7 @@
  - SDL2.0
 
 **Installation**\
-  git clone https://github.com/YehorDzhurynskyi/RayTracer-Unit-.git RT
+  git clone https://github.com/YehorDzhurynskyi/RayTracer-Unit-.git RT\
   cd RT && mkdir build && cd build && cmake .. && make && cd ..
 
 **Run program**\
