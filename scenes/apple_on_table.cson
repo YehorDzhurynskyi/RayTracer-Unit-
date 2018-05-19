@@ -1,0 +1,29 @@
+camera:
+	position: [0.0 50.0 50.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+geometry: [
+	{
+		primitive: "sphere"
+		radius: 1.0
+		position: [0.0 3.0 0.0]
+		color: "0x00895980"
+	}
+	{
+		primitive: "plane"
+		normal: [0.0 1.0 0.0]
+		position: [0.0 0.0 0.0]
+		color: "0x00897b59"
+	}
+]
+light: [
+	{
+		type: "spot"
+		position: [0.0 50.0 0.0]
+		attenuation: [0.75 0.001 0.0005]
+		intensity: 1.0
+		direction: [0.0 -1.0 0.0]
+		angle: 45.0
+		color: "0x00ffffff"
+	}
+]

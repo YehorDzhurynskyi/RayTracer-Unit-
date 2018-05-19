@@ -1,0 +1,22 @@
+camera:
+	position: [0.0 0.0 5.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+geometry: [
+	{
+		primitive: "cylinder"
+		radius: 1.0
+		direction: [0.0 1.0 0.0]
+		position: [0.0 0.0 0.0]
+		color: "0x00087508"
+	}
+]
+light: [
+	{
+		type: "point"
+		position: [5.0 0.0 5.0]
+		attenuation: [1.0 0.0 0.0]
+		intensity: 0.6
+		color: "0x00ffffff"
+	}
+]

@@ -1,0 +1,167 @@
+camera:
+	position: [0.0 2.0 30.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+geometry: [
+# BALL
+	{
+		primitive: "sphere"
+		radius: 1.5
+		position: [0.0 -5.0 10.0]
+		color: "0x00ee3333"
+		shininess: 40.0
+		glossiness: 5.0
+	}
+# WALLS, FLOOR, CEIL
+	{
+		primitive: "plane"
+		normal: [0.0 0.0 1.0]
+		position: [0.0 0.0 -15.0]
+		color: "0x000000ff"
+	}
+	{
+		primitive: "plane"
+		normal: [0.0 1.0 0.0]
+		position: [0.0 -7.0 0.0]
+		color: "0x00a1abba"
+	}
+	{
+		primitive: "plane"
+		normal: [0.0 -1.0 0.0]
+		position: [0.0 7.0 0.0]
+		color: "0x00555555"
+	}
+# COLUMNS
+# 1
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [-8.0 7.0 8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [-8.0 -7.0 8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "cylinder"
+		radius: 2.0
+		position: [-8.0 0.0 8.0]
+		direction: [0.0 1.0 0.0]
+		shininess: 30.0
+		glossiness: 2.0
+		color: "0x00eeeeee"
+		reflectivity: 0.3
+	}
+# 2
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [8.0 7.0 8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [8.0 -7.0 8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "cylinder"
+		radius: 2.0
+		position: [8.0 0.0 8.0]
+		direction: [0.0 1.0 0.0]
+		shininess: 30.0
+		glossiness: 2.0
+		color: "0x00eeeeee"
+		reflectivity: 0.3
+	}
+# 3
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [-8.0 7.0 -8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [-8.0 -7.0 -8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "cylinder"
+		radius: 2.0
+		position: [-8.0 0.0 -8.0]
+		direction: [0.0 1.0 0.0]
+		shininess: 30.0
+		glossiness: 2.0
+		color: "0x00eeeeee"
+		reflectivity: 0.3
+	}
+# 4
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [8.0 7.0 -8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "sphere"
+		radius: 3.0
+		position: [8.0 -7.0 -8.0]
+		color: "0x00eeeeee"
+		shininess: 30.0
+		glossiness: 2.0
+		reflectivity: 0.3
+	}
+	{
+		primitive: "cylinder"
+		radius: 2.0
+		position: [8.0 0.0 -8.0]
+		direction: [0.0 1.0 0.0]
+		shininess: 30.0
+		glossiness: 2.0
+		color: "0x00eeeeee"
+		reflectivity: 0.3
+	}
+]
+light: [
+	{
+		type: "point"
+		position: [30.0 0.0 30.0]
+		attenuation: [1.2 0.008 0.002]
+		intensity: 0.8
+		color: "0x00ffffff"
+	}
+	{
+		type: "point"
+		position: [-30.0 0.0 30.0]
+		attenuation: [1.2 0.008 0.002]
+		intensity: 0.8
+		color: "0x00ffffff"
+	}
+]

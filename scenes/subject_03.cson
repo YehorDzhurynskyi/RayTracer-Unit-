@@ -1,0 +1,35 @@
+camera:
+	position: [0.0 3.0 10.0]
+	spot: [0.0 1.0 0.0]
+	up: [0.0 1.0 0.0]
+geometry: [
+	{
+		primitive: "plane"
+		normal: [0.0 1.0 0.0]
+		position: [0.0 0.0 0.0]
+		color: "0x000000ff"
+	}
+	{
+		primitive: "cone"
+		angle: 45.0
+		direction: [0.0 1.0 0.0]
+		position: [0.0 2.0 0.0]
+		color: "0x00ffff00"
+	}
+	{
+		primitive: "cone"
+		angle: 45.0
+		direction: [0.0 -1.0 0.0]
+		position: [0.0 2.0 0.0]
+		color: "0x00ffff00"
+	}
+]
+light: [
+	{
+		type: "point"
+		position: [5.0 2.0 5.0]
+		attenuation: [0.8 0.005 0.008]
+		intensity: 0.6
+		color: "0x00ffffff"
+	}
+]
