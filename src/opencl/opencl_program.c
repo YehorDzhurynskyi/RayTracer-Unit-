@@ -42,16 +42,16 @@ t_opencl_program	opencl_program_create(const char *file, const char *kernel)
 
 	clprogram = (t_opencl_program){NULL, NULL};
 	source = ft_read_file(file);
-	if (!source)
+	if (source == NULL)
 		print_error("Failed to read openCL source file...");
 	clprogram.program = clCreateProgramWithSource(g_clcontext.context,
 	1, (const char **)&source, NULL, &err);
 	free(source);
-	if (!clprogram.program || err != CL_SUCCESS)
+	if (clprogram.program == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL program...", err);
 	build_program(&clprogram);
 	clprogram.kernel = clCreateKernel(clprogram.program, kernel, &err);
-	if (!clprogram.kernel || err != CL_SUCCESS)
+	if (clprogram.kernel == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL kernel...", err);
 	return (clprogram);
 }
