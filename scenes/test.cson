@@ -1,0 +1,27 @@
+camera:
+	position: [0.0 0.0 10.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+geometry: [
+	{
+		primitive: "sphere"
+		radius: 1.0
+		position: [-2.0 0.0 0.0]
+		color: "0x00895980"
+	}
+	{
+		primitive: "cylinder"
+		radius: 1.0
+		direction: [0.0 0.0 1.0]
+		position: [4.0 0.0 0.0]
+		color: "0x00087508"
+	}
+]
+light: [
+	{
+		type: "directional"
+		direction: [0.0 0.0 -1.0]
+		intensity: 1.0
+		color: "0x00ffffff"
+	}
+]
