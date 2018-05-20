@@ -17,7 +17,5 @@
 
 unsigned int	count_args(const char *format);
 void			print_plain_text(const char *format, size_t size);
-int				process_arg(const char **format);
-void			shutdown(const char *format, t_bool valid);
 
 #endif

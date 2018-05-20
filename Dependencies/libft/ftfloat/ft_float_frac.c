@@ -12,7 +12,7 @@
 
 #include "ft_float.h"
 
-static unsigned	round(char *dest, unsigned precision)
+static unsigned	round_nearest(char *dest, unsigned precision)
 {
 	unsigned	i;
 
@@ -58,7 +58,7 @@ unsigned		ft_get_ffrac(char *dest, unsigned precision, float f)
 		dest[i++] = ((uint32_t)frac) + '0';
 		frac -= ((uint32_t)frac);
 	}
-	return (round(dest, precision));
+	return (round_nearest(dest, precision));
 }
 
 unsigned		ft_get_dfrac(char *dest, unsigned precision, double d)
@@ -81,7 +81,7 @@ unsigned		ft_get_dfrac(char *dest, unsigned precision, double d)
 		dest[i++] = ((uint64_t)frac) + '0';
 		frac -= ((uint64_t)frac);
 	}
-	return (round(dest, precision));
+	return (round_nearest(dest, precision));
 }
 
 unsigned		ft_get_ldfrac(char *dest, unsigned precision, long double ld)
@@ -104,5 +104,5 @@ unsigned		ft_get_ldfrac(char *dest, unsigned precision, long double ld)
 		dest[i++] = ((uint64_t)frac) + '0';
 		frac -= ((uint64_t)frac);
 	}
-	return (round(dest, precision));
+	return (round_nearest(dest, precision));
 }

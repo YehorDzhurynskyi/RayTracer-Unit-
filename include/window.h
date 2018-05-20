@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opencl.h                                           :+:      :+:    :+:   */
+/*   window.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,33 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENCL_H
-# define OPENCL_H
+#ifndef WINDOW_H
+# define WINDOW_H
 
-# ifdef __APPLE__
-#  include <OpenCL/opencl.h>
-# else
-#  include <CL/opencl.h>
-# endif
+# include "ft.h"
 
-typedef struct
-{
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
-}						t_opencl;
+typedef void	(*t_render_callback)(unsigned char *pixelbuffer, int width, int height, void *user_ptr);
 
-typedef struct
-{
-	cl_program			program;
-	cl_kernel			kernel;
-}						t_opencl_program;
-
-void					opencl_init(void);
-void					opencl_cleanup(void);
-t_opencl_program		opencl_program_create(const char *file, const char *kernel);
-void					opencl_program_cleanup(t_opencl_program *clprogram);
-
-extern t_opencl			g_clcontext;
+t_bool	window_create(void);
+void	window_loop(t_render_callback render_callback, void *user_ptr);
 
 #endif

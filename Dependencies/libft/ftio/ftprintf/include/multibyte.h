@@ -15,6 +15,7 @@
 
 # include <wchar.h>
 # include "conversion.h"
+# include <sys/types.h>
 
 unsigned int	to_multibyte(wchar_t ch, char *dst);
 char			*to_multibyte_str(const wchar_t *src, ssize_t wlen);

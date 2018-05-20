@@ -61,8 +61,8 @@ static size_t		get_size(t_conversion *c, const t_nument *ent)
 		{
 			if (c->precision < (int)c->field_width)
 				c->zero_flag = FALSE;
-			size = ent->prefix_len
-			+ (c->precision > (int)ent->int_len ? c->precision : ent->int_len);
+			size = ent->prefix_len + (c->precision > (int)ent->int_len
+			? (size_t)c->precision : ent->int_len);
 			if (c->hash_flag && c->precision > (int)ent->int_len &&
 			(c->type == type_o || c->type == type_O) && *g_nbuff != '0')
 				size--;

@@ -26,7 +26,7 @@ const char *src, unsigned int size)
 		size = ft_strlen(src);
 	}
 	if (c->precision != -1)
-		size = c->precision < (int)size ? c->precision : size;
+		size = c->precision < (int)size ? (unsigned int)c->precision : size;
 	print(c, src, size);
 }
 

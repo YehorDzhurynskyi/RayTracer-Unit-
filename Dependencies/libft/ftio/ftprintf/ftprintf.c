@@ -26,6 +26,37 @@ int				g_ftprintf_fd;
 va_list			g_ftprintf_srcargs;
 va_list			g_ftprintf_args;
 
+static int		process_arg(const char **format)
+{
+	char	*option;
+
+	option = ft_strchr(*format, '%');
+	if (!option)
+		option = ft_strrchr(*format, '\0');
+	if (option && option - *format > 0)
+		print_plain_text(*format, option - *format);
+	if (option)
+	{
+		*format = option;
+		if (!process_conversion(format))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+static void		shutdown(const char *format, t_bool valid)
+{
+	va_end(g_ftprintf_args);
+	va_end(g_ftprintf_srcargs);
+	if (valid)
+		print_plain_text(format, ft_strlen(format));
+	if (g_ftcolor_stack)
+	{
+		stack_cleanup(&g_ftcolor_stack, NULL);
+		set_color(6);
+	}
+}
+
 int				ft_printf_fd(int fd, const char *format, ...)
 {
 	unsigned int	n;
