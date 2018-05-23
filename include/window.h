@@ -15,7 +15,8 @@
 
 # include "ft.h"
 
-typedef void	(*t_render_callback)(unsigned char *pixelbuffer, int width, int height, void *user_ptr);
+typedef void	(*t_render_callback)(unsigned char *pixelbuffer,
+int width, int height, void *user_ptr);
 
 t_bool	window_create(void);
 void	window_loop(t_render_callback render_callback, void *user_ptr);

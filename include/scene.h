@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opencl.h                                           :+:      :+:    :+:   */
+/*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENCL_H
-# define OPENCL_H
+#ifndef SCENE_H
+# define SCENE_H
 
-# ifdef __APPLE__
-#  include <OpenCL/opencl.h>
-# else
-#  include <CL/opencl.h>
-# endif
+# include "camera.h"
+# include "ft.h"
 
-typedef struct s_opencl	t_opencl;
-struct					s_opencl
+typedef struct s_scene	t_scene;
+struct			s_scene
 {
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
+	t_camera	cam;
+	t_alst		*geometry;
+	t_alst		*light;
 };
 
-typedef struct s_opencl_program	t_opencl_program;
-struct					s_opencl_program
-{
-	cl_program			program;
-	cl_kernel			kernel;
-};
-
-void					opencl_init(void);
-void					opencl_cleanup(void);
-t_opencl_program		opencl_program_create(const char *sourcefile,
-const char *kernel_name);
-void					opencl_program_cleanup(t_opencl_program *clprogram);
-
-extern t_opencl			g_clcontext;
+t_scene			*scene_alloc(void);
+void			scene_cleanup(t_scene **scene);
 
 #endif

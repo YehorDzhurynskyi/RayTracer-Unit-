@@ -34,14 +34,14 @@ static void			build_program(t_opencl_program *clprogram)
 	}
 }
 
-t_opencl_program	opencl_program_create(const char *file, const char *kernel)
+t_opencl_program	opencl_program_create(const char *sourcefile, const char *kernel_name)
 {
 	t_opencl_program	clprogram;
 	int					err;
 	char				*source;
 
 	clprogram = (t_opencl_program){NULL, NULL};
-	source = ft_read_file(file);
+	source = ft_read_file(sourcefile);
 	if (source == NULL)
 		print_error("Failed to read openCL source file...");
 	clprogram.program = clCreateProgramWithSource(g_clcontext.context,
@@ -50,7 +50,7 @@ t_opencl_program	opencl_program_create(const char *file, const char *kernel)
 	if (clprogram.program == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL program...", err);
 	build_program(&clprogram);
-	clprogram.kernel = clCreateKernel(clprogram.program, kernel, &err);
+	clprogram.kernel = clCreateKernel(clprogram.program, kernel_name, &err);
 	if (clprogram.kernel == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL kernel...", err);
 	return (clprogram);

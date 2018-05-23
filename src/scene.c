@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opencl.h                                           :+:      :+:    :+:   */
+/*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENCL_H
-# define OPENCL_H
+#include "scene.h"
+#include "ft.h"
+#include <stdlib.h>
+#include "error.h"
+#include "geometry.h"
+#include "light.h"
 
-# ifdef __APPLE__
-#  include <OpenCL/opencl.h>
-# else
-#  include <CL/opencl.h>
-# endif
-
-typedef struct s_opencl	t_opencl;
-struct					s_opencl
+t_scene	*scene_alloc(void)
 {
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
-};
+	t_scene	*scene;
 
-typedef struct s_opencl_program	t_opencl_program;
-struct					s_opencl_program
+	scene = (t_scene*)malloc(sizeof(t_scene));
+	check_mem_alloc(scene);
+	scene->cam = camera_create();
+	scene->geometry = alst_create(6);
+	check_mem_alloc(scene->geometry);
+	scene->light = alst_create(6);
+	check_mem_alloc(scene->light);
+	return (scene);
+}
+
+void	scene_cleanup(t_scene **scene)
 {
-	cl_program			program;
-	cl_kernel			kernel;
-};
-
-void					opencl_init(void);
-void					opencl_cleanup(void);
-t_opencl_program		opencl_program_create(const char *sourcefile,
-const char *kernel_name);
-void					opencl_program_cleanup(t_opencl_program *clprogram);
-
-extern t_opencl			g_clcontext;
-
-#endif
+	alst_clear((*scene)->light, (void (*)(void**))light_cleanup);
+	alst_del(&(*scene)->light);
+	alst_clear((*scene)->geometry, (void (*)(void**))geometry_cleanup);
+	alst_del(&(*scene)->geometry);
+	ft_memdel((void**)scene);
+}

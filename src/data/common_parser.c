@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opencl.h                                           :+:      :+:    :+:   */
+/*   common_parser.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENCL_H
-# define OPENCL_H
+#include "parser.h"
 
-# ifdef __APPLE__
-#  include <OpenCL/opencl.h>
-# else
-#  include <CL/opencl.h>
-# endif
-
-typedef struct s_opencl	t_opencl;
-struct					s_opencl
+t_vec3d	parse_vec3d(const t_cson *cson)
 {
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
-};
+	t_vec3d			res;
+	const t_cson	*value;
 
-typedef struct s_opencl_program	t_opencl_program;
-struct					s_opencl_program
+	value = cson_at(cson, 0);
+	if (value == NULL)
+		return ((t_vec3d){0.0, 0.0, 0.0});
+	res.x = cson_get_real(value);
+	value = cson_at(cson, 1);
+	res.y = cson_get_real(value);
+	value = cson_at(cson, 2);
+	res.z = cson_get_real(value);
+	return (res);
+}
+
+t_color	parse_cson_color(const t_cson *cson)
 {
-	cl_program			program;
-	cl_kernel			kernel;
-};
+	const t_cson	*prty_cson;
 
-void					opencl_init(void);
-void					opencl_cleanup(void);
-t_opencl_program		opencl_program_create(const char *sourcefile,
-const char *kernel_name);
-void					opencl_program_cleanup(t_opencl_program *clprogram);
-
-extern t_opencl			g_clcontext;
-
-#endif
+	prty_cson = cson_valueof(cson, CSON_COLOR_KEY);
+	return (prty_cson == NULL
+	? 0x00FFFFFF : ft_hex_atoui(cson_get_string(prty_cson)));
+}

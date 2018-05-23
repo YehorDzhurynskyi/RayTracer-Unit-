@@ -54,7 +54,7 @@ static void	render(unsigned char *pixelbuffer, int width, int height, void *user
 	}
 }
 
-int		main(int argc, const char *argv[])
+int			main(int argc, const char *argv[])
 {
 	const char		*scene_file;
 
