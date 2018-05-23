@@ -34,8 +34,9 @@ endif()
 ###
 
 ### Preparing dependecies
-find_package(SDL2 REQUIRED)
+find_package(OpenGL REQUIRED)
 find_package(OpenCL REQUIRED)
+find_package(SDL2 REQUIRED)
 
 include_directories(Dependencies/libft)
 add_subdirectory(Dependencies/libft)
@@ -47,13 +48,16 @@ add_subdirectory(Dependencies/cson)
 add_executable(${PROJECT_NAME} "")
 include(src/CMakeLists.txt)
 include_directories(
-	${SDL2_INCLUDE_DIRS}
+	${OpenGL_INCLUDE_DIRS}
 	${OpenCL_INCLUDE_DIRS}
+	${SDL2_INCLUDE_DIRS}
 	./include
+	/Library/Frameworks/SDL2.framework/Headers
 )
 target_link_libraries(${PROJECT_NAME}
-	${SDL2_LIBRARIES}
+	${OpenGL_LIBRARIES}
 	${OpenCL_LIBRARIES}
+	${SDL2_LIBRARIES}
 	ft
 	CSONParser
 )
