@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene.c                                            :+:      :+:    :+:   */
+/*   sphere.cl                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,32 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "ft.h"
-#include <stdlib.h>
-#include "error.h"
-#include "geometry.h"
-#include "light.h"
-
-t_scene	*scene_alloc(void)
+t_bool	sphere_intersect(const t_ray *ray, const t_shape *shape,
+const t_sphere *sphere, float *t)
 {
-	t_scene	*scene;
+	float	b;
+	float	d;
 
-	scene = (t_scene*)malloc(sizeof(t_scene));
-	check_mem_alloc(scene);
-	scene->cam = camera_create();
-	scene->geometry = alst_create(6);
-	check_mem_alloc(scene->geometry);
-	scene->light = alst_create(6);
-	check_mem_alloc(scene->light);
-	return (scene);
-}
-
-void	scene_cleanup(t_scene **scene)
-{
-	alst_clear((*scene)->light, (void (*)(void**))light_cleanup);
-	alst_del(&(*scene)->light);
-	alst_clear((*scene)->geometry, (void (*)(void**))geometry_cleanup);
-	alst_del(&(*scene)->geometry);
-	ft_memdel((void**)scene);
+	float4 to_orig = ray->origin - shape->position;
+	b = dot(ray->direction, to_orig);
+	d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
+	if (d < 0.0)
+		return (FALSE);
+	*t = -b - sqrt(d);
+	return (TRUE);
 }

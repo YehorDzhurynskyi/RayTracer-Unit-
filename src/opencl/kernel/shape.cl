@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opencl.h                                           :+:      :+:    :+:   */
+/*   shape.cl                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,37 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENCL_H
-# define OPENCL_H
+#include "src/opencl/kernel/common.cl"
 
-# ifdef __APPLE__
-#  include <OpenCL/opencl.h>
-# else
-#  include <CL/opencl.h>
-# endif
-
-typedef struct s_opencl	t_opencl;
-struct					s_opencl
+typedef enum e_shape_type	t_shape_type;
+enum				e_shape_type
 {
-	cl_device_id		device_id;
-	cl_context			context;
-	cl_command_queue	commands;
+	PLANE = 0,
+	SPHERE,
+	CONE,
+	CYLINDER
 };
 
-typedef struct s_opencl_program	t_opencl_program;
-struct					s_opencl_program
+typedef struct s_shape t_shape;
+struct				s_shape
 {
-	cl_program			program;
-	cl_kernel			kernel;
-	cl_mem				outputbuffer;
+	float4			position; // it's 16 bytes because of alignment
+	uchar4			color;
+	size_t			buffer_offset;
+	t_shape_type	shapetype;
 };
 
-void					opencl_init(void);
-void					opencl_cleanup(void);
-t_opencl_program		opencl_program_create(const char *sourcefile,
-const char *kernel_name);
-void					opencl_program_cleanup(t_opencl_program *clprogram);
+typedef struct s_sphere	t_sphere;
+struct				s_sphere
+{
+	float			radius2;
+};
 
-extern t_opencl			g_clcontext;
+t_bool				sphere_intersect(const t_ray *ray, const t_shape *shape,
+const t_sphere *sphere, float *t);
 
-#endif
+#include "src/opencl/kernel/sphere.cl"

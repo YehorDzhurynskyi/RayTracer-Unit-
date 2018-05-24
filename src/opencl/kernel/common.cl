@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scene.h                                            :+:      :+:    :+:   */
+/*   common.cl                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SCENE_H
-# define SCENE_H
+typedef int	t_bool;
 
-# include "camera.h"
-# include "ft.h"
+#define TRUE 1
+#define FALSE 0
 
-typedef struct s_scene	t_scene;
-struct			s_scene
+typedef struct s_ray	t_ray;
+struct		s_ray
 {
-	t_camera	cam;
-	t_alst		*geometry;
-	t_alst		*light;
+	float4	origin;
+	float4	direction;
 };
-
-t_scene			*scene_alloc(void);
-void			scene_cleanup(t_scene **scene);
-
-#endif

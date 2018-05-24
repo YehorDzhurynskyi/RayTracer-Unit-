@@ -40,7 +40,7 @@ t_opencl_program	opencl_program_create(const char *sourcefile, const char *kerne
 	int					err;
 	char				*source;
 
-	clprogram = (t_opencl_program){NULL, NULL};
+	clprogram = (t_opencl_program){NULL, NULL, NULL};
 	source = ft_read_file(sourcefile);
 	if (source == NULL)
 		print_error("Failed to read openCL source file...");

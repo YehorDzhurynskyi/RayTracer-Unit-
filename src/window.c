@@ -46,7 +46,7 @@ t_bool					window_create(void)
 		if (g_sdl_window == NULL)
 			break ;
 		g_sdl_renderer = SDL_CreateRenderer(g_sdl_window, -1,
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		SDL_RENDERER_ACCELERATED /*| SDL_RENDERER_PRESENTVSYNC*/); // uncomment it on release
 		if (g_sdl_renderer == NULL)
 			break ;
 		g_sdl_texture = SDL_CreateTexture(g_sdl_renderer, SDL_PIXELFORMAT_ARGB8888,

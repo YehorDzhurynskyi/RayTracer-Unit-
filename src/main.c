@@ -13,6 +13,7 @@
 #include "ft.h"
 #include "error.h"
 #include "window.h"
+#include "opencl.h"
 #include <stdlib.h>
 
 int	g_frame_width = 800;
@@ -39,19 +40,17 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 
 static void	render(unsigned char *pixelbuffer, int width, int height, void *user_ptr)
 {
-	(void)user_ptr;
-	for(unsigned int i = 0; i < 100000; i++)
-	{
-		const unsigned int x = rand() % width;
-		const unsigned int y = rand() % height;
-
-		const unsigned int offset = (width * 4 * y) + x * 4;
-		const unsigned char channel = rand() % 256;
-		pixelbuffer[offset + 0] = channel;
-		pixelbuffer[offset + 1] = channel;
-		pixelbuffer[offset + 2] = channel;
-		pixelbuffer[offset + 3] = 0xff;
-	}
+	int err;
+	t_opencl_program *prgm = (t_opencl_program*)user_ptr;
+	err = clEnqueueNDRangeKernel(g_clcontext.commands, prgm->kernel, 2, NULL, (size_t[]){800, 600}, NULL, 0, NULL, NULL);
+	if (err)
+		print_opencl_error("Failed to set kernel arguments...", err);
+	clFinish(g_clcontext.commands);
+	err = clEnqueueReadBuffer(g_clcontext.commands,
+		prgm->outputbuffer, CL_TRUE, 0, width * height * 4,
+		pixelbuffer, 0, NULL, NULL);
+	if (err != CL_SUCCESS)
+		print_opencl_error("Failed to read output buffer...", err);
 }
 
 int			main(int argc, const char *argv[])
@@ -62,6 +61,18 @@ int			main(int argc, const char *argv[])
 	(void)scene_file;
 	if (window_create() == FALSE)
 		return (EXIT_FAILURE);
-	window_loop(render, NULL);
+	opencl_init();
+	t_opencl_program prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace");
+	int err;
+
+	prgm.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY, 800 * 600 * 4, NULL, &err);
+	if (prgm.outputbuffer == NULL || err != CL_SUCCESS)
+		print_opencl_error("Failed to create output buffer...", err);
+	err = clSetKernelArg(prgm.kernel, 0, sizeof(cl_mem), &prgm.outputbuffer);
+	if (err)
+		print_opencl_error("Failed to set kernel arguments...", err);
+	window_loop(render, &prgm);
+	opencl_program_cleanup(&prgm);
+	opencl_cleanup();
 	return (EXIT_SUCCESS);
 }
