@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.cl                                          :+:      :+:    :+:   */
+/*   math.cl                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	sphere_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_sphere *sphere, float *t)
+t_vec4	mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec)
 {
-	const t_vec4 to_orig = ray->origin - shape->position;
-	const float b = dot(ray->direction, to_orig);
-	const float d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
-	if (d < 0.0)
-		return (FALSE);
-	*t = -b - sqrt(d);
-	return (TRUE);
+	t_vec4	res;
+	res.x = mat[0] * vec.x + mat[1] * vec.y + mat[2] * vec.z + mat[3] * vec.w;
+	res.y = mat[4] * vec.x + mat[5] * vec.y + mat[6] * vec.z + mat[7] * vec.w;
+	res.z = mat[8] * vec.x + mat[9] * vec.y + mat[10] * vec.z + mat[11] * vec.w;
+	res.w = mat[12] * vec.x + mat[13] * vec.y + mat[14] * vec.z + mat[15] * vec.w;
+	return (res);
 }

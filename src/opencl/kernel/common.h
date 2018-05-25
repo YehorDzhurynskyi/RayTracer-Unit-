@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.cl                                          :+:      :+:    :+:   */
+/*   common.hcl                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	sphere_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_sphere *sphere, float *t)
+#ifndef COMMON_HCL
+# define COMMON_HCL
+
+typedef float16	t_mat4x4;
+typedef float4	t_vec4;
+
+# define NULL	((void*)0)
+
+t_vec4			mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec);
+
+typedef int	t_bool;
+
+# define TRUE	1
+# define FALSE	0
+
+typedef unsigned char	t_byte;
+
+typedef struct s_ray	t_ray;
+struct			s_ray
 {
-	const t_vec4 to_orig = ray->origin - shape->position;
-	const float b = dot(ray->direction, to_orig);
-	const float d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
-	if (d < 0.0)
-		return (FALSE);
-	*t = -b - sqrt(d);
-	return (TRUE);
-}
+	t_vec4		origin;
+	t_vec4		direction;
+};
+
+typedef struct	__attribute__ ((packed)) s_camera
+{
+	t_mat4x4	rotation_matrix;
+	t_vec4		position;
+}	t_camera;
+
+# include "src/opencl/kernel/math.cl"
+
+#endif

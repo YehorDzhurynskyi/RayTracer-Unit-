@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.cl                                          :+:      :+:    :+:   */
+/*   shape.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	sphere_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_sphere *sphere, float *t)
+#ifndef SHAPE_H
+# define SHAPE_H
+
+# include "opencl.h"
+
+typedef enum
 {
-	const t_vec4 to_orig = ray->origin - shape->position;
-	const float b = dot(ray->direction, to_orig);
-	const float d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
-	if (d < 0.0)
-		return (FALSE);
-	*t = -b - sqrt(d);
-	return (TRUE);
-}
+	PLANE = 1,
+	SPHERE,
+	CONE,
+	CYLINDER
+}	t_shape_type;
+
+typedef struct		__attribute__ ((packed)) s_shape
+{
+	t_clvec4		position; // it's 16 bytes because of alignment
+	cl_uchar4		color;
+	unsigned int	buffer_offset;
+	t_shape_type	shapetype;
+}	t_shape;
+
+typedef struct		__attribute__ ((packed)) s_sphere
+{
+	cl_float		radius2;
+}	t_sphere;
+
+typedef struct		__attribute__ ((packed)) s_plane
+{
+	t_clvec4		normal;
+}	t_plane;
+
+#endif

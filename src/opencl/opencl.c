@@ -34,13 +34,13 @@ void		opencl_init(void)
 	g_clcontext.context = clCreateContext(NULL, 1, &g_clcontext.device_id, opencl_error_callback, NULL, &err);
 	if (g_clcontext.context == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL context...", err);
-	g_clcontext.commands = clCreateCommandQueue(g_clcontext.context, g_clcontext.device_id, 0, &err);
-	if (g_clcontext.commands == NULL || err != CL_SUCCESS)
+	g_clcontext.command_queue = clCreateCommandQueue(g_clcontext.context, g_clcontext.device_id, 0, &err);
+	if (g_clcontext.command_queue == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create a queue of commands...", err);
 }
 
 void		opencl_cleanup(void)
 {
-	clReleaseCommandQueue(g_clcontext.commands);
+	clReleaseCommandQueue(g_clcontext.command_queue);
 	clReleaseContext(g_clcontext.context);
 }

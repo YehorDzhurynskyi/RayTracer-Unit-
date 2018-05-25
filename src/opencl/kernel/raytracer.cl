@@ -10,20 +10,54 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "src/opencl/kernel/shape.cl"
+#include "src/opencl/kernel/shape.h"
 
-__kernel void trace(
-	__global unsigned int *outputbuffer,
-	t_camera camera
-	// __constant void *scenebuffer,
-)
+static t_bool		check_intersection(__constant t_byte **shape_ptr, const t_ray *ray,
+float *t, __constant t_shape **shape)
 {
-	int	x = get_global_id(0);
-	int	y = get_global_id(1);
-	int width = get_global_size(0);
-	int height = get_global_size(1);
+	*shape = (__constant t_shape*)*shape_ptr;
+	*shape_ptr += sizeof(t_shape);
+	if ((*shape)->shapetype == SPHERE)
+	{
+		__constant t_sphere	*sphere = (__constant t_sphere*)*shape_ptr;
+		*shape_ptr += sizeof(t_sphere);
+		return (sphere_intersect(ray, *shape, sphere, t));
+	}
+	else if ((*shape)->shapetype == PLANE)
+	{
+		__constant t_plane	*plane = (__constant t_plane*)*shape_ptr;
+		*shape_ptr += sizeof(t_plane);
+		return (plane_intersect(ray, *shape, plane, t));
+	}
+	return (FALSE);
+}
+
+static __constant t_shape	*trace_shape(__constant t_byte *shapebuffer, int nshapes,
+const t_ray *ray, float *nearest_t)
+{
+	__constant t_shape	*nearest_shape = NULL;
+	__constant t_shape	*shape;
+	float				t;
+
+	*nearest_t = INFINITY;
+	int i = -1;
+	while (++i < nshapes)
+	{
+		if (FALSE == check_intersection(&shapebuffer, ray, &t, &shape))
+			continue ;
+		else if (t > 1.0E-5 && t < *nearest_t)
+		{
+			*nearest_t = t;
+			nearest_shape = shape;
+		}
+	}
+	return (nearest_shape);
+}
+
+static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height)
+{
 	t_ray primary_ray = (t_ray){};
-	float fov = tan(30.0f * M_PI / 180.0f);
+	float fov = tan(30.0f * M_PI / 180.0f); // TODO: set fov with config struct 
 	float xd = (2.0f * ((x + 0.5f) / width) - 1.0) * fov * (width / (float)height);
 	float yd = (1.0 - 2.0 * ((y + 0.5) / height)) * fov;
 	primary_ray.origin = camera.position;
@@ -31,20 +65,32 @@ __kernel void trace(
 	primary_ray.direction = normalize(primary_ray.direction);
 	primary_ray.direction = mat4x4_mult_vec4(camera.rotation_matrix,
 	primary_ray.direction);
+	return primary_ray;
+}
+
+__kernel void		trace(
+	__global unsigned int *outputbuffer,
+	__constant t_byte *shapebuffer,
+	int nshapes,
+	t_camera camera
+)
+{
+	int	x = get_global_id(0);
+	int	y = get_global_id(1);
+	int width = get_global_size(0);
+	int height = get_global_size(1);
+
+	t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height);
 
 	float t;
+	__constant t_shape *shape = trace_shape(shapebuffer, nshapes, &primary_ray, &t);
 
-	t_shape shape;
-	shape.color = (uchar4)(0, 0, 0, 0);
-	shape.position = (float4)(0.0, 0.0, 0.0, 0.0);
-	shape.shapetype = SPHERE;
-	shape.buffer_offset = 0;
+	unsigned int color = 0;
 
-	t_sphere sphere;
-	sphere.radius2 = 1.0f;
+	color |= shape->color.r << 16;
+	color |= shape->color.g << 8;
+	color |= shape->color.b << 0;
+	color |= shape->color.a << 24;
 
-	if (sphere_intersect(&primary_ray, &shape, &sphere, &t) && t > 0.00001)
-		outputbuffer[x + y * width] = 0x00FF0000;
-	else
-		outputbuffer[x + y * width] = 0x00000000;
+	outputbuffer[x + y * width] = shape != 0 ? color : 0x0;
 }

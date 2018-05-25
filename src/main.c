@@ -13,11 +13,13 @@
 #include "ft.h"
 #include "error.h"
 #include "window.h"
-#include "opencl.h"
+#include "renderer.h"
+#include "scene.h"
+#include "shape.h"
 #include <stdlib.h>
 
-int	g_frame_width = 800;
-int	g_frame_height = 600;
+int					g_frame_width = 800;
+int					g_frame_height = 600;
 
 static const char	*parse_cli_arguments(int argc, const char *argv[])
 {
@@ -38,50 +40,55 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 	return (NULL);
 }
 
-static void	render(unsigned char *pixelbuffer, int width, int height, void *user_ptr)
-{
-	int err;
-	t_opencl_program *prgm = (t_opencl_program*)user_ptr;
-	err = clEnqueueNDRangeKernel(g_clcontext.commands, prgm->kernel, 2, NULL, (size_t[]){800, 600}, NULL, 0, NULL, NULL);
-	if (err)
-		print_opencl_error("Failed to set kernel arguments...", err);
-	clFinish(g_clcontext.commands);
-	err = clEnqueueReadBuffer(g_clcontext.commands,
-		prgm->outputbuffer, CL_TRUE, 0, width * height * 4,
-		pixelbuffer, 0, NULL, NULL);
-	if (err != CL_SUCCESS)
-		print_opencl_error("Failed to read output buffer...", err);
-}
-
-int			main(int argc, const char *argv[])
+int					main(int argc, const char *argv[])
 {
 	const char		*scene_file;
+	t_renderer		renderer;
 
 	scene_file = parse_cli_arguments(argc, argv);
 	(void)scene_file;
 	if (window_create() == FALSE)
 		return (EXIT_FAILURE);
-	opencl_init();
-	t_opencl_program prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace");
-	int err;
+	renderer = renderer_init();
 
-	prgm.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY, 800 * 600 * 4, NULL, &err);
-	if (prgm.outputbuffer == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create output buffer...", err);
-	err |= clSetKernelArg(prgm.kernel, 0, sizeof(cl_mem), &prgm.outputbuffer);
-	t_clmat4x4 mat = {
-		{0.83f, 0.0f, 0.55f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		-0.55f, 0.0f, 0.83f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f}
-	};
-	t_clvec4	pos = {{1.0, 0.0, 3.0, 0.0}};
-	t_camera	camera = (t_camera){mat, pos};
-	err |= clSetKernelArg(prgm.kernel, 1, sizeof(t_camera), &camera);
-	if (err)
-		print_opencl_error("Failed to set kernel arguments...", err);
-	window_loop(render, &prgm);
-	opencl_program_cleanup(&prgm);
-	opencl_cleanup();
+// DYNAMIC SCENE EDITING
+	int err;
+	renderer.scene.host_shapebuffer = clEnqueueMapBuffer(g_clcontext.command_queue, renderer.scene.shapebuffer,
+	CL_TRUE, CL_MAP_WRITE, 0, (sizeof(t_shape) + sizeof(t_sphere)) * 2, 0, NULL, NULL, &err);
+	if (err != CL_SUCCESS)
+		print_opencl_error("Failed to map shapebuffer...", err);
+
+	t_clvec4 position = {{1.0, 0.0, -1.0, 0.0}};
+	cl_uchar4 color = {{0xff, 0xff, 0x0, 0x0}};
+	t_shape shape = (t_shape) {position, color, 0, SPHERE};
+	t_sphere sphere = (t_sphere) { 2.0f };
+	scene_add_sphere(&renderer.scene, &shape, &sphere);
+
+	t_clvec4 position3 = {{0.0, -2.0, 0.0, 0.0}};
+	cl_uchar4 color3 = {{0x66, 0x44, 0x66, 0x0}};
+	t_shape shape3 = (t_shape) {position3, color3, 0, PLANE};
+	t_clvec4 normal1 = {{0.0, 1.0, 0.0, 0.0}};
+	t_plane plane1 = (t_plane) { normal1 };
+	scene_add_plane(&renderer.scene, &shape3, &plane1);
+
+	t_clvec4 position1 = {{-1.0, 0.0, -1.0, 0.0}};
+	cl_uchar4 color1 = {{0x00, 0xff, 0xff, 0x0}};
+	t_shape shape1 = (t_shape) {position1, color1, 0, SPHERE};
+	t_sphere sphere1 = (t_sphere) { 2.0f };
+	scene_add_sphere(&renderer.scene, &shape1, &sphere1);
+
+	t_clvec4 position2 = {{0.0, 0.0, -5.0, 0.0}};
+	cl_uchar4 color2 = {{0xff, 0x00, 0xff, 0x0}};
+	t_shape shape2 = (t_shape) {position2, color2, 0, PLANE};
+	t_clvec4 normal = {{0.0, 0.0, 1.0, 0.0}};
+	t_plane plane = (t_plane) { normal };
+	scene_add_plane(&renderer.scene, &shape2, &plane);
+
+	scene_unmap(&renderer.scene, SHAPE_BUFFER_TARGET);
+// DYNAMIC SCENE EDITING
+
+	window_loop(renderer_render, &renderer);
+
+	renderer_cleanup(&renderer);
 	return (EXIT_SUCCESS);
 }

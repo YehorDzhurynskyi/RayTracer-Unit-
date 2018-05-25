@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shape.cl                                           :+:      :+:    :+:   */
+/*   renderer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,33 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "src/opencl/kernel/common.cl"
+#ifndef RENDERER_H
+# define RENDERER_H
 
-typedef enum e_shape_type	t_shape_type;
-enum				e_shape_type
+# include "opencl.h"
+# include "scene.h"
+
+typedef struct
 {
-	PLANE = 0,
-	SPHERE,
-	CONE,
-	CYLINDER
-};
+	// t_scene;
+	t_opencl_program	rt_prgm;
+	t_opencl_filter		*filter_prgms;
+	t_scene				scene;
+}	t_renderer;
 
-typedef struct s_shape t_shape;
-struct				s_shape
-{
-	float4			position; // it's 16 bytes because of alignment
-	uchar4			color;
-	size_t			buffer_offset;
-	t_shape_type	shapetype;
-};
+t_renderer				renderer_init(void);
+void					renderer_render(unsigned char *pixelbuffer,
+int width, int height, void *user_ptr);
+void					renderer_cleanup(t_renderer *renderer);
 
-typedef struct s_sphere	t_sphere;
-struct				s_sphere
-{
-	float			radius2;
-};
-
-t_bool				sphere_intersect(const t_ray *ray, const t_shape *shape,
-const t_sphere *sphere, float *t);
-
-#include "src/opencl/kernel/sphere.cl"
+#endif
