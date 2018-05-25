@@ -35,6 +35,15 @@ struct					s_opencl_program
 	cl_mem				outputbuffer;
 };
 
+typedef cl_float16		t_clmat4x4;
+typedef cl_float4		t_clvec4;
+
+typedef struct			__attribute__ ((packed)) s_camera
+{
+	t_clmat4x4			rotation_matrix;
+	t_clvec4			position;
+}	t_camera;
+
 void					opencl_init(void);
 void					opencl_cleanup(void);
 t_opencl_program		opencl_program_create(const char *sourcefile,

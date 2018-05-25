@@ -13,9 +13,9 @@
 #include "src/opencl/kernel/shape.cl"
 
 __kernel void trace(
-	__global unsigned int *outputbuffer
+	__global unsigned int *outputbuffer,
+	t_camera camera
 	// __constant void *scenebuffer,
-	// __constant t_camera camera
 )
 {
 	int	x = get_global_id(0);
@@ -26,14 +26,17 @@ __kernel void trace(
 	float fov = tan(30.0f * M_PI / 180.0f);
 	float xd = (2.0f * ((x + 0.5f) / width) - 1.0) * fov * (width / (float)height);
 	float yd = (1.0 - 2.0 * ((y + 0.5) / height)) * fov;
-	primary_ray.origin = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
+	primary_ray.origin = camera.position;
 	primary_ray.direction = (float4)(xd, yd, -1.0f, 0.0f);
 	primary_ray.direction = normalize(primary_ray.direction);
+	primary_ray.direction = mat4x4_mult_vec4(camera.rotation_matrix,
+	primary_ray.direction);
+
 	float t;
 
 	t_shape shape;
 	shape.color = (uchar4)(0, 0, 0, 0);
-	shape.position = (float4)(0.0, 0.0, -5.0, 0.0);
+	shape.position = (float4)(0.0, 0.0, 0.0, 0.0);
 	shape.shapetype = SPHERE;
 	shape.buffer_offset = 0;
 

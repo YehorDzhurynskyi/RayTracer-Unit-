@@ -68,7 +68,16 @@ int			main(int argc, const char *argv[])
 	prgm.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY, 800 * 600 * 4, NULL, &err);
 	if (prgm.outputbuffer == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create output buffer...", err);
-	err = clSetKernelArg(prgm.kernel, 0, sizeof(cl_mem), &prgm.outputbuffer);
+	err |= clSetKernelArg(prgm.kernel, 0, sizeof(cl_mem), &prgm.outputbuffer);
+	t_clmat4x4 mat = {
+		{0.83f, 0.0f, 0.55f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		-0.55f, 0.0f, 0.83f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f}
+	};
+	t_clvec4	pos = {{1.0, 0.0, 3.0, 0.0}};
+	t_camera	camera = (t_camera){mat, pos};
+	err |= clSetKernelArg(prgm.kernel, 1, sizeof(t_camera), &camera);
 	if (err)
 		print_opencl_error("Failed to set kernel arguments...", err);
 	window_loop(render, &prgm);
