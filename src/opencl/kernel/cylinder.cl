@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shape.h                                            :+:      :+:    :+:   */
+/*   cylinder.cl                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,47 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHAPE_H
-# define SHAPE_H
-
-# include "opencl.h"
-
-typedef enum
+t_bool	cylinder_intersect(const t_ray *ray, __constant t_shape *shape,
+__constant t_cylinder *cylinder, float *t)
 {
-	PLANE = 1,
-	SPHERE,
-	CONE,
-	CYLINDER
-}	t_shape_type;
-
-typedef struct		__attribute__ ((packed)) s_shape
-{
-	t_clvec4		position; // it's 16 bytes because of alignment
-	cl_uchar4		color;
-	unsigned int	buffer_offset;
-	t_shape_type	shapetype;
-}	t_shape;
-
-typedef struct		__attribute__ ((packed)) s_sphere
-{
-	cl_float		radius2;
-}	t_sphere;
-
-typedef struct		__attribute__ ((packed)) s_plane
-{
-	t_clvec4		normal;
-}	t_plane;
-
-typedef struct		__attribute__ ((packed)) s_cylinder
-{
-	t_clvec4		direction;
-	cl_float		radius2;
-}	t_cylinder;
-
-typedef struct		__attribute__ ((packed)) s_cone
-{
-	t_clvec4		direction;
-	cl_float		cos2angle;
-}	t_cone;
-
-#endif
+	const t_vec4 to_orig = ray->origin - shape->position;
+	const t_vec4 va = cross(to_orig, cylinder->direction);
+	const t_vec4 vb = cross(ray->direction, cylinder->direction);
+	const float a = dot(vb, vb);
+	const float b = dot(vb, va);
+	const float d = b * b - a * (dot(va, va) - cylinder->radius2);
+	if (d < 0.0)
+		return (FALSE);
+	*t = (-b - sqrt(d)) / a;
+	return (*t > 0.0);
+}

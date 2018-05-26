@@ -51,6 +51,12 @@ void	scene_update_sphere(t_scene *scene, const t_shape *shape, const t_sphere *s
 void	scene_add_plane(t_scene *scene, t_shape *shape, const t_plane *plane);
 void	scene_update_plane(t_scene *scene, const t_shape *shape, const t_plane *plane);
 
+void	scene_add_cylinder(t_scene *scene, t_shape *shape, const t_cylinder *cylinder);
+void	scene_update_cylinder(t_scene *scene, const t_shape *shape, const t_cylinder *cylinder);
+
+void	scene_add_cone(t_scene *scene, t_shape *shape, const t_cone *cone);
+void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone);
+
 void	scene_remove(t_scene *scene, const t_shape *shape);
 
 #endif

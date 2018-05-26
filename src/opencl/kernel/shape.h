@@ -38,17 +38,33 @@ typedef struct		__attribute__ ((packed)) s_sphere
 
 typedef struct		__attribute__ ((packed)) s_plane
 {
-	float4			normal;
+	t_vec4			normal;
 }	t_plane;
 
+typedef struct		__attribute__ ((packed)) s_cylinder
+{
+	t_vec4			direction;
+	float			radius2;
+}	t_cylinder;
+
+typedef struct		__attribute__ ((packed)) s_cone
+{
+	t_vec4			direction;
+	float			cos2angle;
+}	t_cone;
 
 t_bool				sphere_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_sphere *sphere, float *t);
 t_bool				plane_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_plane *plane, float *t);
-
+t_bool				cylinder_intersect(const t_ray *ray, __constant t_shape *shape,
+__constant t_cylinder *cylinder, float *t);
+t_bool				cone_intersect(const t_ray *ray, __constant t_shape *shape,
+__constant t_cone *cone, float *t);
 
 # include "src/opencl/kernel/sphere.cl"
 # include "src/opencl/kernel/plane.cl"
+# include "src/opencl/kernel/cylinder.cl"
+# include "src/opencl/kernel/cone.cl"
 
 #endif

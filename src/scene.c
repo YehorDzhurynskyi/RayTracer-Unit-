@@ -14,8 +14,8 @@
 #include "error.h"
 #include "ft.h"
 
-#define SHAPEBUFFER_CAPACITY	4096
-#define LIGHTBUFFER_CAPACITY	1024
+#define SHAPEBUFFER_CAPACITY	1024 * 16
+#define LIGHTBUFFER_CAPACITY	1024 * 4
 
 t_scene	scene_create(void)
 {
@@ -116,6 +116,46 @@ void	scene_update_plane(t_scene *scene, const t_shape *shape, const t_plane *pla
 	(void)scene;
 	(void)shape;
 	(void)plane;
+	// TODO: implement
+}
+
+void	scene_add_cylinder(t_scene *scene, t_shape *shape, const t_cylinder *cylinder)
+{
+	if (scene->shapebuffer_size + sizeof(t_shape) + sizeof(t_cylinder) > SHAPEBUFFER_CAPACITY)
+		print_error("Reached the maximum number of shapes in scene"); // TODO: don't exit the program just print message and return
+	shape->buffer_offset = scene->shapebuffer_size;
+	scene->shapebuffer_size += sizeof(t_shape) + sizeof(t_cylinder);
+	scene->nshapes++;
+	ft_memcpy(scene->host_shapebuffer, shape, sizeof(t_shape));
+	ft_memcpy(scene->host_shapebuffer + sizeof(t_shape), cylinder, sizeof(t_cylinder));
+	scene->host_shapebuffer += sizeof(t_shape) + sizeof(t_cylinder);
+}
+
+void	scene_update_cylinder(t_scene *scene, const t_shape *shape, const t_cylinder *cylinder)
+{
+	(void)scene;
+	(void)shape;
+	(void)cylinder;
+	// TODO: implement
+}
+
+void	scene_add_cone(t_scene *scene, t_shape *shape, const t_cone *cone)
+{
+	if (scene->shapebuffer_size + sizeof(t_shape) + sizeof(t_cone) > SHAPEBUFFER_CAPACITY)
+		print_error("Reached the maximum number of shapes in scene"); // TODO: don't exit the program just print message and return
+	shape->buffer_offset = scene->shapebuffer_size;
+	scene->shapebuffer_size += sizeof(t_shape) + sizeof(t_cone);
+	scene->nshapes++;
+	ft_memcpy(scene->host_shapebuffer, shape, sizeof(t_shape));
+	ft_memcpy(scene->host_shapebuffer + sizeof(t_shape), cone, sizeof(t_cone));
+	scene->host_shapebuffer += sizeof(t_shape) + sizeof(t_cone);
+}
+
+void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone)
+{
+	(void)scene;
+	(void)shape;
+	(void)cone;
 	// TODO: implement
 }
 

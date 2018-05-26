@@ -29,6 +29,18 @@ float *t, __constant t_shape **shape)
 		*shape_ptr += sizeof(t_plane);
 		return (plane_intersect(ray, *shape, plane, t));
 	}
+	else if ((*shape)->shapetype == CYLINDER)
+	{
+		__constant t_cylinder	*cylinder = (__constant t_cylinder*)*shape_ptr;
+		*shape_ptr += sizeof(t_cylinder);
+		return (cylinder_intersect(ray, *shape, cylinder, t));
+	}
+	else if ((*shape)->shapetype == CONE)
+	{
+		__constant t_cone	*cone = (__constant t_cone*)*shape_ptr;
+		*shape_ptr += sizeof(t_cone);
+		return (cone_intersect(ray, *shape, cone, t));
+	}
 	return (FALSE);
 }
 
