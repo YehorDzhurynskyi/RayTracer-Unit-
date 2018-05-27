@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.cl                                           :+:      :+:    :+:   */
+/*   pointlight.cl                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	plane_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_plane *plane, float *t)
+inline t_vec4		pointlight_to(__constant t_pointlight *pointlight,
+const t_vec4 *point)
 {
-	float denom = -dot(ray->direction, plane->normal);
-	if (denom > 1e-6)
-	{
-		const t_vec4 to_plane = ray->origin - shape->position;
-		*t = dot(to_plane, plane->normal);
-		*t /= denom;
-		return (*t > 0.0);
-	}
-	return (FALSE);
+	return (pointlight->position - *point);
 }
 
-inline t_vec4	plane_normal(__constant t_plane *plane)
+inline t_bool		pointlight_in_shadow(const t_vec4 *to_light, float t)
 {
-	return (plane->normal);
+	return (t <= length(*to_light));
+}
+
+uchar4				pointlight_illuminate(__constant t_light *light,
+__constant t_pointlight *pointlight, const t_fragment *fragment)
+{
+	const t_vec4 to_light = normalize(pointlight_to(pointlight, &fragment->point));
+	const float	attenuation = attenuate(pointlight->attenuation, length(fragment->to_eye));
+	const uchar4 diffcolor = diffuse(light, fragment, to_light);
+	const uchar4 speccolor = specular(light, fragment, to_light);
+	return (color_scalar(color_add(diffcolor, speccolor), attenuation));
 }

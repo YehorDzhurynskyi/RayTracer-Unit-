@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.cl                                           :+:      :+:    :+:   */
+/*   light.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,43 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	plane_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_plane *plane, float *t)
-{
-	float denom = -dot(ray->direction, plane->normal);
-	if (denom > 1e-6)
-	{
-		const t_vec4 to_plane = ray->origin - shape->position;
-		*t = dot(to_plane, plane->normal);
-		*t /= denom;
-		return (*t > 0.0);
-	}
-	return (FALSE);
-}
+#ifndef LIGHT_H
+# define LIGHT_H
 
-inline t_vec4	plane_normal(__constant t_plane *plane)
+# include "opencl.h"
+
+typedef enum
 {
-	return (plane->normal);
-}
+	POINTLIGHT = 1,
+	SPOTLIGHT,
+	DIRLIGHT
+}	t_light_type;
+
+typedef struct		__attribute__ ((packed)) s_light
+{
+	cl_uchar4		color;
+	cl_float		intensity;
+	cl_uint			buffer_offset;
+	t_light_type	lighttype;
+}	t_light;
+
+typedef struct		__attribute__ ((packed)) s_pointlight
+{
+	t_clvec4		position;
+	t_clvec4		attenuation;
+}	t_pointlight;
+
+typedef struct		__attribute__ ((packed)) s_dirlight
+{
+	t_clvec4		direction;
+}	t_dirlight;
+
+typedef struct		__attribute__ ((packed)) s_spotlight
+{
+	t_clvec4		position;
+	t_clvec4		attenuation;
+	t_clvec4		direction;
+	cl_float		cosangle;
+}	t_spotlight;
+
+#endif

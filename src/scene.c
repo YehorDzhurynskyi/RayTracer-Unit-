@@ -159,9 +159,52 @@ void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone)
 	// TODO: implement
 }
 
-void	scene_remove(t_scene *scene, const t_shape *shape)
+void	scene_add_pointlight(t_scene *scene, t_light *light, const t_pointlight *pointlight)
+{
+	if (scene->lightbuffer_size + sizeof(t_light) + sizeof(t_pointlight) > LIGHTBUFFER_CAPACITY)
+		print_error("Reached the maximum number of lights in scene"); // TODO: don't exit the program just print message and return
+	light->buffer_offset = scene->lightbuffer_size;
+	scene->lightbuffer_size += sizeof(t_light) + sizeof(t_pointlight);
+	scene->nlights++;
+	ft_memcpy(scene->host_lightbuffer, light, sizeof(t_light));
+	ft_memcpy(scene->host_lightbuffer + sizeof(t_light), pointlight, sizeof(t_pointlight));
+	scene->host_lightbuffer += sizeof(t_light) + sizeof(t_pointlight);
+}
+
+void	scene_add_dirlight(t_scene *scene, t_light *light, const t_dirlight *dirlight)
+{
+	if (scene->lightbuffer_size + sizeof(t_light) + sizeof(t_dirlight) > LIGHTBUFFER_CAPACITY)
+		print_error("Reached the maximum number of lights in scene"); // TODO: don't exit the program just print message and return
+	light->buffer_offset = scene->lightbuffer_size;
+	scene->lightbuffer_size += sizeof(t_light) + sizeof(t_dirlight);
+	scene->nlights++;
+	ft_memcpy(scene->host_lightbuffer, light, sizeof(t_light));
+	ft_memcpy(scene->host_lightbuffer + sizeof(t_light), dirlight, sizeof(t_dirlight));
+	scene->host_lightbuffer += sizeof(t_light) + sizeof(t_dirlight);
+}
+
+void	scene_add_spotlight(t_scene *scene, t_light *light, const t_spotlight *spotlight)
+{
+	if (scene->lightbuffer_size + sizeof(t_light) + sizeof(t_spotlight) > LIGHTBUFFER_CAPACITY)
+		print_error("Reached the maximum number of lights in scene"); // TODO: don't exit the program just print message and return
+	light->buffer_offset = scene->lightbuffer_size;
+	scene->lightbuffer_size += sizeof(t_light) + sizeof(t_spotlight);
+	scene->nlights++;
+	ft_memcpy(scene->host_lightbuffer, light, sizeof(t_light));
+	ft_memcpy(scene->host_lightbuffer + sizeof(t_light), spotlight, sizeof(t_spotlight));
+	scene->host_lightbuffer += sizeof(t_light) + sizeof(t_spotlight);
+}
+
+void	scene_remove_shape(t_scene *scene, const t_shape *shape)
 {
 	(void)scene;
 	(void)shape;
+	// TODO: implement
+}
+
+void	scene_remove_light(t_scene *scene, const t_light *light)
+{
+	(void)scene;
+	(void)light;
 	// TODO: implement
 }

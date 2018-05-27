@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	cylinder_intersect(const t_ray *ray, __constant t_shape *shape,
+t_bool			cylinder_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_cylinder *cylinder, float *t)
 {
 	const t_vec4 to_orig = ray->origin - shape->position;
@@ -18,9 +18,19 @@ __constant t_cylinder *cylinder, float *t)
 	const t_vec4 vb = cross(ray->direction, cylinder->direction);
 	const float a = dot(vb, vb);
 	const float b = dot(vb, va);
-	const float d = b * b - a * (dot(va, va) - cylinder->radius2);
+	float d = b * b - a * (dot(va, va) - cylinder->radius2);
 	if (d < 0.0)
 		return (FALSE);
-	*t = (-b - sqrt(d)) / a;
-	return (*t > 0.0);
+	d = sqrt(d);
+	*t = (-b - d) / a;
+	if (*t < 0.0)
+		*t = (-b + d) / a;
+	return (TRUE);
+}
+
+inline t_vec4	cylinder_normal(const t_vec4 *point, __constant t_shape *shape,
+__constant t_cylinder *cylinder)
+{
+	const t_vec4 to_orig = *point - shape->position;
+	return (normalize(to_orig - (cylinder->direction * dot(to_orig, cylinder->direction))));
 }

@@ -15,9 +15,17 @@ __constant t_sphere *sphere, float *t)
 {
 	const t_vec4 to_orig = ray->origin - shape->position;
 	const float b = dot(ray->direction, to_orig);
-	const float d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
+	float d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
 	if (d < 0.0)
 		return (FALSE);
-	*t = -b - sqrt(d);
+	d = sqrt(d);
+	*t = -b - d;
+	if (*t < 0.0)
+		*t = -b + d;
 	return (TRUE);
+}
+
+inline t_vec4	sphere_normal(__constant t_shape *shape, const t_vec4 *point)
+{
+	return (normalize(*point - shape->position));
 }

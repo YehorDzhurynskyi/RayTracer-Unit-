@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.cl                                           :+:      :+:    :+:   */
+/*   raytracer.hcl                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	plane_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_plane *plane, float *t)
-{
-	float denom = -dot(ray->direction, plane->normal);
-	if (denom > 1e-6)
-	{
-		const t_vec4 to_plane = ray->origin - shape->position;
-		*t = dot(to_plane, plane->normal);
-		*t /= denom;
-		return (*t > 0.0);
-	}
-	return (FALSE);
-}
+#ifndef RAYTRACER_HCL
+# define RAYTRACER_HCL
 
-inline t_vec4	plane_normal(__constant t_plane *plane)
-{
-	return (plane->normal);
-}
+# include "src/opencl/kernel/shape.h"
+
+__constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *nearest_t);
+
+# include "src/opencl/kernel/shader.cl"
+
+#endif

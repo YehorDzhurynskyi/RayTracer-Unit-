@@ -19,3 +19,9 @@ t_vec4	mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec)
 	res.w = mat[12] * vec.x + mat[13] * vec.y + mat[14] * vec.z + mat[15] * vec.w;
 	return (res);
 }
+
+t_vec4	reflected_vec(t_vec4 v, t_vec4 n)
+{
+	const t_vec4 r = n * (2.0f * dot(v, n));
+	return (normalize(v - r));
+}

@@ -14,6 +14,7 @@
 # define SCENE_H
 
 # include "shape.h"
+# include "light.h"
 
 typedef struct	__attribute__ ((packed)) s_camera
 {
@@ -45,6 +46,10 @@ t_scene	scene_create(void);
 void	scene_cleanup(t_scene *scene);
 void	scene_unmap(t_scene *scene, t_buffer_target target);
 
+void	scene_add_pointlight(t_scene *scene, t_light *light, const t_pointlight *pointlight);
+void	scene_add_dirlight(t_scene *scene, t_light *light, const t_dirlight *dirlight);
+void	scene_add_spotlight(t_scene *scene, t_light *light, const t_spotlight *spotlight);
+
 void	scene_add_sphere(t_scene *scene, t_shape *shape, const t_sphere *sphere);
 void	scene_update_sphere(t_scene *scene, const t_shape *shape, const t_sphere *sphere);
 
@@ -57,6 +62,7 @@ void	scene_update_cylinder(t_scene *scene, const t_shape *shape, const t_cylinde
 void	scene_add_cone(t_scene *scene, t_shape *shape, const t_cone *cone);
 void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone);
 
-void	scene_remove(t_scene *scene, const t_shape *shape);
+void	scene_remove_light(t_scene *scene, const t_light *light);
+void	scene_remove_shape(t_scene *scene, const t_shape *shape);
 
 #endif

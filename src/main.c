@@ -100,7 +100,7 @@ int					main(int argc, const char *argv[])
 	scene_add_sphere(&renderer.scene, &shape1, &sphere1);
 
 	t_clvec4 position8 = {{3.0, 2.0, 2.0, 0.0}};
-	cl_uchar4 color8 = {{0x55, 0xdd, 0x22, 0x0}};
+	cl_uchar4 color8 = {{0xc4, 0xc2, 0xb4, 0x0}};
 	t_shape shape8 = (t_shape) {position8, color8, 0, CONE};
 	t_cone cone2 = (t_cone) { {{0.0f, -0.707f, -0.707f, 0.0f}}, cos2angle1 };
 	scene_add_cone(&renderer.scene, &shape8, &cone2);
@@ -118,8 +118,45 @@ int					main(int argc, const char *argv[])
 	t_plane plane = (t_plane) { normal };
 	scene_add_plane(&renderer.scene, &shape2, &plane);
 
+	t_clvec4 position9 = {{-100.0, 0.0, 0.0, 0.0}};
+	cl_uchar4 color9 = {{0x33, 0xaa, 0x55, 0x0}};
+	t_shape shape9 = (t_shape) {position9, color9, 0, PLANE};
+	t_plane plane3 = (t_plane) { {{1.0, 0.0, 0.0, 0.0}} };
+	scene_add_plane(&renderer.scene, &shape9, &plane3);
+
 	scene_unmap(&renderer.scene, SHAPE_BUFFER_TARGET);
 // DYNAMIC SCENE EDITING
+
+// DYNAMIC LIGHT ADDING
+	renderer.scene.host_lightbuffer = clEnqueueMapBuffer(g_clcontext.command_queue, renderer.scene.lightbuffer,
+	CL_TRUE, CL_MAP_WRITE, 0, sizeof(t_light) + sizeof(t_pointlight), 0, NULL, NULL, &err);
+	if (err != CL_SUCCESS)
+		print_opencl_error("Failed to map lightbuffer...", err);
+
+	t_light light = (t_light){{{0xff, 0xff, 0xff, 0}}, 0.7f, 0, POINTLIGHT};
+	t_pointlight pointlight = (t_pointlight){{{5.0, 3.0, 10.0, 0.0}}, {{0.1, 0.05, 0.01, 0.0}}};
+	scene_add_pointlight(&renderer.scene, &light, &pointlight);
+
+	const float cosangle = cos(60.0f * M_PI / 180.0f);
+
+	t_light light3 = (t_light){{{0xff, 0x33, 0x33, 0}}, 0.7f, 0, SPOTLIGHT};
+	t_spotlight spotlight = (t_spotlight){ {{-5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
+	scene_add_spotlight(&renderer.scene, &light3, &spotlight);
+
+	t_light light2 = (t_light){{{0xff, 0xff, 0x0, 0}}, 0.7f, 0, DIRLIGHT};
+	t_dirlight dirlight = (t_dirlight){ {{0.0, -0.707f, -0.707f, 0.0}} };
+	scene_add_dirlight(&renderer.scene, &light2, &dirlight);
+
+	t_light light4 = (t_light){{{0x33, 0x33, 0xff, 0}}, 0.7f, 0, SPOTLIGHT};
+	t_spotlight spotlight1 = (t_spotlight){ {{5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{-0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
+	scene_add_spotlight(&renderer.scene, &light4, &spotlight1);
+
+	t_light light1 = (t_light){{{0xff, 0xff, 0xff, 0}}, 0.7f, 0, POINTLIGHT};
+	t_pointlight pointlight1 = (t_pointlight){{{-5.0, 3.0, 10.0, 0.0}}, {{0.1, 0.05, 0.01, 0.0}}};
+	scene_add_pointlight(&renderer.scene, &light1, &pointlight1);
+
+	scene_unmap(&renderer.scene, LIGHT_BUFFER_TARGET);
+// DYNAMIC LIGHT ADDING
 
 	window_loop(renderer_render, &renderer);
 

@@ -27,7 +27,7 @@ typedef struct		__attribute__ ((packed)) s_shape
 {
 	t_vec4			position; // it's 16 bytes because of alignment
 	uchar4			color;
-	unsigned int	buffer_offset;
+	uint			buffer_offset;
 	t_shape_type	shapetype;
 }	t_shape;
 
@@ -61,6 +61,13 @@ t_bool				cylinder_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_cylinder *cylinder, float *t);
 t_bool				cone_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_cone *cone, float *t);
+
+t_vec4				sphere_normal(__constant t_shape *shape, const t_vec4 *point);
+t_vec4				plane_normal(__constant t_plane *plane);
+t_vec4				cylinder_normal(const t_vec4 *point, __constant t_shape *shape,
+__constant t_cylinder *cylinder);
+t_vec4				cone_normal(const t_vec4 *point, __constant t_shape *shape,
+__constant t_cone *cone);
 
 # include "src/opencl/kernel/sphere.cl"
 # include "src/opencl/kernel/plane.cl"

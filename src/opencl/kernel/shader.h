@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.cl                                           :+:      :+:    :+:   */
+/*   shader.hcl                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,21 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	plane_intersect(const t_ray *ray, __constant t_shape *shape,
-__constant t_plane *plane, float *t)
-{
-	float denom = -dot(ray->direction, plane->normal);
-	if (denom > 1e-6)
-	{
-		const t_vec4 to_plane = ray->origin - shape->position;
-		*t = dot(to_plane, plane->normal);
-		*t /= denom;
-		return (*t > 0.0);
-	}
-	return (FALSE);
-}
+#ifndef SHADER_HCL
+# define SHADER_HCL
 
-inline t_vec4	plane_normal(__constant t_plane *plane)
+typedef struct s_fragment	t_fragment;
+struct					s_fragment
 {
-	return (plane->normal);
-}
+	t_vec4				point;
+	t_vec4				normal;
+	t_vec4				to_eye;
+	uchar4				color;
+};
+
+uchar4	shade(const t_vec4 *point, const t_scene *scene, __constant t_shape *shape);
+
+# include "src/opencl/kernel/color.cl"
+# include "src/opencl/kernel/light.h"
+
+#endif

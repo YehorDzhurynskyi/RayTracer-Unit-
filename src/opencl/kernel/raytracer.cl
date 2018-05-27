@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.cl                                            :+:      :+:    :+:   */
+/*   raytracer.cl                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "src/opencl/kernel/shape.h"
+#include "src/opencl/kernel/raytracer.h"
 
 static t_bool		check_intersection(__constant t_byte **shape_ptr, const t_ray *ray,
 float *t, __constant t_shape **shape)
@@ -44,18 +44,19 @@ float *t, __constant t_shape **shape)
 	return (FALSE);
 }
 
-static __constant t_shape	*trace_shape(__constant t_byte *shapebuffer, int nshapes,
-const t_ray *ray, float *nearest_t)
+__constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *nearest_t)
 {
+	__constant t_byte	*shape_ptr;
 	__constant t_shape	*nearest_shape = NULL;
 	__constant t_shape	*shape;
 	float				t;
 
 	*nearest_t = INFINITY;
 	int i = -1;
-	while (++i < nshapes)
+	shape_ptr = scene->shapebuffer;
+	while (++i < scene->nshapes)
 	{
-		if (FALSE == check_intersection(&shapebuffer, ray, &t, &shape))
+		if (FALSE == check_intersection(&shape_ptr, ray, &t, &shape))
 			continue ;
 		else if (t > 1.0E-5 && t < *nearest_t)
 		{
@@ -64,6 +65,16 @@ const t_ray *ray, float *nearest_t)
 		}
 	}
 	return (nearest_shape);
+}
+
+static uchar4		trace_ray(const t_ray *ray, const t_scene *scene)
+{
+	float t;
+	__constant t_shape *shape = (__constant t_shape*)trace_shape(scene, ray, &t);
+	if (shape == NULL)
+		return (0x0);
+	const t_vec4 point = ray->direction * t + ray->origin;
+	return (shade(&point, scene, shape));
 }
 
 static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height)
@@ -81,9 +92,11 @@ static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int h
 }
 
 __kernel void		trace(
-	__global unsigned int *outputbuffer,
+	__global uchar4 *outputbuffer,
 	__constant t_byte *shapebuffer,
 	int nshapes,
+	__constant t_byte *lightbuffer,
+	int nlights,
 	t_camera camera
 )
 {
@@ -92,17 +105,15 @@ __kernel void		trace(
 	int width = get_global_size(0);
 	int height = get_global_size(1);
 
+	t_scene scene;
+
+	scene.shapebuffer = shapebuffer;
+	scene.nshapes = nshapes;
+	scene.lightbuffer = lightbuffer;
+	scene.nlights = nlights;
+	scene.camera = camera;
+
 	t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height);
-
-	float t;
-	__constant t_shape *shape = trace_shape(shapebuffer, nshapes, &primary_ray, &t);
-
-	unsigned int color = 0;
-
-	color |= shape->color.r << 16;
-	color |= shape->color.g << 8;
-	color |= shape->color.b << 0;
-	color |= shape->color.a << 24;
-
-	outputbuffer[x + y * width] = shape != 0 ? color : 0x0;
+	const uchar4 pixelcolor = trace_ray(&primary_ray, &scene);
+	outputbuffer[x + y * width] = pixelcolor.bgra;
 }
