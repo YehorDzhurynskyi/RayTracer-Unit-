@@ -71,7 +71,7 @@ static uchar4	illuminate(__constant t_byte *lightbuffer, const t_fragment *fragm
 	return (0);
 }
 
-static t_vec4	obtain_normal(const t_vec4 *point, __constant t_shape *shape)
+t_vec4	obtain_normal(const t_vec4 *point, __constant t_shape *shape)
 {
 	const __constant t_byte *shape_ptr = (__constant t_byte*)shape;
 	if (shape->shapetype == SPHERE)

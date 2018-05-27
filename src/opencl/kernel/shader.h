@@ -22,6 +22,7 @@ struct					s_fragment
 	uchar4				color;
 };
 
+t_vec4	obtain_normal(const t_vec4 *point, __constant t_shape *shape);
 uchar4	shade(const t_vec4 *point, const t_scene *scene, __constant t_shape *shape);
 
 # include "src/opencl/kernel/color.cl"

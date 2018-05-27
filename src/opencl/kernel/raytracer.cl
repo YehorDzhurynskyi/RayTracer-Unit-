@@ -67,14 +67,24 @@ __constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *n
 	return (nearest_shape);
 }
 
-static uchar4		trace_ray(const t_ray *ray, const t_scene *scene)
+static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
 {
-	float t;
-	__constant t_shape *shape = (__constant t_shape*)trace_shape(scene, ray, &t);
-	if (shape == NULL)
-		return (0x0);
-	const t_vec4 point = ray->direction * t + ray->origin;
-	return (shade(&point, scene, shape));
+	uchar4	color = 0;
+	t_ray	rey = *ray;
+	while (--trace_depth >= 0)
+	{
+		float t;
+		__constant t_shape *shape = (__constant t_shape*)trace_shape(scene, &rey, &t);
+		if (shape == NULL)
+			break ;
+		const t_vec4 point = rey.direction * t + rey.origin;
+		color = color_add(color, color_scalar(shade(&point, scene, shape), 0.5f));
+		const t_vec4 normal = obtain_normal(&point, shape);
+		rey.direction = reflected_vec(rey.direction, normal);
+		const float bias = 0.005f;
+		rey.origin = point + rey.direction * bias;
+	}
+	return (color);
 }
 
 static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height)
@@ -114,6 +124,6 @@ __kernel void		trace(
 	scene.camera = camera;
 
 	t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height);
-	const uchar4 pixelcolor = trace_ray(&primary_ray, &scene);
+	const uchar4 pixelcolor = trace_ray(&primary_ray, &scene, 5);
 	outputbuffer[x + y * width] = pixelcolor.bgra;
 }

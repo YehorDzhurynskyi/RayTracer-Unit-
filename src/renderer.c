@@ -33,7 +33,7 @@ static void	renderer_prepare(const t_renderer *renderer)
 	static float ellapsed = 0.0f;
 	ellapsed += ((now - last) / 1000000.0f) * 1000.0;
 	last = now;
-	double x = ((int)ellapsed) % 10000 / 10000.0 * 2.0 * M_PI;
+	double x = ((int)ellapsed) % 1000 / 1000.0 * 2.0 * M_PI;
 	double s = sin(x);
 	double c = cos(x);
 	t_clmat4x4 mat = {
