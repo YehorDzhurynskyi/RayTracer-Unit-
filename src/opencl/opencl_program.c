@@ -56,24 +56,11 @@ t_opencl_program	opencl_program_create(const char *sourcefile, const char *kerne
 	clprogram.kernel = clCreateKernel(clprogram.program, kernel_name, &err);
 	if (clprogram.kernel == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create openCL kernel...", err);
-	clprogram.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY,
+	clprogram.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_WRITE,
 	g_frame_width * g_frame_height * 4, NULL, &err);
 	if (clprogram.outputbuffer == NULL || err != CL_SUCCESS)
 		print_opencl_error("Failed to create output buffer...", err);
 	return (clprogram);
-}
-
-t_opencl_filter		opencl_filter_create(const char *sourcefile, const char *kernel_name)
-{
-	t_opencl_filter		clfilter;
-	int					err;
-
-	clfilter.prgm = opencl_program_create(sourcefile, kernel_name);
-	clfilter.inputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_ONLY,
-	g_frame_width * g_frame_height * 4, NULL, &err);
-	if (clfilter.inputbuffer == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create input buffer...", err);
-	return (clfilter);
 }
 
 void				opencl_program_cleanup(t_opencl_program *clprogram)
@@ -81,10 +68,4 @@ void				opencl_program_cleanup(t_opencl_program *clprogram)
 	clReleaseMemObject(clprogram->outputbuffer);
 	clReleaseProgram(clprogram->program);
 	clReleaseKernel(clprogram->kernel);
-}
-
-void				opencl_filter_cleanup(t_opencl_filter *clfilter)
-{
-	clReleaseMemObject(clfilter->inputbuffer);
-	opencl_program_cleanup(&clfilter->prgm);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   bw_filter.cl                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,24 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error.h"
-#include "ft.h"
-#include <stdlib.h>
-#include <errno.h>
-
-void	print_error(const char *message)
+__kernel void		filter(
+	__global uchar4 *inputbuffer,
+	__global uchar4 *outputbuffer
+)
 {
-	ft_printf_fd(2, "RT Error: %s\n", message);
-	exit(EXIT_FAILURE);
-}
+	const int x = get_global_id(0);
+	const int y = get_global_id(1);
+	const int width = get_global_size(0);
 
-void	print_opencl_error(const char *message, int cl_error_code)
-{
-	ft_printf_fd(2, "OpenCL Error[%d]: %s\n", cl_error_code, message);
-
-	// TODO: shutdown opencl context
-	//		clReleaseCommandQueue(cl->commands);
-	//		clReleaseContext(cl->context);
-
-	exit(EXIT_FAILURE);
+	const uchar4 in = inputbuffer[x + y * width];
+	outputbuffer[x + y * width] = max(in.r, max(in.g, in.b));
 }

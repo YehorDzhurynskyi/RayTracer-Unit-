@@ -35,12 +35,6 @@ struct					s_opencl_program
 	cl_mem				outputbuffer;
 };
 
-typedef struct
-{
-	t_opencl_program	prgm;
-	cl_mem				inputbuffer;
-}	t_opencl_filter;
-
 typedef cl_float16		t_clmat4x4;
 typedef cl_float4		t_clvec4;
 
@@ -49,9 +43,6 @@ void					opencl_cleanup(void);
 t_opencl_program		opencl_program_create(const char *sourcefile,
 const char *kernel_name);
 void					opencl_program_cleanup(t_opencl_program *clprogram);
-t_opencl_filter			opencl_filter_create(const char *sourcefile,
-const char *kernel_name);
-void					opencl_filter_cleanup(t_opencl_filter *clfilter);
 
 extern t_opencl			g_clcontext;
 

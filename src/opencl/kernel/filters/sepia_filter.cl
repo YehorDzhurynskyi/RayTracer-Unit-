@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   sepia_filter.cl                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,24 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error.h"
-#include "ft.h"
-#include <stdlib.h>
-#include <errno.h>
-
-void	print_error(const char *message)
+__kernel void		filter(
+	__global uchar4 *inputbuffer,
+	__global uchar4 *outputbuffer
+)
 {
-	ft_printf_fd(2, "RT Error: %s\n", message);
-	exit(EXIT_FAILURE);
-}
+	const int x = get_global_id(0);
+	const int y = get_global_id(1);
+	const int width = get_global_size(0);
 
-void	print_opencl_error(const char *message, int cl_error_code)
-{
-	ft_printf_fd(2, "OpenCL Error[%d]: %s\n", cl_error_code, message);
-
-	// TODO: shutdown opencl context
-	//		clReleaseCommandQueue(cl->commands);
-	//		clReleaseContext(cl->context);
-
-	exit(EXIT_FAILURE);
+	float4 in = convert_float4_rtz(inputbuffer[x + y * width]);
+	in /= 255.0f;
+	uchar4 out;
+	out.r = 0xff * dot(in, float4(0.393f, 0.769f, 0.189f, 0.0f));
+	out.g = 0xff * dot(in, float4(0.349f, 0.686f, 0.168f, 0.0f));
+	out.b = 0xff * dot(in, float4(0.272f, 0.534f, 0.131f, 0.0f));
+	out.a = 0;
+	outputbuffer[x + y * width] = out;
 }
