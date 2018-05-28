@@ -63,7 +63,6 @@ void	renderer_render(unsigned char *pixelbuffer, int width, int height, void *us
 	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 	if (err)
 		print_opencl_error("Failed to run kernel...", err);
-
 	clFinish(g_clcontext.command_queue);
 	err = clEnqueueReadBuffer(g_clcontext.command_queue,
 		renderer->rt_prgm.outputbuffer, CL_TRUE, 0, width * height * 4,

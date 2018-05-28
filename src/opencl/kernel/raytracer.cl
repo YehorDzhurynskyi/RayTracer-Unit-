@@ -125,5 +125,5 @@ __kernel void		trace(
 
 	t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height);
 	const uchar4 pixelcolor = trace_ray(&primary_ray, &scene, 5);
-	outputbuffer[x + y * width] = pixelcolor.bgra;
+	outputbuffer[x + y * width] = pixelcolor;
 }

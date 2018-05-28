@@ -11,51 +11,84 @@
 /* ************************************************************************** */
 
 #include "window.h"
-#include <SDL.h>
+
+#include "gui.h"
 #include "error.h"
 
-static SDL_Window		*g_sdl_window = NULL;
-static SDL_Renderer		*g_sdl_renderer = NULL;
-static SDL_Texture		*g_sdl_texture = NULL;
-static unsigned char	*g_pixelbuffer = NULL;
-static t_bool			g_window_should_close = FALSE;
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_IMPLEMENTATION
+#define NK_SDL_GL2_IMPLEMENTATION
+#define NK_PRIVATE
 
-extern int				g_frame_width;
-extern int				g_frame_height;
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include "nuklear.h"
+#include "nuklear_sdl.h"
+
+static SDL_Window			*g_sdl_window = NULL;
+static SDL_GLContext		*g_sdl_gl_context = NULL;
+static struct nk_context	*g_nk_context = NULL;
+static unsigned char		*g_pixelbuffer = NULL;
+static t_bool				g_window_should_close = FALSE;
+unsigned int				g_gl_texture_name;
+
+extern int					g_frame_width;
+extern int					g_frame_height;
 
 #define WINDOW_TITLE	"RT"
 
-static void				window_cleanup(void)
+static void					window_cleanup(void)
 {
 	free(g_pixelbuffer);
-	SDL_DestroyTexture(g_sdl_texture);
-	SDL_DestroyRenderer(g_sdl_renderer);
+	glDeleteTextures(1, &g_gl_texture_name);
+	nk_sdl_shutdown();
+	SDL_GL_DeleteContext(g_sdl_gl_context);
 	SDL_DestroyWindow(g_sdl_window);
 	SDL_Quit();
 }
 
-t_bool					window_create(void)
+static void					generate_gl_texture()
+{
+	glGenTextures(1, &g_gl_texture_name);
+	glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, g_frame_width, g_frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+}
+
+t_bool						window_create(void)
 {
 	while (TRUE)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 			break ;
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		g_sdl_window = SDL_CreateWindow(WINDOW_TITLE,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		g_frame_width, g_frame_height, 0);
+		1400, 900, SDL_WINDOW_OPENGL);
 		if (g_sdl_window == NULL)
 			break ;
-		g_sdl_renderer = SDL_CreateRenderer(g_sdl_window, -1,
-		SDL_RENDERER_ACCELERATED /*| SDL_RENDERER_PRESENTVSYNC*/); // uncomment it on release
-		if (g_sdl_renderer == NULL)
-			break ;
-		g_sdl_texture = SDL_CreateTexture(g_sdl_renderer, SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING, g_frame_width, g_frame_height);
-		if (g_sdl_texture == NULL)
-			break ;
+		g_nk_context = nk_sdl_init(g_sdl_window);
 		g_pixelbuffer = (unsigned char*)malloc(g_frame_width * g_frame_height * 4);
 		if (g_pixelbuffer == NULL)
 			break ;
+		g_sdl_gl_context = SDL_GL_CreateContext(g_sdl_window);
+		generate_gl_texture();
+		struct nk_font_atlas *atlas;
+		nk_sdl_font_stash_begin(&atlas);
+		nk_sdl_font_stash_end();
 		return (TRUE);
 	}
 	window_cleanup();
@@ -63,20 +96,36 @@ t_bool					window_create(void)
 	return (FALSE);
 }
 
-static void				poll_events(void)
+static void					poll_events(void)
 {
 	SDL_Event	event;
 
+	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT)
 			g_window_should_close = TRUE;
 		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
 			g_window_should_close = TRUE;
+		nk_sdl_handle_event(&event);
 	}
+	nk_input_end(g_nk_context);
 }
 
-void					window_loop(t_render_callback render_callback, void *user_ptr)
+static void					render_scene(void)
+{
+	struct nk_command_buffer	*canvas;
+	struct nk_image				image;
+	struct nk_rect				total_space;
+
+	canvas = nk_window_get_canvas(g_nk_context);
+	total_space = nk_window_get_content_region(g_nk_context);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, g_frame_width, g_frame_height, GL_RGBA, GL_UNSIGNED_BYTE, g_pixelbuffer);
+	image = nk_image_id((int)g_gl_texture_name);
+	nk_draw_image(canvas, total_space, &image, nk_rgba(255, 255, 255, 255));
+}
+
+void						window_loop(t_render_callback render_callback, void *user_ptr)
 {
 	Uint64	start;
 	Uint64	freq;
@@ -87,12 +136,15 @@ void					window_loop(t_render_callback render_callback, void *user_ptr)
 	{
 		start = SDL_GetPerformanceCounter();
 		poll_events();
-		SDL_RenderClear(g_sdl_renderer);
-		ft_bzero(g_pixelbuffer, g_frame_width * g_frame_height * 4);
-		render_callback(g_pixelbuffer, g_frame_width, g_frame_height, user_ptr);
-		SDL_UpdateTexture(g_sdl_texture, NULL, g_pixelbuffer, g_frame_width * 4);
-		SDL_RenderCopy(g_sdl_renderer, g_sdl_texture, NULL, NULL);
-		SDL_RenderPresent(g_sdl_renderer);
+		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
+		render_callback(g_pixelbuffer, g_frame_width, g_frame_height, user_ptr); // TODO: call this function every scene update
+		if (nk_begin(g_nk_context, "Scene", nk_rect(300, 0, 800, 600), NK_WINDOW_TITLE))
+			render_scene();
+		nk_end(g_nk_context);
+		render_gui();
+		glClear(GL_COLOR_BUFFER_BIT);
+		nk_sdl_render(NK_ANTI_ALIASING_ON);
+		SDL_GL_SwapWindow(g_sdl_window);
 		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
 		ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 	}

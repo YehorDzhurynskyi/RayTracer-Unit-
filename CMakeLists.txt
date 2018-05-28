@@ -41,10 +41,8 @@ find_package(SDL2 REQUIRED)
 include_directories(Dependencies/libft)
 add_subdirectory(Dependencies/libft)
 
-include_directories(Dependencies/cson)
 add_subdirectory(Dependencies/cson)
 
-include_directories(Dependencies/nuklear)
 add_subdirectory(Dependencies/nuklear)
 ###
 
@@ -52,14 +50,14 @@ add_executable(${PROJECT_NAME} "")
 include(src/CMakeLists.txt)
 
 include_directories(
-	${OpenGL_INCLUDE_DIRS}
+	${OPENGL_INCLUDE_DIRS}
 	${OpenCL_INCLUDE_DIRS}
 	${SDL2_INCLUDE_DIRS}
 	./include
 )
 
 target_link_libraries(${PROJECT_NAME}
-	${OpenGL_LIBRARIES}
+	${OPENGL_LIBRARIES}
 	${OpenCL_LIBRARIES}
 	${SDL2_LIBRARIES}
 	ft
