@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 __kernel void		filter(
-	__global uchar4 *inputbuffer,
+	const __global uchar4 *inputbuffer,
 	__global uchar4 *outputbuffer
 )
 {

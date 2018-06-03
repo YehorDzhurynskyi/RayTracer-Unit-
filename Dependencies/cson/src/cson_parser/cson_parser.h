@@ -45,20 +45,20 @@ struct				s_cson_parser
 	int				buffer_offset;
 	int				state;
 	int				current_line;
-	int				*err;
+	t_error_code	*err;
 	int				array_depth;
 	int				bounded_object_depth;
 	t_bool			is_comment;
 };
 
 void				cson_log_parsing_error(t_cson_parser *parser,
-const char *msg, char error_symbol, int errcode);
+const char *msg, char error_symbol, t_error_code errcode);
 void				cson_log_error(t_cson_parser *parser,
-const char *msg, int errcode);
+const char *msg, t_error_code errcode);
 
 t_cson				*cson_alloc(t_cson *is_root);
 
-t_bool				cson_parser_init(t_cson_parser *parser, int *err);
+t_bool				cson_parser_init(t_cson_parser *parser, t_error_code *err);
 t_cson				*cson_parser_done(t_cson_parser *parser);
 void				cson_parser_fail(t_cson_parser *parser);
 void				cson_parser_free(t_cson_parser *parser);

@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(RT)
-set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# set(CMAKE_VERBOSE_MAKEFILE ON)
 
 ### Setting output dir
 if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "Debug") 

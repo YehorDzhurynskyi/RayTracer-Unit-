@@ -53,9 +53,9 @@ int					main(int argc, const char *argv[])
 		return (EXIT_FAILURE);
 	renderer = renderer_init();
 
-	renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
-	renderer.nfilters++;
-	// renderer.filter_prgms[1] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
+	// renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
+	// renderer.nfilters++;
+	// renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
 	// renderer.nfilters++;
 // DYNAMIC SCENE EDITING
 	int err;

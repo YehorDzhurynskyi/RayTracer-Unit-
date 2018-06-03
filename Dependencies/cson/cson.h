@@ -15,7 +15,8 @@
 
 # include "ft.h"
 
-# define CSON_PARSER_BSIZE	4096
+# define CSON_PARSER_BSIZE		4096
+# define CSON_PRODUCER_BSIZE	4096
 
 # define CSON_UNDEFINED_VALUE_TYPE	0x0
 # define CSON_STRING_VALUE_TYPE		0x1
@@ -32,6 +33,7 @@
 # define CSON_VALUE_PARSING_ERROR		0x5
 # define CSON_BRACKETS_PARSING_ERROR	0x6
 # define CSON_EMPTY_DATA_PARSING_ERROR	0x7
+# define CSON_NULL_PARAMETER_ERROR		0x8
 
 typedef union u_cson_value	t_cson_value;
 union				u_cson_value
@@ -52,12 +54,27 @@ struct				s_cson
 	t_cson			*parent;
 };
 
+typedef int	t_error_code;
+
 /*
-**	ALLOC/DEALLOC
+**	DEALLOC
 */
-t_cson				*cson_parse_file(const char *filename, int *err);
-t_cson				*cson_parse_str(const char *str, size_t size, int *err);
 void				cson_free(t_cson *cson);
+
+/*
+**	PARSING
+*/
+t_cson				*cson_parse_file(const char *filename, t_error_code *err);
+t_cson				*cson_parse_str(const char *str,
+size_t size, t_error_code *err);
+
+/*
+**	PRODUCING
+*/
+t_error_code		cson_produce_file(const t_cson *cson,
+const char *filename, t_bool override_file);
+char				*cson_produce_str(const t_cson *cson,
+size_t *size, t_error_code *err);
 
 /*
 **	NAVIGATION

@@ -1,40 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atod.c                                          :+:      :+:    :+:   */
+/*   cson_str_producer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/24 17:27:27 by ydzhuryn          #+#    #+#             */
-/*   Updated: 2017/10/28 13:07:42 by ydzhuryn         ###   ########.fr       */
+/*   Created: 2017/11/15 15:08:24 by ydzhuryn          #+#    #+#             */
+/*   Updated: 2018/01/05 17:20:48 by ydzhuryn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "cson.h"
 
-double	ft_atod(const char *s)
+char	*cson_produce_str(const t_cson *cson, size_t *size, t_error_code *err)
 {
-	double	n;
-	double	f;
-	double	d;
-	int		sign;
-
-	n = (double)ft_atoi(s);
-	sign = 1;
-	while ((*s >= '\t' && *s <= '\r') || *s == ' ')
-		s++;
-	if (*s == '-')
-		sign = -1;
-	s = ft_strchr(s, '.');
-	if (s == NULL)
-		return (n);
-	++s;
-	f = 0.0;
-	d = 10.0;
-	while (*s >= '0' && *s <= '9')
+	if (cson == NULL || size == NULL)
 	{
-		f += (*s++ - '0') / d;
-		d *= 10.0;
+		*err = CSON_NULL_PARAMETER_ERROR;
+		return (NULL);
 	}
-	return (n + (f * sign));
+	return (NULL);
 }

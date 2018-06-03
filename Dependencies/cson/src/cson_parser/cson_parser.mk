@@ -13,10 +13,11 @@ CSON_CSON_PARSER_SRC	:=	cson_assignee.c\
 							cson_number_handler.c\
 							cson_string_handler.c\
 							cson_value_handler.c\
+							cson_parser_logger.c\
 
 CSON_CSON_PARSER_OBJ	=	$(addprefix $(CSON_OBJ_DIR), $(CSON_CSON_PARSER_SRC:.c=.o))
 CSON_CSON_PARSER		+=	$(addprefix $(CSON_CSON_PARSER_DIR), $(CSON_CSON_PARSER_SRC))
 CSON_OBJ				+=	$(CSON_CSON_PARSER_OBJ)
 
 $(CSON_CSON_PARSER_OBJ): $(CSON_OBJ_DIR)%.o: $(CSON_CSON_PARSER_DIR)%.c
-	$(CC) $(CSON_CFLAGS) $(CSON_INCLUDE) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
