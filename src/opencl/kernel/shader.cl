@@ -102,6 +102,7 @@ inline static t_fragment	compose_fragment(const t_scene *scene, const t_vec4 *po
 	fragment.color = shape->color;
 	fragment.to_eye = scene->camera.position - shape->position;
 	fragment.point = *point;
+	fragment.shininess = shape->shininess;
 	return (fragment);
 }
 

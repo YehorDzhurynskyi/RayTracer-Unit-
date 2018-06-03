@@ -66,65 +66,65 @@ int					main(int argc, const char *argv[])
 
 	t_clvec4 position6 = {{0.0, 2.0, -3.0, 0.0}};
 	cl_uchar4 color6 = {{0x22, 0x55, 0xdd, 0x0}};
-	t_shape shape6 = (t_shape) {position6, color6, 0, CONE};
+	t_shape shape6 = (t_shape) {position6, color6, 0, 10.0f, 0.5f, CONE};
 	const float cos2angle = cos(30.0f * M_PI / 180.0f) * cos(30.0f * M_PI / 180.0f);
 	t_cone cone = (t_cone) { {{0.0f, 1.0f, 0.0f, 0.0f}}, cos2angle };
 	scene_add_cone(&renderer.scene, &shape6, &cone);
 
 	t_clvec4 position4 = {{-5.0, 0.0, 0.0, 0.0}};
 	cl_uchar4 color4 = {{0x44, 0xaa, 0x44, 0x0}};
-	t_shape shape4 = (t_shape) {position4, color4, 0, CYLINDER};
+	t_shape shape4 = (t_shape) {position4, color4, 0, 20.0f, 0.1f, CYLINDER};
 	t_cylinder cylinder = (t_cylinder) { {{-0.707f, 0.707f, 0.0f, 0.0f}}, 1.0f };
 	scene_add_cylinder(&renderer.scene, &shape4, &cylinder);
 
 	t_clvec4 position7 = {{-3.0, 2.0, 2.0, 0.0}};
 	cl_uchar4 color7 = {{0xdd, 0x55, 0x33, 0x0}};
-	t_shape shape7 = (t_shape) {position7, color7, 0, CONE};
+	t_shape shape7 = (t_shape) {position7, color7, 0, 1.0f, 0.0f, CONE};
 	const float cos2angle1 = cos(10.0f * M_PI / 180.0f) * cos(10.0f * M_PI / 180.0f);
 	t_cone cone1 = (t_cone) { {{0.0f, -0.707f, 0.707f, 0.0f}}, cos2angle1 };
 	scene_add_cone(&renderer.scene, &shape7, &cone1);
 
 	t_clvec4 position = {{1.0, 0.0, -1.0, 0.0}};
 	cl_uchar4 color = {{0xff, 0xff, 0x0, 0x0}};
-	t_shape shape = (t_shape) {position, color, 0, SPHERE};
+	t_shape shape = (t_shape) {position, color, 0, 4.0f, 0.0f, SPHERE};
 	t_sphere sphere = (t_sphere) { 1.0f };
 	scene_add_sphere(&renderer.scene, &shape, &sphere);
 
 	t_clvec4 position3 = {{0.0, -2.0, 0.0, 0.0}};
 	cl_uchar4 color3 = {{0x66, 0x44, 0x66, 0x0}};
-	t_shape shape3 = (t_shape) {position3, color3, 0, PLANE};
+	t_shape shape3 = (t_shape) {position3, color3, 0, 10.0f, 0.5f, PLANE};
 	t_clvec4 normal1 = {{0.0, 1.0, 0.0, 0.0}};
 	t_plane plane1 = (t_plane) { normal1 };
 	scene_add_plane(&renderer.scene, &shape3, &plane1);
 
 	t_clvec4 position1 = {{-1.0, 0.0, -1.0, 0.0}};
 	cl_uchar4 color1 = {{0x00, 0xff, 0xff, 0x0}};
-	t_shape shape1 = (t_shape) {position1, color1, 0, SPHERE};
+	t_shape shape1 = (t_shape) {position1, color1, 0, 7.0f, 0.0f, SPHERE};
 	t_sphere sphere1 = (t_sphere) { 1.0f };
 	scene_add_sphere(&renderer.scene, &shape1, &sphere1);
 
 	t_clvec4 position8 = {{3.0, 2.0, 2.0, 0.0}};
 	cl_uchar4 color8 = {{0xc4, 0xc2, 0xb4, 0x0}};
-	t_shape shape8 = (t_shape) {position8, color8, 0, CONE};
+	t_shape shape8 = (t_shape) {position8, color8, 0, 5.0f, 0.7f, CONE};
 	t_cone cone2 = (t_cone) { {{0.0f, -0.707f, -0.707f, 0.0f}}, cos2angle1 };
 	scene_add_cone(&renderer.scene, &shape8, &cone2);
 
 	t_clvec4 position5 = {{5.0, 0.0, 0.0, 0.0}};
 	cl_uchar4 color5 = {{0x44, 0xaa, 0x44, 0x0}};
-	t_shape shape5 = (t_shape) {position5, color5, 0, CYLINDER};
+	t_shape shape5 = (t_shape) {position5, color5, 0, 25.0f, 0.6f, CYLINDER};
 	t_cylinder cylinder1 = (t_cylinder) { {{0.707f, 0.707f, 0.0f, 0.0f}}, 1.0f };
 	scene_add_cylinder(&renderer.scene, &shape5, &cylinder1);
 
 	t_clvec4 position2 = {{0.0, 0.0, -5.0, 0.0}};
 	cl_uchar4 color2 = {{0xff, 0x00, 0xff, 0x0}};
-	t_shape shape2 = (t_shape) {position2, color2, 0, PLANE};
+	t_shape shape2 = (t_shape) {position2, color2, 0, 30.0f, 0.4f, PLANE};
 	t_clvec4 normal = {{0.0, 0.707f, 0.707f, 0.0}};
 	t_plane plane = (t_plane) { normal };
 	scene_add_plane(&renderer.scene, &shape2, &plane);
 
 	t_clvec4 position9 = {{-100.0, 0.0, 0.0, 0.0}};
 	cl_uchar4 color9 = {{0x33, 0xaa, 0x55, 0x0}};
-	t_shape shape9 = (t_shape) {position9, color9, 0, PLANE};
+	t_shape shape9 = (t_shape) {position9, color9, 0, 25.0f, 0.0f, PLANE};
 	t_plane plane3 = (t_plane) { {{1.0, 0.0, 0.0, 0.0}} };
 	scene_add_plane(&renderer.scene, &shape9, &plane3);
 
@@ -141,19 +141,19 @@ int					main(int argc, const char *argv[])
 	t_pointlight pointlight = (t_pointlight){{{5.0, 3.0, 10.0, 0.0}}, {{0.1, 0.05, 0.01, 0.0}}};
 	scene_add_pointlight(&renderer.scene, &light, &pointlight);
 
-	const float cosangle = cos(60.0f * M_PI / 180.0f);
+	// const float cosangle = cos(60.0f * M_PI / 180.0f);
 
-	t_light light3 = (t_light){{{0xff, 0x33, 0x33, 0}}, 0.7f, 0, SPOTLIGHT};
-	t_spotlight spotlight = (t_spotlight){ {{-5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
-	scene_add_spotlight(&renderer.scene, &light3, &spotlight);
+	// t_light light3 = (t_light){{{0xff, 0x33, 0x33, 0}}, 0.7f, 0, SPOTLIGHT};
+	// t_spotlight spotlight = (t_spotlight){ {{-5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
+	// scene_add_spotlight(&renderer.scene, &light3, &spotlight);
 
-	t_light light2 = (t_light){{{0xff, 0xff, 0x0, 0}}, 0.7f, 0, DIRLIGHT};
-	t_dirlight dirlight = (t_dirlight){ {{0.0, -0.707f, -0.707f, 0.0}} };
-	scene_add_dirlight(&renderer.scene, &light2, &dirlight);
+	// t_light light2 = (t_light){{{0xff, 0xff, 0x0, 0}}, 0.7f, 0, DIRLIGHT};
+	// t_dirlight dirlight = (t_dirlight){ {{0.0, -0.707f, -0.707f, 0.0}} };
+	// scene_add_dirlight(&renderer.scene, &light2, &dirlight);
 
-	t_light light4 = (t_light){{{0x33, 0x33, 0xff, 0}}, 0.7f, 0, SPOTLIGHT};
-	t_spotlight spotlight1 = (t_spotlight){ {{5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{-0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
-	scene_add_spotlight(&renderer.scene, &light4, &spotlight1);
+	// t_light light4 = (t_light){{{0x33, 0x33, 0xff, 0}}, 0.7f, 0, SPOTLIGHT};
+	// t_spotlight spotlight1 = (t_spotlight){ {{5.0, 3.0, 2.0, 0.0}}, {{1.0, 0.0, 0.0, 0.0}}, {{-0.577f, -0.577f, -0.577f, 0.0f}}, cosangle };
+	// scene_add_spotlight(&renderer.scene, &light4, &spotlight1);
 
 	t_light light1 = (t_light){{{0xff, 0xff, 0xff, 0}}, 0.7f, 0, POINTLIGHT};
 	t_pointlight pointlight1 = (t_pointlight){{{-5.0, 3.0, 10.0, 0.0}}, {{0.1, 0.05, 0.01, 0.0}}};

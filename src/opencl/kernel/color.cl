@@ -42,3 +42,16 @@ inline uchar4	color_scalar(const uchar4 color, const float factor)
 	result.a = min((int)(color.a * factor), 0xff);
 	return (result);
 }
+
+inline uchar4	color_mix(const uchar4 a,
+const uchar4 b, const float factor)
+{
+	uchar4	result;
+	float rfactor = 1.0f - factor;
+
+	result.r = min((int)(a.r * factor) + (int)(b.r * rfactor), 0xff);
+	result.g = min((int)(a.g * factor) + (int)(b.g * rfactor), 0xff);
+	result.b = min((int)(a.b * factor) + (int)(b.b * rfactor), 0xff);
+	result.a = min((int)(a.a * factor) + (int)(b.a * rfactor), 0xff);
+	return (result);
+}

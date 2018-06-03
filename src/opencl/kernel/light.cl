@@ -25,8 +25,7 @@ uchar4			specular(__constant t_light *light, const t_fragment *fragment, const t
 	t_vec4	reflected = reflected_vec(from_light, fragment->normal);
 	float	specfactor = dot(normalize(fragment->to_eye), reflected);
 	specfactor = specfactor <= 0.0 ? 0.0 : specfactor;
-	// specfactor = frag->glossiness * pow(specfactor, frag->shininess);
-	specfactor = 0.8f * pow(specfactor, 20);
+	specfactor = pow(specfactor, fragment->shininess);
 	const uchar4 specular = color_mult(fragment->color, light->color);
 	return (color_scalar(specular, specfactor * light->intensity));
 }

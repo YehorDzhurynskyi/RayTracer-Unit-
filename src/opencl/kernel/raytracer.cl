@@ -69,20 +69,31 @@ __constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *n
 
 static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
 {
-	uchar4	color = 0;
-	t_ray	rey = *ray;
-	while (--trace_depth >= 0)
+	uchar4				color;
+	float				t;
+	__constant t_shape	*shape;
+	__constant t_shape	*next_shape;
+	t_ray				next_ray = *ray;
+
+	shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
+	if (shape == NULL)
+		return (0);
+	t_vec4 point = next_ray.direction * t + next_ray.origin;
+	color = shade(&point, scene, shape);
+	while (--trace_depth > 0)
 	{
-		float t;
-		__constant t_shape *shape = (__constant t_shape*)trace_shape(scene, &rey, &t);
-		if (shape == NULL)
-			break ;
-		const t_vec4 point = rey.direction * t + rey.origin;
-		color = color_add(color, color_scalar(shade(&point, scene, shape), 0.5f));
+		if (shape->reflectivity < 1.0E-4)
+			break;
 		const t_vec4 normal = obtain_normal(&point, shape);
-		rey.direction = reflected_vec(rey.direction, normal);
+		next_ray.direction = reflected_vec(next_ray.direction, normal);
 		const float bias = 0.005f;
-		rey.origin = point + rey.direction * bias;
+		next_ray.origin = point + next_ray.direction * bias;
+		next_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
+		if (next_shape == NULL)
+			break ;
+		point = next_ray.direction * t + next_ray.origin;
+		color = color_add(color, color_scalar(shade(&point, scene, next_shape), shape->reflectivity));
+		shape = next_shape;
 	}
 	return (color);
 }

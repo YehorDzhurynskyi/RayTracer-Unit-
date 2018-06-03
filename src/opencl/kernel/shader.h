@@ -20,6 +20,7 @@ struct					s_fragment
 	t_vec4				normal;
 	t_vec4				to_eye;
 	uchar4				color;
+	float				shininess;
 };
 
 t_vec4	obtain_normal(const t_vec4 *point, __constant t_shape *shape);

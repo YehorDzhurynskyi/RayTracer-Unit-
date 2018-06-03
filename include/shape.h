@@ -28,6 +28,8 @@ typedef struct		__attribute__ ((packed)) s_shape
 	t_clvec4		position; // it's 16 bytes because of alignment
 	cl_uchar4		color;
 	cl_uint			buffer_offset;
+	cl_float		shininess;
+	cl_float		reflectivity;
 	t_shape_type	shapetype;
 }	t_shape;
 
