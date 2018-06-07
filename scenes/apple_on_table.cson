@@ -1,22 +1,25 @@
+ambient: 0.15
 camera:
 	position: [0.0 50.0 50.0]
+	forward: [0.0 -0.707 -0.707]
+	right: [1.0 0.0 0.0]
+	up: [0.0 0.707 -0.707]
 	spot: [0.0 0.0 0.0]
-	up: [0.0 1.0 0.0]
-geometry: [
+shapes: [
 	{
-		primitive: "sphere"
+		type: "sphere"
 		radius: 1.0
 		position: [0.0 3.0 0.0]
-		color: "0x00895980"
+		color: "0x000000ff"
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [0.0 1.0 0.0]
-		position: [0.0 0.0 0.0]
+		position: [0.0 -5.0 0.0]
 		color: "0x00897b59"
 	}
 ]
-light: [
+lights: [
 	{
 		type: "spot"
 		position: [0.0 50.0 0.0]

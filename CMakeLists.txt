@@ -62,6 +62,6 @@ target_link_libraries(${PROJECT_NAME}
 	${OpenCL_LIBRARIES}
 	${SDL2_LIBRARIES}
 	ft
-	CSONParser
+	cson
 	nuklear
 )

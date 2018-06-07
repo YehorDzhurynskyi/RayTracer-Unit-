@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common_parser.c                                    :+:      :+:    :+:   */
+/*   common_serializer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,29 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "scenerepository.h"
 
-t_vec3d	parse_vec3d(const t_cson *cson)
+t_cson	*serialize_vec3d(const t_vec3d *vec)
 {
-	t_vec3d			res;
-	const t_cson	*value;
+	t_cson	*cson;
 
-	value = cson_at(cson, 0);
-	if (value == NULL)
-		return ((t_vec3d){0.0, 0.0, 0.0});
-	res.x = cson_get_real(value);
-	value = cson_at(cson, 1);
-	res.y = cson_get_real(value);
-	value = cson_at(cson, 2);
-	res.z = cson_get_real(value);
-	return (res);
+	cson = cson_array();
+	cson_push_real(cson, vec->x);
+	cson_push_real(cson, vec->y);
+	cson_push_real(cson, vec->z);
+	return (cson);
 }
 
-t_color	parse_cson_color(const t_cson *cson)
+t_cson	*serialize_vec4(const t_clvec4 *vec)
 {
-	const t_cson	*prty_cson;
+	t_cson	*cson;
 
-	prty_cson = cson_valueof(cson, CSON_COLOR_KEY);
-	return (prty_cson == NULL
-	? 0x00FFFFFF : ft_hex_atoui(cson_get_string(prty_cson)));
+	cson = cson_array();
+	cson_push_real(cson, vec->x);
+	cson_push_real(cson, vec->y);
+	cson_push_real(cson, vec->z);
+	cson_push_real(cson, vec->w);
+	return (cson);
+}
+
+t_cson	*serialize_color(const cl_uchar4 *color)
+{
+	unsigned int	uicolor;
+
+	uicolor = color->w << 24;
+	uicolor |= color->x << 16;
+	uicolor |= color->y << 8;
+	uicolor |= color->z << 0;
+	return (cson_string(ft_hex_uitoa(uicolor, TRUE, FALSE)));
 }

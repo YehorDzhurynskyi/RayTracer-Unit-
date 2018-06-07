@@ -1,10 +1,11 @@
+ambient: 0.15
 camera:
 	position: [-4.0 1.0 4.0]
 	spot: [-4.0 1.0 1000.0]
 	up: [0.0 1.0 0.0]
-geometry: [
+shapes: [
 	{
-		primitive: "sphere"
+		type: "sphere"
 		radius: 1.0
 		position: [0.0 0.0 0.0]
 		color: "0x00ff3333"
@@ -13,7 +14,7 @@ geometry: [
 		reflectivity: 0.4
 	}
 	{
-		primitive: "sphere"
+		type: "sphere"
 		radius: 1.0
 		position: [1.0 -1.0 1.0]
 		color: "0x0033ff33"
@@ -22,7 +23,7 @@ geometry: [
 		reflectivity: 0.4
 	}
 	{
-		primitive: "sphere"
+		type: "sphere"
 		radius: 1.0
 		position: [-1.0 -1.0 1.0]
 		color: "0x003333ff"
@@ -31,7 +32,7 @@ geometry: [
 		reflectivity: 0.4
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [0.0 1.0 0.0]
 		position: [0.0 -2.0 0.0]
 		color: "0x004e6993"
@@ -41,7 +42,7 @@ geometry: [
 	}
 #MIRRORS
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [0.0 0.0 1.0]
 		position: [0.0 0.0 -5.0]
 		color: "0x00111111"
@@ -50,7 +51,7 @@ geometry: [
 		glossiness: 2.0
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [0.0 0.0 -1.0]
 		position: [0.0 0.0 5.0]
 		color: "0x00111111"
@@ -59,28 +60,28 @@ geometry: [
 		glossiness: 2.0
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [1.0 0.0 0.0]
 		position: [-5.0 0.0 0.0]
 		color: "0x00111111"
 		reflectivity: 0.75
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [-1.0 0.0 0.0]
 		position: [5.0 0.0 0.0]
 		color: "0x00111111"
 		reflectivity: 0.75
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		normal: [0.0 -1.0 0.0]
 		position: [0.0 5.0 0.0]
 		color: "0x00111111"
 		reflectivity: 0.75
 	}
 ]
-light: [
+lights: [
 	{
 		type: "point"
 		position: [0.0 4.0 0.0]

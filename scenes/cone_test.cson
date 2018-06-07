@@ -1,10 +1,11 @@
+ambient: 0.15
 camera:
 	position: [0.0 0.0 20.0]
 	spot: [0.0 0.0 -10.0]
 	up: [0.0 1.0 0.0]
-geometry: [
+shapes: [
 	{
-		primitive: "cone"
+		type: "cone"
 		angle: 15.0
 		position: [0.0 0.0 -10.0]
 		direction: [0.0 0.0 -1.0]
@@ -13,7 +14,7 @@ geometry: [
 		glossiness: 1.0
 	}
 	{
-		primitive: "cone"
+		type: "cone"
 		angle: 15.0
 		position: [5.0 0.0 -10.0]
 		direction: [0.0 1.0 0.0]
@@ -22,7 +23,7 @@ geometry: [
 		glossiness: 1.0
 	}
 	{
-		primitive: "cone"
+		type: "cone"
 		angle: 15.0
 		position: [-5.0 0.0 -10.0]
 		direction: [0.0 -1.0 0.0]
@@ -31,7 +32,7 @@ geometry: [
 		glossiness: 1.0
 	}
 	{
-		primitive: "cone"
+		type: "cone"
 		angle: 15.0
 		position: [-5.0 0.0 0.0]
 		direction: [-1.0 -1.0 0.0]
@@ -40,7 +41,7 @@ geometry: [
 		glossiness: 1.0
 	}
 	{
-		primitive: "cone"
+		type: "cone"
 		angle: 15.0
 		position: [5.0 0.0 0.0]
 		direction: [3.0 1.0 0.0]
@@ -50,43 +51,37 @@ geometry: [
 	}
 # ROOM BOX
 	{
-		primitive: "plane"
+		type: "plane"
 		position: [0.0 0.0 -15.0]
 		normal: [0.0 0.0 1.0]
 		color: "0x00808080"
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		position: [10.0 0.0 0.0]
 		normal: [-1.0 0.0 0.0]
 		color: "0x00808080"
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		position: [-10.0 0.0 0.0]
 		normal: [1.0 0.0 0.0]
 		color: "0x00808080"
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		position: [0.0 5.0 0.0]
 		normal: [0.0 -1.0 0.0]
 		color: "0x00808080"
 	}
 	{
-		primitive: "plane"
+		type: "plane"
 		position: [0.0 -5.0 0.0]
 		normal: [0.0 1.0 0.0]
 		color: "0x00808080"
 	}
 ]
-light: [
-	# {
-	# 	type: "directional"
-	# 	direction: [0.0 -1.0 0.0]
-	# 	color: "0x00ffffff"
-	# 	intensity: 1.0
-	# }
+lights: [
 	{
 		type: "point"
 		position: [5.0 0.0 -5.0]

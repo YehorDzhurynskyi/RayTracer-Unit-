@@ -5,6 +5,7 @@ CSON_CSON_NAVIGATOR_SRC	:=	cson_at.c\
 							cson_foreach.c\
 							cson_get_composite.c\
 							cson_get_primitive.c\
+							cson_get_default_primitive.c\
 							cson_root.c\
 							cson_size.c\
 							cson_type_composite.c\

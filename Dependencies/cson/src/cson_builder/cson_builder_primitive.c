@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cson_allocator.c                                   :+:      :+:    :+:   */
+/*   cson_builder_primitive.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,46 +11,43 @@
 /* ************************************************************************** */
 
 #include "cson.h"
-#include <stdlib.h>
 
-t_cson	*cson_alloc(t_cson *parent)
+t_cson	*cson_integer(int value)
 {
 	t_cson	*cson;
 
-	cson = (t_cson*)malloc(sizeof(t_cson));
-	if (!cson)
-		return (NULL);
-	cson->key = NULL;
-	cson->value_type = CSON_UNDEFINED_VALUE_TYPE;
-	cson->parent = parent;
+	cson = cson_alloc(NULL);
+	cson->value_type = CSON_INTEGER_VALUE_TYPE;
+	cson->value.integer = value;
 	return (cson);
 }
 
-void	cson_eliminate(t_cson *cson)
+t_cson	*cson_real(double value)
 {
-	unsigned	i;
-	t_alst		*tuple;
+	t_cson	*cson;
 
-	if (cson == NULL)
-		return ;
-	if (cson->value_type == CSON_OBJECT_VALUE_TYPE
-	|| cson->value_type == CSON_ARRAY_VALUE_TYPE)
-	{
-		tuple = cson->value.tuple;
-		i = 0;
-		while (i < tuple->size)
-			cson_free(alst_get(tuple, i++));
-		alst_del(&tuple);
-	}
-	else if (cson->value_type == CSON_STRING_VALUE_TYPE)
-		free(cson->value.string);
-	free(cson->key);
-	free(cson);
+	cson = cson_alloc(NULL);
+	cson->value_type = CSON_REAL_VALUE_TYPE;
+	cson->value.real = value;
+	return (cson);
 }
 
-void	cson_free(t_cson *cson)
+t_cson	*cson_boolean(t_bool value)
 {
-	while (cson->parent != NULL)
-		cson = cson->parent;
-	cson_eliminate(cson);
+	t_cson	*cson;
+
+	cson = cson_alloc(NULL);
+	cson->value_type = CSON_BOOLEAN_VALUE_TYPE;
+	cson->value.boolean = value;
+	return (cson);
+}
+
+t_cson	*cson_string(const char *value)
+{
+	t_cson	*cson;
+
+	cson = cson_alloc(NULL);
+	cson->value_type = CSON_STRING_VALUE_TYPE;
+	cson->value.string = ft_strdup(value);
+	return (cson);
 }

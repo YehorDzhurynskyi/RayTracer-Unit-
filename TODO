@@ -1,0 +1,2 @@
+Need to store on host the copy of scene to speed up the read access,
+then on writing access call map/unmap functions to upload changes

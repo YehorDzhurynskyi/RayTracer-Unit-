@@ -27,31 +27,9 @@ static void	renderer_prepare(const t_renderer *renderer)
 	err |= clSetKernelArg(renderer->rt_prgm.kernel, 2, sizeof(cl_int), &renderer->scene.nshapes);
 	err |= clSetKernelArg(renderer->rt_prgm.kernel, 3, sizeof(cl_mem), &renderer->scene.lightbuffer);
 	err |= clSetKernelArg(renderer->rt_prgm.kernel, 4, sizeof(cl_int), &renderer->scene.nlights);
-#if 0
 	err |= clSetKernelArg(renderer->rt_prgm.kernel, 5, sizeof(t_camera), &renderer->scene.camera);
-#else
-	static clock_t last = 0;
-	clock_t now = clock();
-	static float ellapsed = 0.0f;
-	ellapsed += ((now - last) / 1000000.0f) * 1000.0;
-	last = now;
-	double x = ((int)ellapsed) % 1000 / 1000.0 * 2.0 * M_PI;
-	double s = sin(x);
-	double c = cos(x);
-	t_clmat4x4 mat = {
-		{c, 0.0f, s, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		-s, 0.0f, c, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f}
-	};
-	const float d = 8.0f;
-	t_clvec4	pos = {{s * d, s, c * d, 0.0}};
-	t_camera	camera = (t_camera){mat, pos};
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 5, sizeof(t_camera), &camera); // TODO: replace with scene.camera
-#endif
 	if (err)
 		print_opencl_error("Failed to set kernel arguments...", err);
-	// TODO: add light related and other set kernel args
 }
 
 static cl_mem	*enqueue_filters(t_renderer *renderer, int width, int height)

@@ -13,13 +13,22 @@
 #ifndef SCENE_H
 # define SCENE_H
 
+# include "ft.h"
 # include "shape.h"
 # include "light.h"
 
+# ifndef SHAPEBUFFER_CAPACITY
+#  define SHAPEBUFFER_CAPACITY	1024 * 16
+# endif
+
+# ifndef LIGHTBUFFER_CAPACITY
+#  define LIGHTBUFFER_CAPACITY	1024 * 4
+# endif
+
 typedef struct	__attribute__ ((packed)) s_camera
 {
-	t_clmat4x4	rotation_matrix;
-	t_clvec4	position;
+	t_clmat4x4		rotation_matrix;
+	t_clvec4		position;
 }	t_camera;
 
 typedef struct
@@ -33,6 +42,7 @@ typedef struct
 	size_t			lightbuffer_size;
 	unsigned int	nlights;
 	t_camera		camera;
+	cl_float		ambient;
 	// cube map texture
 }	t_scene;
 
@@ -42,27 +52,15 @@ typedef enum
 	LIGHT_BUFFER_TARGET
 }	t_buffer_target;
 
-t_scene	scene_create(void);
-void	scene_cleanup(t_scene *scene);
-void	scene_unmap(t_scene *scene, t_buffer_target target);
+t_camera			camera_look_at(const t_vec3d *position,
+const t_vec3d *spot, const t_vec3d *up);
+t_camera			camera_create(const t_vec3d *position,
+const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up);
 
-void	scene_add_pointlight(t_scene *scene, t_light *light, const t_pointlight *pointlight);
-void	scene_add_dirlight(t_scene *scene, t_light *light, const t_dirlight *dirlight);
-void	scene_add_spotlight(t_scene *scene, t_light *light, const t_spotlight *spotlight);
-
-void	scene_add_sphere(t_scene *scene, t_shape *shape, const t_sphere *sphere);
-void	scene_update_sphere(t_scene *scene, const t_shape *shape, const t_sphere *sphere);
-
-void	scene_add_plane(t_scene *scene, t_shape *shape, const t_plane *plane);
-void	scene_update_plane(t_scene *scene, const t_shape *shape, const t_plane *plane);
-
-void	scene_add_cylinder(t_scene *scene, t_shape *shape, const t_cylinder *cylinder);
-void	scene_update_cylinder(t_scene *scene, const t_shape *shape, const t_cylinder *cylinder);
-
-void	scene_add_cone(t_scene *scene, t_shape *shape, const t_cone *cone);
-void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone);
-
-void	scene_remove_light(t_scene *scene, const t_light *light);
-void	scene_remove_shape(t_scene *scene, const t_shape *shape);
+t_scene				scene_create(void);
+void				scene_cleanup(t_scene *scene);
+void				scene_unmap(t_scene *scene, t_buffer_target target);
+size_t				shape_sizeof(t_shape_type type);
+size_t				light_sizeof(t_light_type type);
 
 #endif

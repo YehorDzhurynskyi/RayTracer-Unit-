@@ -57,9 +57,33 @@ struct				s_cson
 typedef int	t_error_code;
 
 /*
-**	DEALLOC
+**	ALLOC/DEALLOC
 */
+t_cson				*cson_alloc(t_cson *parent);
 void				cson_free(t_cson *cson);
+void				cson_eliminate(t_cson *cson);
+
+/*
+**	BUILDER
+*/
+t_cson				*cson_integer(int value);
+t_cson				*cson_real(double value);
+t_cson				*cson_boolean(t_bool value);
+t_cson				*cson_string(const char *value);
+t_cson				*cson_array(void);
+t_cson				*cson_object(void);
+void				cson_push_integer(t_cson *cson, int value);
+void				cson_push_real(t_cson *cson, double value);
+void				cson_push_boolean(t_cson *cson, t_bool value);
+void				cson_push_string(t_cson *cson, const char *value);
+void				cson_push(t_cson *cson, t_cson *value);
+void				cson_put_integer(t_cson *cson, const char *key, int value);
+void				cson_put_boolean(t_cson *cson, const char *key,
+t_bool value);
+void				cson_put_string(t_cson *cson, const char *key,
+const char *value);
+void				cson_put_real(t_cson *cson, const char *key, double value);
+void				cson_put(t_cson *cson, const char *key, t_cson *value);
 
 /*
 **	PARSING
@@ -94,6 +118,12 @@ double				cson_get_real(const t_cson *cson);
 t_bool				cson_get_boolean(const t_cson *cson);
 const t_alst		*cson_get_array(const t_cson *cson);
 const t_alst		*cson_get_object(const t_cson *cson);
+const char			*cson_get_default_string(const t_cson *cson,
+const char *value);
+long long			cson_get_default_integer(const t_cson *cson, int value);
+double				cson_get_default_real(const t_cson *cson, double value);
+t_bool				cson_get_default_boolean(const t_cson *cson,
+t_bool value);
 
 const t_cson		*cson_valueof(const t_cson *cson, const char *key);
 const t_cson		*cson_at(const t_cson *cson, unsigned int index);
