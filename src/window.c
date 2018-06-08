@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "window.h"
-
+#include "ft.h"
 #include "gui.h"
 #include "logger.h"
 
@@ -99,6 +99,7 @@ static void					poll_events(void)
 {
 	SDL_Event	event;
 
+	camera_key_handler();
 	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
@@ -108,8 +109,6 @@ static void					poll_events(void)
 		{
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				g_window_should_close = TRUE;
-			else
-				camera_key_handler(&event);
 		}
 		nk_sdl_handle_event(&event);
 	}

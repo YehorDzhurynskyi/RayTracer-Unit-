@@ -11,34 +11,35 @@
 /* ************************************************************************** */
 
 #include <SDL.h>
-#include <SDL_opengl.h>
 #include "renderer.h"
 
-void	camera_key_handler(const SDL_Event *event)
+void	camera_key_handler(void)
 {
-	t_vec3d	forward;
-	t_vec3d	right;
-	float	forward_speed;
-	float	side_speed;
+	t_vec3d		forward;
+	t_vec3d		right;
+	float		forward_speed;
+	float		side_speed;
+	const Uint8	*keystate;
 
-	if (event->key.keysym.sym == SDLK_w || event->key.keysym.sym == SDLK_s
-	|| event->key.keysym.sym == SDLK_a || event->key.keysym.sym == SDLK_d)
+	keystate = SDL_GetKeyboardState(NULL);
+	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S]
+	|| keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D])
 	{
 		forward_speed = 0.0f;
 		side_speed = 0.0f;
-		if (event->key.keysym.sym == SDLK_w || event->key.keysym.sym == SDLK_s)
+		if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_S])
 		{
 			forward.x = -g_scene_renderer.scene.camera.rotation_matrix.s2;
 			forward.y = -g_scene_renderer.scene.camera.rotation_matrix.s6;
 			forward.z = -g_scene_renderer.scene.camera.rotation_matrix.sa;
-			forward_speed = event->key.keysym.sym == SDLK_w ? 0.2f : -0.2f;
+			forward_speed = keystate[SDL_SCANCODE_W] ? 0.2f : -0.2f;
 		}
-		if (event->key.keysym.sym == SDLK_a || event->key.keysym.sym == SDLK_d)
+		if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D])
 		{
 			right.x = g_scene_renderer.scene.camera.rotation_matrix.s0;
 			right.y = g_scene_renderer.scene.camera.rotation_matrix.s4;
 			right.z = g_scene_renderer.scene.camera.rotation_matrix.s8;
-			side_speed = event->key.keysym.sym == SDLK_a ? -0.15f : 0.15f;
+			side_speed = keystate[SDL_SCANCODE_A] ? -0.15f : 0.15f;
 		}
 		g_scene_renderer.scene.camera.position.x += forward_speed * forward.x + side_speed * right.x;
 		g_scene_renderer.scene.camera.position.y += forward_speed * forward.y + side_speed * right.y;
