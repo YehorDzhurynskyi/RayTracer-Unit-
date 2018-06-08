@@ -54,9 +54,8 @@ int					main(int argc, const char *argv[])
 		ft_printf_fd(2, "usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file\n");
 		return (EXIT_FAILURE);
 	}
-	err_code = scene_load(&g_scene_renderer.scene, scene_file);
-	window_create();
 	renderer_init();
+	window_create();
 	err_code = scene_load(&g_scene_renderer.scene, scene_file);
 	if (err_code != 0) // TODO: replace it later
 	{
@@ -65,10 +64,10 @@ int					main(int argc, const char *argv[])
 	}
 
 	{
-		// renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
-		// renderer.nfilters++;
-		// renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
-		// renderer.nfilters++;
+		g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
+		g_scene_renderer.nfilters++;
+		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
+		// g_scene_renderer.nfilters++;
 	}
 
 	window_loop(renderer_render);

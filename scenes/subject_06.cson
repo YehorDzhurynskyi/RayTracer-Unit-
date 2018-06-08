@@ -40,7 +40,6 @@ shapes: [
 		position: [-8.0 7.0 8.0]
 		color: "0x00eeeeee"
 		shininess: 30.0
-		glossiness: 2.0
 		reflectivity: 0.3
 	}
 	{
@@ -49,7 +48,6 @@ shapes: [
 		position: [-8.0 -7.0 8.0]
 		color: "0x00eeeeee"
 		shininess: 30.0
-		glossiness: 2.0
 		reflectivity: 0.3
 	}
 	{
@@ -58,7 +56,6 @@ shapes: [
 		position: [-8.0 0.0 8.0]
 		direction: [0.0 1.0 0.0]
 		shininess: 30.0
-		glossiness: 2.0
 		color: "0x00eeeeee"
 		reflectivity: 0.3
 	}

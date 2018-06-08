@@ -32,7 +32,7 @@ t_cylinder	deserialize_cylinder(const t_cson *cson, t_err_code *err)
 	}
 	cylinder.direction = deserialize_vec4(direction_cson, TRUE, err);
 	radius_cson = cson_valueof(cson, CSON_RADIUS_KEY);
-	if (radius_cson == NULL || cson_is_real(radius_cson))
+	if (radius_cson == NULL || cson_is_real(radius_cson) == FALSE)
 	{
 		log_notify("Cylinder radius is absent or is not real-type"
 		" value, the value is set to " RADIUS_STR " by default");

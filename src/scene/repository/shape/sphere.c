@@ -24,7 +24,7 @@ t_sphere	deserialize_sphere(const t_cson *cson, t_err_code *err)
 
 	(void)err;
 	radius_cson = cson_valueof(cson, CSON_RADIUS_KEY);
-	if (radius_cson == NULL || cson_is_real(radius_cson))
+	if (radius_cson == NULL || cson_is_real(radius_cson) == FALSE)
 	{
 		log_notify("Sphere radius is absent or is not real-type"
 		" value, the value is set to " RADIUS_STR " by default");
