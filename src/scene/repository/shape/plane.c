@@ -12,11 +12,19 @@
 
 #include "scenerepository.h"
 
-t_plane	deserialize_plane(const t_cson *cson)
+t_plane	deserialize_plane(const t_cson *cson, t_err_code *err)
 {
-	t_plane	plane;
+	t_plane			plane;
+	const t_cson	*normal_cson;
 
-	plane.normal = deserialize_vec4(cson_valueof(cson, CSON_NORMAL_KEY), TRUE);
+	normal_cson = cson_valueof(cson, CSON_NORMAL_KEY);
+	if (normal_cson == NULL)
+	{
+		*err = RT_NO_REQUIRED_VALUE_ERROR;
+		log_error("Plane's normal vector is absent", *err);
+		return ((t_plane){});
+	}
+	plane.normal = deserialize_vec4(normal_cson, TRUE, err);
 	return (plane);
 }
 

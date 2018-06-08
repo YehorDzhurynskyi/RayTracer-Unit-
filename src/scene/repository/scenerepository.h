@@ -17,6 +17,7 @@
 # include "scene.h"
 # include "shape.h"
 # include "light.h"
+# include "logger.h"
 
 /*
 **	cson keys for scene (de)serializer
@@ -54,62 +55,44 @@
 # define CSON_INTENSITY_KEY		"intensity"
 # define CSON_ATTENUATION_KEY	"attenuation"
 
-/*
-**	error codes for (de)serializing
-**	which are generates on scene_load or scene_upload function calls
-*/
-# define SCENEREPOSITORY_NO_ERROR					0x0
-# define SCENEREPOSITORY_UNDEFINED_ERROR			0x1
-# define SCENEREPOSITORY_FILE_OPENING_ERROR			0x2
-# define SCENEREPOSITORY_MEM_ALLOC_ERROR			0x3
-# define SCENEREPOSITORY_FILE_READING_ERROR			0x4
-# define SCENEREPOSITORY_KEY_PARSING_ERROR			0x5
-# define SCENEREPOSITORY_VALUE_PARSING_ERROR		0x6
-# define SCENEREPOSITORY_BRACKETS_PARSING_ERROR		0x7
-# define SCENEREPOSITORY_EMPTY_DATA_PARSING_ERROR	0x8
-# define SCENEREPOSITORY_NULL_PARAMETER_ERROR		0x9
-# define SCENEREPOSITORY_WRONG_VALUE_FORMAT_ERROR	0xA
-
-typedef int		t_err_code;
-
 t_err_code		scene_load(t_scene *scene, const char *filename);
 t_err_code		scene_upload(const t_scene *scene, const char *filename);
 
 /*
 **	(de)serializing functions
 */
-t_clvec4		deserialize_vec4(const t_cson *cson, t_bool normalize);
+t_clvec4		deserialize_vec4(const t_cson *cson, t_bool normalize, t_err_code *err);
 t_cson			*serialize_vec4(const t_clvec4 *vec);
-t_vec3d			deserialize_vec3d(const t_cson *cson, t_bool normalize);
+t_vec3d			deserialize_vec3d(const t_cson *cson, t_bool normalize, t_err_code *err);
 t_cson			*serialize_vec3d(const t_vec3d *vec);
-cl_uchar4		deserialize_color(const t_cson *cson);
+cl_uchar4		deserialize_color(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_color(const cl_uchar4 *color);
 
-t_camera		deserialize_camera(const t_cson *cson);
+t_camera		deserialize_camera(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_camera(const t_camera *camera);
 
 t_err_code		deserialize_shapes(t_scene *scene, const t_cson *cson);
-t_shape			deserialize_shape(const t_cson *cson);
+t_shape			deserialize_shape(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_shape(t_cson *actual_shape_cson,
 const t_shape *shape);
-t_cone			deserialize_cone(const t_cson *cson);
+t_cone			deserialize_cone(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_cone(const t_cone *cone);
-t_cylinder		deserialize_cylinder(const t_cson *cson);
+t_cylinder		deserialize_cylinder(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_cylinder(const t_cylinder *cylinder);
-t_plane			deserialize_plane(const t_cson *cson);
+t_plane			deserialize_plane(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_plane(const t_plane *plane);
-t_sphere		deserialize_sphere(const t_cson *cson);
+t_sphere		deserialize_sphere(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_sphere(const t_sphere *sphere);
 
 t_err_code		deserialize_lights(t_scene *scene, const t_cson *cson);
-t_light			deserialize_light(const t_cson *cson);
+t_light			deserialize_light(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_light(t_cson *actual_light_cson,
 const t_light *light);
-t_pointlight	deserialize_pointlight(const t_cson *cson);
+t_pointlight	deserialize_pointlight(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_pointlight(const t_pointlight *pointlight);
-t_dirlight		deserialize_dirlight(const t_cson *cson);
+t_dirlight		deserialize_dirlight(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_dirlight(const t_dirlight *dirlight);
-t_spotlight		deserialize_spotlight(const t_cson *cson);
+t_spotlight		deserialize_spotlight(const t_cson *cson, t_err_code *err);
 t_cson			*serialize_spotlight(const t_spotlight *spotlight);
 
 #endif

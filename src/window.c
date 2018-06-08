@@ -13,7 +13,7 @@
 #include "window.h"
 
 #include "gui.h"
-#include "error.h"
+#include "logger.h"
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -64,7 +64,7 @@ static void					generate_gl_texture()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, g_frame_width, g_frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 }
 
-t_bool						window_create(void)
+void						window_create(void)
 {
 	while (TRUE)
 	{
@@ -89,11 +89,10 @@ t_bool						window_create(void)
 		struct nk_font_atlas *atlas;
 		nk_sdl_font_stash_begin(&atlas);
 		nk_sdl_font_stash_end();
-		return (TRUE);
+		return ;
 	}
 	window_cleanup();
-	print_error(SDL_GetError());
-	return (FALSE);
+	log_fatal("SDL window creation was failed", RT_SDL_ERROR);
 }
 
 static void					poll_events(void)

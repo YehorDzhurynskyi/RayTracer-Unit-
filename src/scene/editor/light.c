@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "sceneeditor.h"
-#include "error.h"
+#include "logger.h"
 #include <assert.h>
 
 // TODO: the code of this and sceneeditor_shape.c file are pretty the same
@@ -25,7 +25,7 @@ const void *actual_light)
 
 	sizeof_actuallight = light_sizeof(light->lighttype);
 	if (scene->lightbuffer_size + sizeof(t_light) + sizeof_actuallight > LIGHTBUFFER_CAPACITY)
-		print_error("Reached the maximum number of lights in scene"); // TODO: don't exit the program just print message and return
+		log_error("Reached the maximum number of lights in scene", RT_BUFFER_OVERFLOW_ERROR);
 	light->buffer_offset = scene->lightbuffer_size;
 	scene->nlights++;
 	dest = scene->host_lightbuffer + scene->lightbuffer_size;

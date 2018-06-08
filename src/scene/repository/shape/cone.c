@@ -12,13 +12,34 @@
 
 #include "scenerepository.h"
 #include <math.h>
+#include "logger.h"
 
-t_cone	deserialize_cone(const t_cson *cson)
+#define ANGLE		15.0
+#define ANGLE_STR	TO_STRING(ANGLE)
+
+t_cone	deserialize_cone(const t_cson *cson, t_err_code *err)
 {
-	t_cone	cone;
+	t_cone			cone;
+	const t_cson	*direction_cson;
+	const t_cson	*angle_cson;
 
-	cone.direction = deserialize_vec4(cson_valueof(cson, CSON_DIRECTION_KEY), TRUE);
-	cone.cos2angle = cson_get_default_real(cson_valueof(cson, CSON_ANGLE_KEY), 15.0);
+	direction_cson = cson_valueof(cson, CSON_DIRECTION_KEY);
+	if (direction_cson == NULL)
+	{
+		*err = RT_NO_REQUIRED_VALUE_ERROR;
+		log_error("Cone's diretion vector is absent", *err);
+		return ((t_cone){});
+	}
+	cone.direction = deserialize_vec4(direction_cson, TRUE, err);
+	angle_cson = cson_valueof(cson, CSON_ANGLE_KEY);
+	if (angle_cson == NULL || cson_is_real(angle_cson) == FALSE)
+	{
+		log_notify("Cone angle is absent or is not real-type"
+		" value, the value is set to " ANGLE_STR " by default");
+		cone.cos2angle = ANGLE;
+	}
+	else
+		cone.cos2angle = cson_get_real(angle_cson);
 	cone.cos2angle = cos(cone.cos2angle * M_PI / 180.0);
 	cone.cos2angle *= cone.cos2angle;
 	return (cone);

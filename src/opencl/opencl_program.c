@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "opencl.h"
-#include "error.h"
+#include "logger.h"
 #include "ft.h"
 
 #define BUILDLOG_BUFF_SIZE	4096
@@ -33,7 +33,7 @@ static void			build_program(t_opencl_program *clprogram)
 		if (ret_size > BUILDLOG_BUFF_SIZE)
 			ret_size = BUILDLOG_BUFF_SIZE;
 		logbuffer[ret_size] = '\0';
-		print_opencl_error(logbuffer, err);
+		log_fatal(logbuffer, RT_OPENCL_ERROR);
 	}
 }
 
@@ -46,20 +46,20 @@ t_opencl_program	opencl_program_create(const char *sourcefile, const char *kerne
 	clprogram = (t_opencl_program){NULL, NULL, NULL};
 	source = ft_read_file(sourcefile);
 	if (source == NULL)
-		print_error("Failed to read openCL source file...");
+		log_fatal("Failed to read openCL source file...", RT_FILE_OPENING_ERROR);
 	clprogram.program = clCreateProgramWithSource(g_clcontext.context,
 	1, (const char **)&source, NULL, &err);
 	free(source);
 	if (clprogram.program == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create openCL program...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	build_program(&clprogram);
 	clprogram.kernel = clCreateKernel(clprogram.program, kernel_name, &err);
 	if (clprogram.kernel == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create openCL kernel...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	clprogram.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_WRITE,
 	g_frame_width * g_frame_height * 4, NULL, &err);
 	if (clprogram.outputbuffer == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create output buffer...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	return (clprogram);
 }
 

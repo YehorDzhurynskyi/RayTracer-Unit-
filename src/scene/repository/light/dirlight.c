@@ -12,12 +12,19 @@
 
 #include "scenerepository.h"
 
-t_dirlight	deserialize_dirlight(const t_cson *cson)
+t_dirlight	deserialize_dirlight(const t_cson *cson, t_err_code *err)
 {
-	t_dirlight	dirlight;
+	t_dirlight		dirlight;
+	const t_cson	*direction_cson;
 
-	dirlight.direction = deserialize_vec4(cson_valueof(cson,
-	CSON_DIRECTION_KEY), TRUE);
+	direction_cson = cson_valueof(cson, CSON_DIRECTION_KEY);
+	if (direction_cson == NULL)
+	{
+		*err = RT_NO_REQUIRED_VALUE_ERROR;
+		log_error("Direction light's diretion vector is absent", *err);
+		return ((t_dirlight){});
+	}
+	dirlight.direction = deserialize_vec4(direction_cson, TRUE, err);
 	return (dirlight);
 }
 

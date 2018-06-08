@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft.h"
-#include "error.h"
 #include "window.h"
 #include "renderer.h"
 #include "scene.h"
@@ -19,6 +18,7 @@
 #include "scenerepository.h"
 #include "shape.h"
 #include <stdlib.h>
+#include "logger.h"
 
 int					g_frame_width = 800;
 int					g_frame_height = 600;
@@ -37,12 +37,11 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 		else
 			return (argv[i]);
 		if (i >= argc || g_frame_width <= 0 || g_frame_height <= 0)
-			print_error("Invalid command line argument\n" RT_USAGE);
+			log_fatal("Invalid command line argument\n" RT_USAGE,
+			RT_COMMAND_LINE_PARSING_ERROR);
 	}
 	return (NULL);
 }
-
-#include <math.h>
 
 int					main(int argc, const char *argv[])
 {
@@ -51,15 +50,18 @@ int					main(int argc, const char *argv[])
 
 	scene_file = parse_cli_arguments(argc, argv);
 	if (scene_file == NULL) // TODO: replace it later
-		print_error("usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file");
-	if (window_create() == FALSE)
+	{
+		ft_printf_fd(2, "usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file\n");
 		return (EXIT_FAILURE);
+	}
+	err_code = scene_load(&g_scene_renderer.scene, scene_file);
+	window_create();
 	renderer_init();
 	err_code = scene_load(&g_scene_renderer.scene, scene_file);
-	if (err_code != 0)
+	if (err_code != 0) // TODO: replace it later
 	{
 		ft_printf("Error has been occured with code %x\n", err_code);
-		exit(1);
+		return (EXIT_FAILURE);
 	}
 
 	{

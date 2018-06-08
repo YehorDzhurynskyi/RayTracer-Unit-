@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "opencl.h"
-#include "error.h"
+#include "logger.h"
 #include "ft.h"
 
 t_opencl	g_clcontext;
@@ -30,13 +30,13 @@ void		opencl_init(void)
 
 	err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &g_clcontext.device_id, NULL);
 	if (CL_SUCCESS != err)
-		print_opencl_error("Failed to get device IDS...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	g_clcontext.context = clCreateContext(NULL, 1, &g_clcontext.device_id, opencl_error_callback, NULL, &err);
 	if (g_clcontext.context == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create openCL context...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	g_clcontext.command_queue = clCreateCommandQueue(g_clcontext.context, g_clcontext.device_id, 0, &err);
 	if (g_clcontext.command_queue == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create a queue of commands...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
 
 void		opencl_cleanup(void)

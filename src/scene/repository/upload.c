@@ -16,5 +16,5 @@ t_err_code	scene_upload(const t_scene *scene, const char *filename)
 {
 	(void)scene;
 	(void)filename;
-	return (SCENEREPOSITORY_NO_ERROR);
+	return (RT_NO_ERROR);
 }

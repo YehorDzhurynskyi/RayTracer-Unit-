@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "renderer.h"
-#include "error.h"
+#include "logger.h"
 
 t_renderer	g_scene_renderer;
 
@@ -27,7 +27,7 @@ static void	renderer_prepare(void)
 	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(cl_int), &g_scene_renderer.scene.nlights);
 	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_camera), &g_scene_renderer.scene.camera);
 	if (err)
-		print_opencl_error("Failed to set kernel arguments...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
 
 static cl_mem	*enqueue_filters(int width, int height)
@@ -46,11 +46,11 @@ static cl_mem	*enqueue_filters(int width, int height)
 		err = clSetKernelArg(g_scene_renderer.filter_prgms[i].kernel, 0, sizeof(cl_mem), &*in_buffer);
 		err |= clSetKernelArg(g_scene_renderer.filter_prgms[i].kernel, 1, sizeof(cl_mem), &*out_buffer);
 		if (err)
-			print_opencl_error("Failed to set kernel arguments...", err);
+			log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 		err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.filter_prgms[i].kernel,
 		2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 		if (err)
-			print_opencl_error("Failed to run filter kernel...", err);
+			log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 		in_buffer = &g_scene_renderer.filter_prgms[i].outputbuffer;
 	}
 	return (out_buffer);
@@ -65,14 +65,14 @@ void	renderer_render(unsigned char *pixelbuffer, int width, int height)
 	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.rt_prgm.kernel,
 	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 	if (err)
-		print_opencl_error("Failed to run kernel...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	outputbuffer_ptr = enqueue_filters(width, height);
 	clFinish(g_clcontext.command_queue);
 	err = clEnqueueReadBuffer(g_clcontext.command_queue,
 		*outputbuffer_ptr, CL_TRUE, 0, width * height * 4,
 		pixelbuffer, 0, NULL, NULL);
 	if (err != CL_SUCCESS)
-		print_opencl_error("Failed to read output buffer...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
 
 void	renderer_init(void)

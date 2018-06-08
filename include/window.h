@@ -19,7 +19,7 @@
 typedef void	(*t_render_callback)(unsigned char *pixelbuffer,
 int width, int height);
 
-t_bool	window_create(void);
+void	window_create(void);
 void	window_loop(t_render_callback render_callback);
 void	camera_key_handler(const SDL_Event *event);
 

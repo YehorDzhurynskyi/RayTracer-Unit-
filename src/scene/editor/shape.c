@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "sceneeditor.h"
-#include "error.h"
+#include "logger.h"
 #include <assert.h>
 
 void			scene_add_shape(t_scene *scene, t_shape *shape,
@@ -22,7 +22,7 @@ const void *actual_shape)
 
 	sizeof_actualshape = shape_sizeof(shape->shapetype);
 	if (scene->shapebuffer_size + sizeof(t_shape) + sizeof_actualshape > SHAPEBUFFER_CAPACITY)
-		print_error("Reached the maximum number of shapes in scene"); // TODO: don't exit the program just print message and return
+		log_error("Reached the maximum number of shapes in scene", RT_BUFFER_OVERFLOW_ERROR);
 	shape->buffer_offset = scene->shapebuffer_size;
 	scene->nshapes++;
 	dest = scene->host_shapebuffer + scene->shapebuffer_size;

@@ -12,12 +12,27 @@
 
 #include "scenerepository.h"
 #include <math.h>
+#include "logger.h"
 
-t_sphere	deserialize_sphere(const t_cson *cson)
+#define RADIUS		1.0
+#define RADIUS_STR	TO_STRING(RADIUS)
+
+t_sphere	deserialize_sphere(const t_cson *cson, t_err_code *err)
 {
-	t_sphere	sphere;
+	t_sphere		sphere;
+	const t_cson	*radius_cson;
 
-	sphere.radius2 = cson_get_default_real(cson_valueof(cson, CSON_RADIUS_KEY), 1.0);
+	(void)err;
+	radius_cson = cson_valueof(cson, CSON_RADIUS_KEY);
+	if (radius_cson == NULL || cson_is_real(radius_cson))
+	{
+		log_notify("Sphere radius is absent or is not real-type"
+		" value, the value is set to " RADIUS_STR " by default");
+		sphere.radius2 = RADIUS;
+	}
+	else
+		sphere.radius2 = cson_get_real(radius_cson);
+	sphere.radius2 *= sphere.radius2;
 	return (sphere);
 }
 

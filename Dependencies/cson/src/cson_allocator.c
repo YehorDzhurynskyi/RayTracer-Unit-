@@ -39,7 +39,7 @@ void	cson_eliminate(t_cson *cson)
 		tuple = cson->value.tuple;
 		i = 0;
 		while (i < tuple->size)
-			cson_free(alst_get(tuple, i++));
+			cson_eliminate(alst_get(tuple, i++));
 		alst_del(&tuple);
 	}
 	else if (cson->value_type == CSON_STRING_VALUE_TYPE)

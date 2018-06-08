@@ -19,7 +19,7 @@ unsigned int	ft_hex_atoui(const char *s)
 	n = 0;
 	if (!s)
 		return (0);
-	if (s[0] == '0' && s[1] == 'x')
+	if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
 		s += 2;
 	while (ft_ishex(*s))
 	{

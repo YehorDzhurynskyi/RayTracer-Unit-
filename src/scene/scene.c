@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "scene.h"
-#include "error.h"
+#include "logger.h"
 #include "ft.h"
 #include <assert.h>
 
@@ -26,23 +26,23 @@ t_scene	scene_create(void)
 	scene.shapebuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY
 	| CL_MEM_ALLOC_HOST_PTR, SHAPEBUFFER_CAPACITY, NULL, &err);
 	if (scene.shapebuffer == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create shapebuffer...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	scene.shapebuffer_size = 0;
 	scene.nshapes = 0;
 	g_host_shapebuffer = malloc(SHAPEBUFFER_CAPACITY);
 	if (!g_host_shapebuffer)
-		print_error("malloc error"); // TODO: add error handling
+		log_fatal("Failed to allocate memory for shape buffer", RT_MEM_ALLOC_ERROR);
 	scene.host_shapebuffer = g_host_shapebuffer;
 
 	scene.lightbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY
 	| CL_MEM_ALLOC_HOST_PTR, LIGHTBUFFER_CAPACITY, NULL, &err);
 	if (scene.lightbuffer == NULL || err != CL_SUCCESS)
-		print_opencl_error("Failed to create lightbuffer...", err);
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	scene.lightbuffer_size = 0;
 	scene.nlights = 0;
 	g_host_lightbuffer = malloc(LIGHTBUFFER_CAPACITY);
 	if (!g_host_lightbuffer)
-		print_error("malloc error"); // TODO: add error handling
+		log_fatal("Failed to allocate memory for light buffer", RT_MEM_ALLOC_ERROR);
 	scene.host_lightbuffer = g_host_lightbuffer;
 	return (scene);
 }
@@ -70,14 +70,14 @@ void	scene_unmap(t_scene *scene, t_buffer_target target)
 	{
 		err = clEnqueueUnmapMemObject(g_clcontext.command_queue, scene->shapebuffer, scene->host_shapebuffer, 0, NULL, NULL);
 		if (err != CL_SUCCESS)
-			print_opencl_error("Failed to unmap buffer...", err);
+			log_error(opencl_get_error(err), RT_OPENCL_ERROR);
 		scene->host_shapebuffer = g_host_shapebuffer;
 	}
 	else if (target == LIGHT_BUFFER_TARGET)
 	{
 		err = clEnqueueUnmapMemObject(g_clcontext.command_queue, scene->lightbuffer, scene->host_lightbuffer, 0, NULL, NULL);
 		if (err != CL_SUCCESS)
-			print_opencl_error("Failed to unmap buffer...", err);
+			log_error(opencl_get_error(err), RT_OPENCL_ERROR);
 		scene->host_lightbuffer = g_host_lightbuffer;
 	}
 }

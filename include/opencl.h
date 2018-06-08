@@ -43,6 +43,7 @@ void					opencl_cleanup(void);
 t_opencl_program		opencl_program_create(const char *sourcefile,
 const char *kernel_name);
 void					opencl_program_cleanup(t_opencl_program *clprogram);
+const char				*opencl_get_error(int error);
 
 extern t_opencl			g_clcontext;
 
