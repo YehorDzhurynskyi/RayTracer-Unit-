@@ -98,12 +98,12 @@ static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth
 	return (color);
 }
 
-static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height)
+static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height, float xbias, float ybias)
 {
 	t_ray primary_ray = (t_ray){};
 	float fov = tan(30.0f * M_PI / 180.0f); // TODO: set fov with config struct 
-	float xd = (2.0f * ((x + 0.5f) / width) - 1.0) * fov * (width / (float)height);
-	float yd = (1.0 - 2.0 * ((y + 0.5) / height)) * fov;
+	float xd = (2.0f * ((x + xbias) / width) - 1.0) * fov * (width / (float)height);
+	float yd = (1.0 - 2.0 * ((y + ybias) / height)) * fov;
 	primary_ray.origin = camera.position;
 	primary_ray.direction = (float4)(xd, yd, -1.0f, 0.0f);
 	primary_ray.direction = normalize(primary_ray.direction);
@@ -134,7 +134,23 @@ __kernel void		trace(
 	scene.nlights = nlights;
 	scene.camera = camera;
 
-	t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height);
-	const uchar4 pixelcolor = trace_ray(&primary_ray, &scene, 5);
+	const int SAMPLES = 1;
+	uchar4 pixelcolor;
+	if (SAMPLES == 1)
+	{
+		t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height, 0.5f, 0.5f);
+		pixelcolor = trace_ray(&primary_ray, &scene, 5);
+	} else if (SAMPLES == 4) {
+		t_ray primary_ray1 = obtain_primary_ray(camera, x, y, width, height, 0.2f, 0.8f);
+		const uchar4 pixelcolor1 = trace_ray(&primary_ray1, &scene, 5);
+		t_ray primary_ray2 = obtain_primary_ray(camera, x, y, width, height, 0.4f, 0.4f);
+		const uchar4 pixelcolor2 = trace_ray(&primary_ray2, &scene, 5);
+		t_ray primary_ray3 = obtain_primary_ray(camera, x, y, width, height, 0.6f, 0.6f);
+		const uchar4 pixelcolor3 = trace_ray(&primary_ray3, &scene, 5);
+		t_ray primary_ray4 = obtain_primary_ray(camera, x, y, width, height, 0.8f, 0.2f);
+		const uchar4 pixelcolor4 = trace_ray(&primary_ray4, &scene, 5);
+		pixelcolor = color_add(color_add(color_scalar(pixelcolor1, 0.25), color_scalar(pixelcolor2, 0.25)),
+		color_add(color_scalar(pixelcolor3, 0.25), color_scalar(pixelcolor4, 0.25)));
+	}
 	outputbuffer[x + y * width] = pixelcolor;
 }

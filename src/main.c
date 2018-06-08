@@ -64,8 +64,8 @@ int					main(int argc, const char *argv[])
 	}
 
 	{
-		g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
-		g_scene_renderer.nfilters++;
+		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
+		// g_scene_renderer.nfilters++;
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;
 	}
