@@ -13,64 +13,60 @@
 #include "renderer.h"
 #include "error.h"
 
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
+t_renderer	g_scene_renderer;
 
-static void	renderer_prepare(const t_renderer *renderer)
+static void	renderer_prepare(void)
 {
 	int	err;
 
-	err = clSetKernelArg(renderer->rt_prgm.kernel, 0,
-	sizeof(cl_mem), &renderer->rt_prgm.outputbuffer);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 1, sizeof(cl_mem), &renderer->scene.shapebuffer);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 2, sizeof(cl_int), &renderer->scene.nshapes);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 3, sizeof(cl_mem), &renderer->scene.lightbuffer);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 4, sizeof(cl_int), &renderer->scene.nlights);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 5, sizeof(t_camera), &renderer->scene.camera);
+	err = clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 0,
+	sizeof(cl_mem), &g_scene_renderer.rt_prgm.outputbuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 1, sizeof(cl_mem), &g_scene_renderer.scene.shapebuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 2, sizeof(cl_int), &g_scene_renderer.scene.nshapes);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 3, sizeof(cl_mem), &g_scene_renderer.scene.lightbuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(cl_int), &g_scene_renderer.scene.nlights);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_camera), &g_scene_renderer.scene.camera);
 	if (err)
 		print_opencl_error("Failed to set kernel arguments...", err);
 }
 
-static cl_mem	*enqueue_filters(t_renderer *renderer, int width, int height)
+static cl_mem	*enqueue_filters(int width, int height)
 {
 	int		err;
 	int		i;
 	cl_mem	*in_buffer;
 	cl_mem	*out_buffer;
 
-	in_buffer = &renderer->rt_prgm.outputbuffer;
-	out_buffer = &renderer->rt_prgm.outputbuffer;
+	in_buffer = &g_scene_renderer.rt_prgm.outputbuffer;
+	out_buffer = &g_scene_renderer.rt_prgm.outputbuffer;
 	i = -1;
-	while (++i < (int)renderer->nfilters)
+	while (++i < (int)g_scene_renderer.nfilters)
 	{
-		out_buffer = &renderer->filter_prgms[i].outputbuffer;
-		err = clSetKernelArg(renderer->filter_prgms[i].kernel, 0, sizeof(cl_mem), &*in_buffer);
-		err |= clSetKernelArg(renderer->filter_prgms[i].kernel, 1, sizeof(cl_mem), &*out_buffer);
+		out_buffer = &g_scene_renderer.filter_prgms[i].outputbuffer;
+		err = clSetKernelArg(g_scene_renderer.filter_prgms[i].kernel, 0, sizeof(cl_mem), &*in_buffer);
+		err |= clSetKernelArg(g_scene_renderer.filter_prgms[i].kernel, 1, sizeof(cl_mem), &*out_buffer);
 		if (err)
 			print_opencl_error("Failed to set kernel arguments...", err);
-		err = clEnqueueNDRangeKernel(g_clcontext.command_queue, renderer->filter_prgms[i].kernel,
+		err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.filter_prgms[i].kernel,
 		2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 		if (err)
 			print_opencl_error("Failed to run filter kernel...", err);
-		in_buffer = &renderer->filter_prgms[i].outputbuffer;
+		in_buffer = &g_scene_renderer.filter_prgms[i].outputbuffer;
 	}
 	return (out_buffer);
 }
 
-void	renderer_render(unsigned char *pixelbuffer, int width, int height, void *user_ptr)
+void	renderer_render(unsigned char *pixelbuffer, int width, int height)
 {
-	t_renderer	*renderer;
 	int			err;
 	cl_mem		*outputbuffer_ptr;
 
-	renderer = (t_renderer*)user_ptr;
-	renderer_prepare(renderer);
-	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, renderer->rt_prgm.kernel,
+	renderer_prepare();
+	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.rt_prgm.kernel,
 	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 	if (err)
 		print_opencl_error("Failed to run kernel...", err);
-	outputbuffer_ptr = enqueue_filters(renderer, width, height);
+	outputbuffer_ptr = enqueue_filters(width, height);
 	clFinish(g_clcontext.command_queue);
 	err = clEnqueueReadBuffer(g_clcontext.command_queue,
 		*outputbuffer_ptr, CL_TRUE, 0, width * height * 4,
@@ -79,25 +75,22 @@ void	renderer_render(unsigned char *pixelbuffer, int width, int height, void *us
 		print_opencl_error("Failed to read output buffer...", err);
 }
 
-t_renderer	renderer_init(void)
+void	renderer_init(void)
 {
-	t_renderer	renderer;
-
 	opencl_init();
-	renderer.rt_prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace"); // TODO: replace hardcoded values
-	renderer.nfilters = 0;
-	renderer.scene = scene_create();
-	return (renderer);
+	g_scene_renderer.rt_prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace"); // TODO: replace hardcoded values
+	g_scene_renderer.nfilters = 0;
+	g_scene_renderer.scene = scene_create();
 }
 
-void		renderer_cleanup(t_renderer *renderer)
+void	renderer_cleanup(void)
 {
 	int	i;
 
-	scene_cleanup(&renderer->scene);
-	opencl_program_cleanup(&renderer->rt_prgm);
+	scene_cleanup(&g_scene_renderer.scene);
+	opencl_program_cleanup(&g_scene_renderer.rt_prgm);
 	i = 0;
-	while (i < (int)renderer->nfilters)
-		opencl_program_cleanup(&renderer->filter_prgms[i++]);
+	while (i < (int)g_scene_renderer.nfilters)
+		opencl_program_cleanup(&g_scene_renderer.filter_prgms[i++]);
 	opencl_cleanup();
 }

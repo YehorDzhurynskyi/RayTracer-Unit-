@@ -47,7 +47,6 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 int					main(int argc, const char *argv[])
 {
 	const char	*scene_file;
-	t_renderer	renderer;
 	t_err_code	err_code;
 
 	scene_file = parse_cli_arguments(argc, argv);
@@ -55,8 +54,8 @@ int					main(int argc, const char *argv[])
 		print_error("usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file");
 	if (window_create() == FALSE)
 		return (EXIT_FAILURE);
-	renderer = renderer_init();
-	err_code = scene_load(&renderer.scene, scene_file);
+	renderer_init();
+	err_code = scene_load(&g_scene_renderer.scene, scene_file);
 	if (err_code != 0)
 	{
 		ft_printf("Error has been occured with code %x\n", err_code);
@@ -70,8 +69,8 @@ int					main(int argc, const char *argv[])
 		// renderer.nfilters++;
 	}
 
-	window_loop(renderer_render, &renderer);
+	window_loop(renderer_render);
 
-	renderer_cleanup(&renderer);
+	renderer_cleanup();
 	return (EXIT_SUCCESS);
 }

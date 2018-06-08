@@ -27,9 +27,11 @@ typedef struct
 	t_scene				scene;
 }	t_renderer;
 
-t_renderer				renderer_init(void);
+void					renderer_init(void);
 void					renderer_render(unsigned char *pixelbuffer,
-int width, int height, void *user_ptr);
-void					renderer_cleanup(t_renderer *renderer);
+int width, int height);
+void					renderer_cleanup(void);
+
+extern t_renderer		g_scene_renderer;
 
 #endif

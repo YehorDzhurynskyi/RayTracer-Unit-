@@ -105,8 +105,13 @@ static void					poll_events(void)
 	{
 		if (event.type == SDL_QUIT)
 			g_window_should_close = TRUE;
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-			g_window_should_close = TRUE;
+		else if (event.type == SDL_KEYDOWN)
+		{
+			if (event.key.keysym.sym == SDLK_ESCAPE)
+				g_window_should_close = TRUE;
+			else
+				camera_key_handler(&event);
+		}
 		nk_sdl_handle_event(&event);
 	}
 	nk_input_end(g_nk_context);
@@ -125,7 +130,7 @@ static void					render_scene(void)
 	nk_draw_image(canvas, total_space, &image, nk_rgba(255, 255, 255, 255));
 }
 
-void						window_loop(t_render_callback render_callback, void *user_ptr)
+void						window_loop(t_render_callback render_callback)
 {
 	Uint64	start;
 	Uint64	freq;
@@ -137,7 +142,7 @@ void						window_loop(t_render_callback render_callback, void *user_ptr)
 		start = SDL_GetPerformanceCounter();
 		poll_events();
 		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
-		render_callback(g_pixelbuffer, g_frame_width, g_frame_height, user_ptr); // TODO: call this function every scene update
+		render_callback(g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		if (nk_begin(g_nk_context, "Scene", nk_rect(300, 0, 800, 600), NK_WINDOW_TITLE))
 			render_scene();
 		nk_end(g_nk_context);
