@@ -43,7 +43,7 @@ extern int					g_frame_height;
 
 #define WINDOW_TITLE	"RT"
 
-static void					window_cleanup(void)
+void						window_cleanup(void)
 {
 	free(g_pixelbuffer);
 	glDeleteTextures(1, &g_gl_texture_name);
@@ -151,5 +151,4 @@ void						window_loop(t_render_callback render_callback)
 		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
 		ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 	}
-	window_cleanup();
 }

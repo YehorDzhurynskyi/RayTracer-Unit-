@@ -6,3 +6,5 @@ Add camera rotations
 Fix plane intersection functions
 
 Fix shadows in distance
+
+kill leak which fires from (SDL_Init) relying on lldb

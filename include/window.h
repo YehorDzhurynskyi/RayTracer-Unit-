@@ -19,5 +19,6 @@ int width, int height);
 void	window_create(void);
 void	window_loop(t_render_callback render_callback);
 void	camera_key_handler(void);
+void	window_cleanup(void);
 
 #endif

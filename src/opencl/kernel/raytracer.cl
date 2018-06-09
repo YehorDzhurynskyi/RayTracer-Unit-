@@ -138,7 +138,7 @@ __kernel void		trace(
 	scene.camera = camera;
 
 	const int SAMPLES = 1;
-	const int TRACE_DEPTH = 15;
+	const int TRACE_DEPTH = 5;
 
 	uchar4 pixelcolor;
 	if (SAMPLES == 1)

@@ -81,7 +81,7 @@ int					main(int argc, const char *argv[])
 	}
 
 	window_loop(renderer_render);
-
+	window_cleanup();
 	renderer_cleanup();
 	return (EXIT_SUCCESS);
 }
