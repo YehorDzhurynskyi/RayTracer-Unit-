@@ -35,23 +35,17 @@ inline uchar4	color_add(const uchar4 a, const uchar4 b)
 inline uchar4	color_scalar(const uchar4 color, const float factor)
 {
 	uchar4 result;
+	uint4	col = convert_uint4(color);
 
-	result.r = min((int)(color.r * factor), 0xff);
-	result.g = min((int)(color.g * factor), 0xff);
-	result.b = min((int)(color.b * factor), 0xff);
-	result.a = min((int)(color.a * factor), 0xff);
+	result.r = min((int)(col.r * factor), 0xff);
+	result.g = min((int)(col.g * factor), 0xff);
+	result.b = min((int)(col.b * factor), 0xff);
+	result.a = min((int)(col.a * factor), 0xff);
 	return (result);
 }
 
 inline uchar4	color_mix(const uchar4 a,
 const uchar4 b, const float factor)
 {
-	uchar4	result;
-	float rfactor = 1.0f - factor;
-
-	result.r = min((int)(a.r * factor) + (int)(b.r * rfactor), 0xff);
-	result.g = min((int)(a.g * factor) + (int)(b.g * rfactor), 0xff);
-	result.b = min((int)(a.b * factor) + (int)(b.b * rfactor), 0xff);
-	result.a = min((int)(a.a * factor) + (int)(b.a * rfactor), 0xff);
-	return (result);
+	return (color_add(color_scalar(a, factor), color_scalar(b, 1.0f - factor)));
 }

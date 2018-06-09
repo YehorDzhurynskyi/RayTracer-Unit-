@@ -71,31 +71,34 @@ static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth
 {
 	uchar4				color;
 	float				t;
-	__constant t_shape	*shape;
-	__constant t_shape	*next_shape;
+	__constant t_shape	*nearest_shape;
 	t_ray				next_ray = *ray;
+	float				reflectivity;
 
-	shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
-	if (shape == NULL)
+	nearest_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
+	if (nearest_shape == NULL)
 		return (0);
 	t_vec4 point = next_ray.direction * t + next_ray.origin;
-	color = shade(&point, scene, shape);
+	reflectivity = nearest_shape->reflectivity;
+	color = color_scalar(shade(&point, scene, nearest_shape), 1.0f - reflectivity);
+	uchar4 result_color = color;
 	while (--trace_depth > 0)
 	{
-		if (shape->reflectivity < 1.0E-4)
+		if (reflectivity < 1.0e-6)
 			break;
-		const t_vec4 normal = obtain_normal(&point, shape);
+		const t_vec4 normal = obtain_normal(&point, nearest_shape);
 		next_ray.direction = reflected_vec(next_ray.direction, normal);
 		const float bias = 0.005f;
 		next_ray.origin = point + next_ray.direction * bias;
-		next_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
-		if (next_shape == NULL)
+		nearest_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
+		if (nearest_shape == NULL)
 			break ;
 		point = next_ray.direction * t + next_ray.origin;
-		color = color_add(color, color_scalar(shade(&point, scene, next_shape), shape->reflectivity));
-		shape = next_shape;
+		color = color_scalar(shade(&point, scene, nearest_shape), reflectivity * (1.0f - nearest_shape->reflectivity));
+		reflectivity *= nearest_shape->reflectivity;
+		result_color = color_add(result_color, color);
 	}
-	return (color);
+	return (result_color);
 }
 
 static t_ray		obtain_primary_ray(t_camera camera, int x, int y, int width, int height, float xbias, float ybias)
@@ -135,20 +138,22 @@ __kernel void		trace(
 	scene.camera = camera;
 
 	const int SAMPLES = 1;
+	const int TRACE_DEPTH = 5;
+
 	uchar4 pixelcolor;
 	if (SAMPLES == 1)
 	{
 		t_ray primary_ray = obtain_primary_ray(camera, x, y, width, height, 0.5f, 0.5f);
-		pixelcolor = trace_ray(&primary_ray, &scene, 5);
+		pixelcolor = trace_ray(&primary_ray, &scene, TRACE_DEPTH);
 	} else if (SAMPLES == 4) {
 		t_ray primary_ray1 = obtain_primary_ray(camera, x, y, width, height, 0.2f, 0.8f);
-		const uchar4 pixelcolor1 = trace_ray(&primary_ray1, &scene, 5);
+		const uchar4 pixelcolor1 = trace_ray(&primary_ray1, &scene, TRACE_DEPTH);
 		t_ray primary_ray2 = obtain_primary_ray(camera, x, y, width, height, 0.4f, 0.4f);
-		const uchar4 pixelcolor2 = trace_ray(&primary_ray2, &scene, 5);
+		const uchar4 pixelcolor2 = trace_ray(&primary_ray2, &scene, TRACE_DEPTH);
 		t_ray primary_ray3 = obtain_primary_ray(camera, x, y, width, height, 0.6f, 0.6f);
-		const uchar4 pixelcolor3 = trace_ray(&primary_ray3, &scene, 5);
+		const uchar4 pixelcolor3 = trace_ray(&primary_ray3, &scene, TRACE_DEPTH);
 		t_ray primary_ray4 = obtain_primary_ray(camera, x, y, width, height, 0.8f, 0.2f);
-		const uchar4 pixelcolor4 = trace_ray(&primary_ray4, &scene, 5);
+		const uchar4 pixelcolor4 = trace_ray(&primary_ray4, &scene, TRACE_DEPTH);
 		pixelcolor = color_add(color_add(color_scalar(pixelcolor1, 0.25), color_scalar(pixelcolor2, 0.25)),
 		color_add(color_scalar(pixelcolor3, 0.25), color_scalar(pixelcolor4, 0.25)));
 	}

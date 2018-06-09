@@ -43,16 +43,26 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 	return (NULL);
 }
 
+void	atexit_callback(void)
+{
+	system("leaks RT");
+	int a = 5;
+	(void)a;
+}
+
 int					main(int argc, const char *argv[])
 {
 	const char	*scene_file;
 	t_err_code	err_code;
 
 	scene_file = parse_cli_arguments(argc, argv);
-	if (scene_file == NULL) // TODO: replace it later
-	{
-		ft_printf_fd(2, "usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file\n");
-		return (EXIT_FAILURE);
+	{ // TODO: replace on realease
+		atexit(atexit_callback);
+		if (scene_file == NULL)
+		{
+			ft_printf_fd(2, "usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file\n");
+			return (EXIT_FAILURE);
+		}
 	}
 	renderer_init();
 	window_create();

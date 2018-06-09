@@ -16,11 +16,10 @@
 # include "opencl.h"
 # include "scene.h"
 
-# define RT_MAX_FILTERS	8
+# define RT_MAX_FILTERS	4
 
 typedef struct
 {
-	// t_scene;
 	t_opencl_program	rt_prgm;
 	t_opencl_program	filter_prgms[RT_MAX_FILTERS];
 	unsigned int		nfilters;
