@@ -18,6 +18,10 @@
 #define SHININESS_STR		TO_STRING(SHININESS)
 #define REFLECTIVITY		0.0
 #define REFLECTIVITY_STR	TO_STRING(REFLECTIVITY)
+#define IOR					1.0
+#define IOR_STR				TO_STRING(IOR)
+#define OPACITY				1.0
+#define OPACITY_STR			TO_STRING(OPACITY)
 
 static t_shape_type	recognize_shape_type(const char *type, t_err_code *err)
 {
@@ -41,6 +45,8 @@ t_shape				deserialize_shape(const t_cson *cson, t_err_code *err)
 	const t_cson	*position_cson;
 	const t_cson	*shininess_cson;
 	const t_cson	*reflectivity_cson;
+	const t_cson	*ior_cson;
+	const t_cson	*opacity_cson;
 
 	position_cson = cson_valueof(cson, CSON_POSITION_KEY);
 	if (position_cson == NULL)
@@ -54,7 +60,7 @@ t_shape				deserialize_shape(const t_cson *cson, t_err_code *err)
 	shininess_cson = cson_valueof(cson, CSON_SHININESS_KEY);
 	if (shininess_cson == NULL || cson_is_real(shininess_cson) == FALSE)
 	{
-		log_notify("Shape shininess is absent or is not real-type"
+		log_notify("Shape's shininess is absent or is not real-type"
 		" value, the value is set to " SHININESS_STR " by default");
 		shape.shininess = SHININESS;
 	}
@@ -63,12 +69,30 @@ t_shape				deserialize_shape(const t_cson *cson, t_err_code *err)
 	reflectivity_cson = cson_valueof(cson, CSON_REFLECTIVITY_KEY);
 	if (reflectivity_cson == NULL || cson_is_real(reflectivity_cson) == FALSE)
 	{
-		log_notify("Shape reflectivity is absent or is not "
+		log_notify("Shape's reflectivity is absent or is not "
 		"real-type value, the value is set to " REFLECTIVITY_STR " by default");
 		shape.reflectivity = REFLECTIVITY;
 	}
 	else
 		shape.reflectivity = cson_get_real(reflectivity_cson);
+	ior_cson = cson_valueof(cson, CSON_IOR_KEY);
+	if (ior_cson == NULL || cson_is_real(ior_cson) == FALSE)
+	{
+		log_notify("Shape's index of refraction (IOR) is absent or is not "
+		"real-type value, the value is set to " IOR_STR " by default");
+		shape.ior = IOR;
+	}
+	else
+		shape.ior = cson_get_real(ior_cson);
+	opacity_cson = cson_valueof(cson, CSON_OPACITY_KEY);
+	if (opacity_cson == NULL || cson_is_real(opacity_cson) == FALSE)
+	{
+		log_notify("Shape's opacity is absent or is not "
+		"real-type value, the value is set to " OPACITY_STR " by default");
+		shape.opacity = OPACITY;
+	}
+	else
+		shape.opacity = cson_get_real(opacity_cson);
 	shape.shapetype = recognize_shape_type(cson_get_string(
 		cson_valueof(cson, CSON_TYPE_KEY)), err);
 	return (shape);
@@ -89,6 +113,10 @@ t_cson				*serialize_shape(t_cson *actual_shape_cson, const t_shape *shape)
 	shape->shininess);
 	cson_put_real(actual_shape_cson, CSON_REFLECTIVITY_KEY,
 	shape->reflectivity);
+	cson_put_real(actual_shape_cson, CSON_IOR_KEY,
+	shape->ior);
+	cson_put_real(actual_shape_cson, CSON_OPACITY_KEY,
+	shape->opacity);
 	return (actual_shape_cson);
 }
 

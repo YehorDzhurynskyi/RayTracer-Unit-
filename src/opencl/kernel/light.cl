@@ -22,7 +22,7 @@ uchar4			diffuse(__constant t_light *light, const t_fragment *fragment, const t_
 uchar4			specular(__constant t_light *light, const t_fragment *fragment, const t_vec4 to_light)
 {
 	const t_vec4 from_light = to_light * -1.0f;
-	t_vec4	reflected = reflected_vec(from_light, fragment->normal);
+	t_vec4	reflected = reflect(from_light, fragment->normal);
 	float	specfactor = dot(normalize(fragment->to_eye), reflected);
 	specfactor = specfactor <= 0.0 ? 0.0 : specfactor;
 	specfactor = pow(specfactor, fragment->shininess);

@@ -50,6 +50,8 @@ void	cson_eliminate(t_cson *cson)
 
 void	cson_free(t_cson *cson)
 {
+	if (cson == NULL)
+		return ;
 	while (cson->parent != NULL)
 		cson = cson->parent;
 	cson_eliminate(cson);

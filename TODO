@@ -8,3 +8,14 @@ Fix plane intersection functions
 Fix shadows in distance
 
 kill leak which fires from (SDL_Init) relying on lldb
+
+SSAA fucks lightning
+
+Add validation for parameters range i.e. reflectivity coef should be in range [0 .. 1]
+
+instead of writing "Shape's" <property> is absent in shape's
+repository replace it with actual shape name after shape type identifying
+
+Add ambient coef to opencl
+
+Need to add proper shadow processing of transluent shapes

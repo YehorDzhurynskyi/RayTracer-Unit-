@@ -30,6 +30,8 @@ typedef struct		__attribute__ ((packed)) s_shape
 	uint			buffer_offset;
 	float			shininess;
 	float			reflectivity;
+	float			opacity;
+	float			ior;
 	t_shape_type	shapetype;
 }	t_shape;
 

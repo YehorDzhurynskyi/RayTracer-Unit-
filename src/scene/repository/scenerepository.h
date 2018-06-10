@@ -44,6 +44,8 @@
 # define CSON_DIRECTION_KEY		"direction"
 # define CSON_SHININESS_KEY		"shininess"
 # define CSON_REFLECTIVITY_KEY	"reflectivity"
+# define CSON_OPACITY_KEY		"opacity"
+# define CSON_IOR_KEY			"ior"
 
 # define CSON_AMBIENT_KEY		"ambient"
 

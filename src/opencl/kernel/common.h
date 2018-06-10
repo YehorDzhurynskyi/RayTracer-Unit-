@@ -49,7 +49,7 @@ struct					s_scene
 };
 
 t_vec4				mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec);
-t_vec4				reflected_vec(t_vec4 v, t_vec4 n);
+t_vec4				reflect(t_vec4 v, t_vec4 n);
 
 # include "src/opencl/kernel/math.cl"
 

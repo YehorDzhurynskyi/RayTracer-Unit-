@@ -96,4 +96,11 @@ lights: [
 		color: "0x00FFFFFF"
 		intensity: 0.5
 	}
+	{
+		type: "point"
+		position: [0.0 0.0 100.0]
+		attenuation: [0.44 0.05 0.002]
+		color: "0x00FFFFFF"
+		intensity: 0.5
+	}
 ]

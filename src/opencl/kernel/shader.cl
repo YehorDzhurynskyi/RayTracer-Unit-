@@ -12,7 +12,7 @@
 
 #include "src/opencl/kernel/shader.h"
 
-static t_bool	is_in_shadow(const t_vec4 *point, const t_scene *scene, __constant t_byte *light_ptr)
+static float	dimness(const t_vec4 *point, const t_scene *scene, __constant t_byte *light_ptr)
 {
 	__constant t_light *light = (__constant t_light*)light_ptr;
 	t_vec4	to_light;
@@ -35,19 +35,20 @@ static t_bool	is_in_shadow(const t_vec4 *point, const t_scene *scene, __constant
 	const float bias = 0.005f;
 	t_ray	shadow_ray = (t_ray){*point + shadow_ray_direction * bias, shadow_ray_direction};
 	float t;
-	if (NULL != trace_shape(scene, &shadow_ray, &t))
+	__constant t_shape *nearest_shape = trace_shape(scene, &shadow_ray, &t);
+	if (nearest_shape != NULL)
 	{
 		if (light->lighttype == POINTLIGHT)
-			return (pointlight_in_shadow(&to_light, t));
+			return (pointlight_in_shadow(&to_light, t) * nearest_shape->opacity);
 		else if (light->lighttype == DIRLIGHT)
-			return (dirlight_in_shadow());
+			return (dirlight_in_shadow() * nearest_shape->opacity);
 		else if (light->lighttype == SPOTLIGHT)
 		{
 			__constant t_spotlight *spotlight = (__constant t_spotlight*)(light_ptr + sizeof(t_light));
-			return (spotlight_in_shadow(spotlight, &to_light, t));
+			return (spotlight_in_shadow(spotlight, &to_light, t) * nearest_shape->opacity);
 		}
 	}
-	return (FALSE);
+	return (0.0);
 }
 
 static uchar4	illuminate(__constant t_byte *lightbuffer, const t_fragment *fragment)
@@ -116,8 +117,8 @@ uchar4	shade(const t_vec4 *point, const t_scene *scene, __constant t_shape *shap
 	while (++i < scene->nlights)
 	{
 		__constant t_light *light = (__constant t_light*)light_ptr;
-		if (!is_in_shadow(point, scene, light_ptr)) // TODO: add soft shadows
-			color = color_add(color, illuminate(light_ptr, &fragment));
+		// TODO: add soft shadows
+		color = color_add(color, color_scalar(illuminate(light_ptr, &fragment), 1.0f - dimness(point, scene, light_ptr)));
 		if (light->lighttype == POINTLIGHT)
 			light_ptr += sizeof(t_light) + sizeof(t_pointlight);
 		else if (light->lighttype == DIRLIGHT)

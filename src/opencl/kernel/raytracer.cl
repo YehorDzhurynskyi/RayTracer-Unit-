@@ -67,37 +67,76 @@ __constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *n
 	return (nearest_shape);
 }
 
+// static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
+// {
+// 	float				t;
+// 	__constant t_shape	*nearest_shape;
+// 	t_ray				next_ray = *ray;
+// 	uchar4				result_color = 0;
+// 	float				reflectivity = 1.0f;
+
+// 	do {
+// 		nearest_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
+// 		if (nearest_shape == NULL)
+// 			break;
+// 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
+// 		result_color = color_add(result_color, color_scalar(shade(&point, scene, nearest_shape), reflectivity * (1.0f - nearest_shape->reflectivity)));
+// 		{ // reflection
+// 			if (nearest_shape->reflectivity < 1.0e-6)
+// 				break;
+// 			// reflectivity *= nearest_shape->reflectivity;
+// 			// const t_vec4 normal = obtain_normal(&point, nearest_shape);
+// 			// next_ray.direction = reflect(next_ray.direction, normal);
+// 			// const float bias = 0.005f;
+// 			// next_ray.origin = point + next_ray.direction * bias;
+// 		}
+// 		{ // refraction
+
+// 		}
+// 	} while (--trace_depth > 0);
+// 	return (result_color);
+// }
+
+static t_vec4		refract(t_vec4 incident, t_vec4 normal, float ior)
+{
+	float cosi = dot(incident, normal); 
+	float snell;
+	if (cosi < 0)
+	{
+		cosi = -cosi;
+		snell = 1.0f / ior; // here 1.0f is ior of vacuum
+	}
+	else
+	{
+		normal = -normal;
+		snell = ior;
+	}
+	float k = 1 - snell * snell * (1 - cosi * cosi); 
+	return (k < 0 ? 0 : snell * incident + (snell * cosi - sqrt(k)) * normal);
+}
+
 static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
 {
-	uchar4				color;
 	float				t;
 	__constant t_shape	*nearest_shape;
 	t_ray				next_ray = *ray;
-	float				reflectivity;
+	uchar4				result_color = 0;
+	float				opacity = 1.0f;
 
-	nearest_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
-	if (nearest_shape == NULL)
-		return (0);
-	t_vec4 point = next_ray.direction * t + next_ray.origin;
-	reflectivity = nearest_shape->reflectivity;
-	color = color_scalar(shade(&point, scene, nearest_shape), 1.0f - reflectivity);
-	uchar4 result_color = color;
-	while (--trace_depth > 0)
-	{
-		if (reflectivity < 1.0e-6)
-			break;
-		const t_vec4 normal = obtain_normal(&point, nearest_shape);
-		next_ray.direction = reflected_vec(next_ray.direction, normal);
-		const float bias = 0.005f;
-		next_ray.origin = point + next_ray.direction * bias;
+	do {
 		nearest_shape = (__constant t_shape*)trace_shape(scene, &next_ray, &t);
 		if (nearest_shape == NULL)
-			break ;
-		point = next_ray.direction * t + next_ray.origin;
-		color = color_scalar(shade(&point, scene, nearest_shape), reflectivity * (1.0f - nearest_shape->reflectivity));
-		reflectivity *= nearest_shape->reflectivity;
-		result_color = color_add(result_color, color);
-	}
+			break;
+		const t_vec4 point = next_ray.direction * t + next_ray.origin;
+		result_color = color_add(result_color, color_scalar(shade(&point, scene, nearest_shape), opacity * nearest_shape->opacity));
+		if (nearest_shape->opacity == 1.0)
+			break;
+		opacity *= (1.0f - nearest_shape->opacity);
+		const t_vec4 normal = obtain_normal(&point, nearest_shape);
+		next_ray.direction = refract(next_ray.direction, normal, nearest_shape->ior);
+		const float bias = 0.005f;
+		next_ray.origin = point + next_ray.direction * bias;
+	} while (--trace_depth > 0);
 	return (result_color);
 }
 
@@ -138,7 +177,7 @@ __kernel void		trace(
 	scene.camera = camera;
 
 	const int SAMPLES = 1;
-	const int TRACE_DEPTH = 5;
+	const int TRACE_DEPTH = 15;
 
 	uchar4 pixelcolor;
 	if (SAMPLES == 1)
@@ -154,8 +193,8 @@ __kernel void		trace(
 		const uchar4 pixelcolor3 = trace_ray(&primary_ray3, &scene, TRACE_DEPTH);
 		t_ray primary_ray4 = obtain_primary_ray(camera, x, y, width, height, 0.8f, 0.2f);
 		const uchar4 pixelcolor4 = trace_ray(&primary_ray4, &scene, TRACE_DEPTH);
-		pixelcolor = color_add(color_add(color_scalar(pixelcolor1, 0.25), color_scalar(pixelcolor2, 0.25)),
-		color_add(color_scalar(pixelcolor3, 0.25), color_scalar(pixelcolor4, 0.25)));
+		pixelcolor = color_add(color_add(color_scalar(pixelcolor1, 0.25f), color_scalar(pixelcolor2, 0.25f)),
+		color_add(color_scalar(pixelcolor3, 0.25f), color_scalar(pixelcolor4, 0.25f)));
 	}
 	outputbuffer[x + y * width] = pixelcolor;
 }

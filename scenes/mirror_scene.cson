@@ -10,7 +10,6 @@ shapes: [
 		position: [0.0 0.0 0.0]
 		color: "0x00ff3333"
 		shininess: 20.0
-		glossiness: 2.0
 		reflectivity: 0.4
 	}
 	{
@@ -19,7 +18,6 @@ shapes: [
 		position: [1.0 -1.0 1.0]
 		color: "0x0033ff33"
 		shininess: 20.0
-		glossiness: 2.0
 		reflectivity: 0.4
 	}
 	{
@@ -28,7 +26,6 @@ shapes: [
 		position: [-1.0 -1.0 1.0]
 		color: "0x003333ff"
 		shininess: 20.0
-		glossiness: 2.0
 		reflectivity: 0.4
 	}
 	{
@@ -48,7 +45,6 @@ shapes: [
 		color: "0x00111111"
 		reflectivity: 0.75
 		shininess: 20.0
-		glossiness: 2.0
 	}
 	{
 		type: "plane"
@@ -57,7 +53,6 @@ shapes: [
 		color: "0x00111111"
 		reflectivity: 0.75
 		shininess: 20.0
-		glossiness: 2.0
 	}
 	{
 		type: "plane"
@@ -85,7 +80,7 @@ lights: [
 	{
 		type: "point"
 		position: [0.0 4.0 0.0]
-		# attenuation: [0.40 0.005 0.001]
+		attenuation: [0.40 0.005 0.001]
 		intensity: 0.8
 		color: "0x00ffffff"
 	}
