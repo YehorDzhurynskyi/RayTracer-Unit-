@@ -7,35 +7,24 @@ shapes: [
 	{
 		type: "cylinder"
 		radius: 1.0
-		position: [0.0 0.0 0.0]
+		position: [8.0 8.0 4.0]
 		direction: [0.0 1.0 0.0]
 		color: "0x33ffff"
 		shininess: 10.0
 		reflectivity: 0.0
 		opacity: 0.6
-		ior: 1.5
+		ior: 1.1
 	}
 	{
 		type: "cylinder"
 		radius: 1.0
-		position: [4.0 4.0 0.0]
+		position: [0.0 0.0 0.0]
 		direction: [0.0 1.0 0.0]
 		color: "0x33ffff"
 		shininess: 10.0
 		reflectivity: 0.0
 		opacity: 0.4
-		ior: 1.5
-	}
-	{
-		type: "cylinder"
-		radius: 1.0
-		position: [-4.0 -4.0 0.0]
-		direction: [0.0 1.0 0.0]
-		color: "0x33ffff"
-		shininess: 10.0
-		reflectivity: 0.0
-		opacity: 0.2
-		ior: 1.5
+		ior: 1.1
 	}
 	{
 		type: "cylinder"
@@ -45,12 +34,23 @@ shapes: [
 		color: "0x33ffff"
 		shininess: 10.0
 		reflectivity: 0.0
+		opacity: 0.2
+		ior: 1.1
+	}
+	{
+		type: "cylinder"
+		radius: 1.0
+		position: [-16.0 -16.0 0.0]
+		direction: [0.0 1.0 0.0]
+		color: "0x33ffff"
+		shininess: 10.0
+		reflectivity: 0.0
 		opacity: 0.1
-		ior: 1.5
+		ior: 1.1
 	}
 	{
 		type: "sphere"
-		radius: 1.0
+		radius: 0.8
 		position: [0.0 0.0 4.0]
 		color: "0xaa33ee"
 		shininess: 40.0
@@ -66,7 +66,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [0.0 1.0 0.0]
-		position: [0.0 -5.0 0.0]
+		position: [0.0 -20.0 0.0]
 		color: "0xffff33"
 		reflectivity: 0.0
 		shininess: 20.0
@@ -74,7 +74,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [0.0 -1.0 0.0]
-		position: [0.0 5.0 0.0]
+		position: [0.0 20.0 0.0]
 		color: "0xffffff"
 		reflectivity: 0.0
 		shininess: 20.0
@@ -82,7 +82,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [1.0 0.0 0.0]
-		position: [-5.0 0.0 0.0]
+		position: [-20.0 0.0 0.0]
 		color: "0x3333ff"
 		reflectivity: 0.0
 		shininess: 20.0
@@ -90,7 +90,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [-1.0 0.0 0.0]
-		position: [5.0 0.0 0.0]
+		position: [20.0 0.0 0.0]
 		color: "0x33ff33"
 		reflectivity: 0.0
 		shininess: 20.0
@@ -98,7 +98,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [0.0 0.0 -1.0]
-		position: [0.0 0.0 5.0]
+		position: [0.0 0.0 20.0]
 		color: "0xff3333"
 		reflectivity: 0.0
 		shininess: 20.0
@@ -106,7 +106,7 @@ shapes: [
 	{
 		type: "plane"
 		normal: [0.0 0.0 1.0]
-		position: [0.0 0.0 -5.0]
+		position: [0.0 0.0 -20.0]
 		color: "0xff33ff"
 		reflectivity: 0.0
 		shininess: 20.0

@@ -26,10 +26,10 @@ char	*ft_read_file(const char *filename)
 	char	*result;
 	char	*temp;
 
-	result = ft_strdup("");
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (NULL);
+	result = ft_strdup("");
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';

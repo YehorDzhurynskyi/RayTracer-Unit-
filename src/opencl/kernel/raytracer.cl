@@ -81,18 +81,13 @@ __constant t_shape	*trace_shape(const t_scene *scene, const t_ray *ray, float *n
 // 			break;
 // 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
 // 		result_color = color_add(result_color, color_scalar(shade(&point, scene, nearest_shape), reflectivity * (1.0f - nearest_shape->reflectivity)));
-// 		{ // reflection
-// 			if (nearest_shape->reflectivity < 1.0e-6)
-// 				break;
-// 			// reflectivity *= nearest_shape->reflectivity;
-// 			// const t_vec4 normal = obtain_normal(&point, nearest_shape);
-// 			// next_ray.direction = reflect(next_ray.direction, normal);
-// 			// const float bias = 0.005f;
-// 			// next_ray.origin = point + next_ray.direction * bias;
-// 		}
-// 		{ // refraction
-
-// 		}
+// 		if (nearest_shape->reflectivity < 1.0e-6)
+// 			break;
+// 		reflectivity *= nearest_shape->reflectivity;
+// 		const t_vec4 normal = obtain_normal(&point, nearest_shape);
+// 		next_ray.direction = reflect(next_ray.direction, normal);
+// 		const float bias = 0.005f;
+// 		next_ray.origin = point + next_ray.direction * bias;
 // 	} while (--trace_depth > 0);
 // 	return (result_color);
 // }
@@ -114,6 +109,8 @@ static t_vec4		refract(t_vec4 incident, t_vec4 normal, float ior)
 	float k = 1 - snell * snell * (1 - cosi * cosi); 
 	return (k < 0 ? 0 : snell * incident + (snell * cosi - sqrt(k)) * normal);
 }
+
+// TODO: implement call stack :) https://github.com/RenatoUtsch/clTracer/blob/master/source/clSampler/cl/recursion.cl
 
 static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
 {
