@@ -19,3 +19,5 @@ repository replace it with actual shape name after shape type identifying
 Add ambient coef to opencl
 
 Need to add proper shadow processing of transluent shapes
+
+Add area lightning

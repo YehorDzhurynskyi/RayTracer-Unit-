@@ -14,10 +14,16 @@ t_bool	plane_intersect(const t_ray *ray, __constant t_shape *shape,
 __constant t_plane *plane, float *t)
 {
 	float denom = -dot(ray->direction, plane->normal);
+	float sign = 1.0f;
+	if (denom < 0.0f)
+	{
+		denom = -denom;
+		sign = -sign;
+	}
 	if (denom > 1e-6)
 	{
 		const t_vec4 to_plane = ray->origin - shape->position;
-		*t = dot(to_plane, plane->normal);
+		*t = sign * dot(to_plane, plane->normal);
 		*t /= denom;
 		return (*t > 0.0);
 	}
