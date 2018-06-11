@@ -13,6 +13,13 @@
 #ifndef GUI_H
 # define GUI_H
 
+# include "libft.h"
+
 void	render_gui(void);
+void	display_mainmnu(void);
+void	display_console(void);
+void	ui_init_images(void);
+void	display_scenes(void);
+int		scren_shot(void);
 
 #endif

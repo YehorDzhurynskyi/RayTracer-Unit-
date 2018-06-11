@@ -6,7 +6,7 @@
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 15:08:24 by ydzhuryn          #+#    #+#             */
-/*   Updated: 2018/01/05 17:20:48 by ydzhuryn         ###   ########.fr       */
+/*   Updated: 2018/06/11 14:54:17 by pzubar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ft.h"
 #include "gui.h"
 #include "logger.h"
+
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -33,7 +34,7 @@
 
 static SDL_Window			*g_sdl_window = NULL;
 static SDL_GLContext		*g_sdl_gl_context = NULL;
-static struct nk_context	*g_nk_context = NULL;
+struct nk_context			*g_nk_context = NULL;
 static unsigned char		*g_pixelbuffer = NULL;
 static t_bool				g_window_should_close = FALSE;
 unsigned int				g_gl_texture_name;
@@ -43,6 +44,7 @@ extern int					g_frame_height;
 
 #define WINDOW_TITLE	"RT"
 
+//https://www.opengl.org/discussion_boards/showthread.php/185739-Store-a-2D-texture-to-file
 void						window_cleanup(void)
 {
 	free(g_pixelbuffer);
@@ -77,7 +79,7 @@ void						window_create(void)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		g_sdl_window = SDL_CreateWindow(WINDOW_TITLE,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		1400, 900, SDL_WINDOW_OPENGL);
+		1300, 900, SDL_WINDOW_OPENGL);
 		if (g_sdl_window == NULL)
 			break ;
 		g_nk_context = nk_sdl_init(g_sdl_window);
@@ -134,21 +136,32 @@ void						window_loop(t_render_callback render_callback)
 	Uint64	freq;
 	double	mseconds;
 
+	//int i = 0;
+
 	freq = SDL_GetPerformanceFrequency();
+	ui_init_images();
 	while (!g_window_should_close)
 	{
 		start = SDL_GetPerformanceCounter();
 		poll_events();
 		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
 		render_callback(g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
-		if (nk_begin(g_nk_context, "Scene", nk_rect(300, 0, 800, 600), NK_WINDOW_TITLE))
+		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER|NK_WINDOW_TITLE))
 			render_scene();
+
+/*
+		if (i == 0 && ++i)
+		{
+			
+		}
+*/
 		nk_end(g_nk_context);
 		render_gui();
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.10f, 0.18f, 0.24f, 1.0f);
 		nk_sdl_render(NK_ANTI_ALIASING_ON);
 		SDL_GL_SwapWindow(g_sdl_window);
 		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
-		ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
+		//ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 	}
 }

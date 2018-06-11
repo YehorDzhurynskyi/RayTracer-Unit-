@@ -6,6 +6,10 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/logger.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/gui.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_windows.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_popups.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/targa.c"
 	
 	"${CMAKE_CURRENT_LIST_DIR}/opencl/opencl.c"
 	"${CMAKE_CURRENT_LIST_DIR}/opencl/opencl_error.c"

@@ -20,19 +20,19 @@
 /*
 **	SHAPE EDITING
 */
-void				scene_add_shape(t_scene *scene, t_shape *shape,
+void	scene_add_shape(t_scene *scene, t_shape *shape,
 const void *actual_shape);
-void				scene_update_shape(t_scene *scene, const t_shape *shape,
+void	scene_update_shape(t_scene *scene, const t_shape *shape,
 const void *actual_shape);
-void				scene_remove_shape(t_scene *scene, const t_shape *shape);
+void	scene_remove_shape(t_scene *scene, const t_shape *shape);
 
 /*
 **	LIGHT EDITING
 */
-void				scene_add_light(t_scene *scene, t_light *light,
+void	scene_add_light(t_scene *scene, t_light *light,
 const void *actual_light);
-void				scene_update_light(t_scene *scene, const t_light *light,
+void	scene_update_light(t_scene *scene, const t_light *light,
 const void *actual_light);
-void				scene_remove_light(t_scene *scene, const t_light *light);
+void	scene_remove_light(t_scene *scene, const t_light *light);
 
 #endif
