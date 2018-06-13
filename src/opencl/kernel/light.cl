@@ -24,9 +24,11 @@ uchar4			specular(__constant t_light *light, const t_fragment *fragment, const t
 	const t_vec4 from_light = to_light * -1.0f;
 	t_vec4	reflected = reflect(from_light, fragment->normal);
 	float	specfactor = dot(normalize(fragment->to_eye), reflected);
-	specfactor = specfactor <= 0.0 ? 0.0 : specfactor;
+	specfactor = max(0.0f, specfactor);
 	specfactor = pow(specfactor, fragment->shininess);
-	const uchar4 specular = color_mult(fragment->color, light->color);
+	// if fragment is metal then formula is:
+	// const uchar4 specular = color_mult(light->color, fragment->color);
+	const uchar4 specular = light->color;
 	return (color_scalar(specular, specfactor * light->intensity));
 }
 
