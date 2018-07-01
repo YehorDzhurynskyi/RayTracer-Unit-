@@ -45,15 +45,16 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 
 void	atexit_callback(void)
 {
+	ft_printf("Cleaning OPENCL\n");
+	renderer_cleanup();
 	system("leaks RT");
-	int a = 5;
-	(void)a;
 }
 
 int					main(int argc, const char *argv[])
 {
 	const char	*scene_file;
 	t_err_code	err_code;
+	t_scene		scene;
 
 	scene_file = parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
@@ -65,14 +66,14 @@ int					main(int argc, const char *argv[])
 		}
 	}
 	renderer_init();
+	scene = scene_create();
 	window_create();
-	err_code = scene_load(&g_scene_renderer.scene, scene_file);
+	err_code = scene_load(&scene, scene_file);
 	if (err_code != 0) // TODO: replace it later
 	{
 		ft_printf("Error has been occured with code %x\n", err_code);
 		return (EXIT_FAILURE);
 	}
-
 	{
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;
@@ -80,8 +81,9 @@ int					main(int argc, const char *argv[])
 		// g_scene_renderer.nfilters++;
 	}
 
-	window_loop(renderer_render);
+	window_loop(renderer_render, &scene);
 	window_cleanup();
-	renderer_cleanup();
+	scene_cleanup(&scene);
+	// renderer_cleanup();
 	return (EXIT_SUCCESS);
 }

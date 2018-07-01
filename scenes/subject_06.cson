@@ -1,165 +1,213 @@
-ambient: 0.15
+ambient: 0.08
 camera:
 	position: [0.0 2.0 30.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse color": "0x00ffd700"
+		"specular color": "0x00ffd700"
+		glossiness: 1.0
+		ior: 1.0
+	}
+	{
+		"diffuse color": "0x000000ff"
+		"specular color": "0x000000ff"
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		"diffuse color": "0x00a1abba"
+		"specular color": "0x00a1abba"
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		"diffuse color": "0x00555555"
+		"specular color": "0x00555555"
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		"diffuse color": "0x00eeeeee"
+		"specular color": "0x00eeeeee"
+		glossiness: 1.0
+		ior: 1.0
+	}
+]
 shapes: [
 # BALL
 	{
-		type: "sphere"
-		radius: 1.5
-		position: [0.0 -5.0 10.0]
-		color: "0x00ee3333"
-		shininess: 40.0
-		glossiness: 5.0
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [0.0 -5.0 10.0]
+			radius: 1.5
+		}
 	}
 # WALLS, FLOOR, CEIL
 	{
-		type: "plane"
-		normal: [0.0 0.0 1.0]
-		position: [0.0 0.0 -15.0]
-		color: "0x000000ff"
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -15.0]
+			orientation: [-90.0 0.0 0.0]
+		}
 	}
 	{
-		type: "plane"
-		normal: [0.0 1.0 0.0]
-		position: [0.0 -7.0 0.0]
-		color: "0x00a1abba"
+		relation: "union"
+		material: 2
+		primitive: {
+			type: "plane"
+			position: [0.0 -7.0 0.0]
+		}
 	}
 	{
-		type: "plane"
-		normal: [0.0 -1.0 0.0]
-		position: [0.0 7.0 0.0]
-		color: "0x00555555"
+		relation: "union"
+		material: 3
+		primitive: {
+			type: "plane"
+			position: [0.0 7.0 0.0]
+			orientation: [180.0 0.0 0.0]
+		}
 	}
 # COLUMNS
 # 1
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [-8.0 7.0 8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [-8.0 7.0 8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [-8.0 -7.0 8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [-8.0 -7.0 8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "cylinder"
-		radius: 2.0
-		position: [-8.0 0.0 8.0]
-		direction: [0.0 1.0 0.0]
-		shininess: 30.0
-		color: "0x00eeeeee"
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "cylinder"
+			radius: 2.0
+			position: [-8.0 0.0 8.0]
+		}
 	}
 # 2
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [8.0 7.0 8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [8.0 7.0 8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [8.0 -7.0 8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [8.0 -7.0 8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "cylinder"
-		radius: 2.0
-		position: [8.0 0.0 8.0]
-		direction: [0.0 1.0 0.0]
-		shininess: 30.0
-		glossiness: 2.0
-		color: "0x00eeeeee"
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "cylinder"
+			radius: 2.0
+			position: [8.0 0.0 8.0]
+		}
 	}
 # 3
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [-8.0 7.0 -8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [-8.0 7.0 -8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [-8.0 -7.0 -8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [-8.0 -7.0 -8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "cylinder"
-		radius: 2.0
-		position: [-8.0 0.0 -8.0]
-		direction: [0.0 1.0 0.0]
-		shininess: 30.0
-		glossiness: 2.0
-		color: "0x00eeeeee"
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "cylinder"
+			radius: 2.0
+			position: [-8.0 0.0 -8.0]
+		}
 	}
 # 4
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [8.0 7.0 -8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [8.0 7.0 -8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "sphere"
-		radius: 3.0
-		position: [8.0 -7.0 -8.0]
-		color: "0x00eeeeee"
-		shininess: 30.0
-		glossiness: 2.0
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [8.0 -7.0 -8.0]
+			radius: 3.0
+		}
 	}
 	{
-		type: "cylinder"
-		radius: 2.0
-		position: [8.0 0.0 -8.0]
-		direction: [0.0 1.0 0.0]
-		shininess: 30.0
-		glossiness: 2.0
-		color: "0x00eeeeee"
-		reflectivity: 0.3
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "cylinder"
+			radius: 2.0
+			position: [8.0 0.0 -8.0]
+		}
 	}
 ]
-lights: [
+lightsources: [
 	{
 		type: "point"
 		position: [30.0 0.0 30.0]
-		attenuation: [1.2 0.008 0.002]
-		intensity: 0.8
+		attenuation: [0.65 0.003 0.001]
+		intensity: 1.0
 		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
 	}
 	{
 		type: "point"
 		position: [-30.0 0.0 30.0]
-		attenuation: [1.2 0.008 0.002]
-		intensity: 0.8
+		attenuation: [0.65 0.003 0.001]
+		intensity: 1.0
 		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
 	}
 ]

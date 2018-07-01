@@ -19,6 +19,18 @@
 #  include <CL/opencl.h>
 # endif
 
+typedef cl_uchar4	t_clcolor;
+
+typedef cl_int		t_claddress;
+typedef cl_int		t_clresourceid;
+typedef cl_int		t_clbool;
+typedef cl_float	t_clscalar;
+typedef cl_float3	t_clvec3;
+typedef cl_float4	t_clvec4;
+typedef cl_float16	t_clmat4x4;
+
+# define NULL_RESOURCE_ID	0
+
 typedef struct s_opencl	t_opencl;
 struct					s_opencl
 {
@@ -34,9 +46,6 @@ struct					s_opencl_program
 	cl_kernel			kernel;
 	cl_mem				outputbuffer;
 };
-
-typedef cl_float16		t_clmat4x4;
-typedef cl_float4		t_clvec4;
 
 void					opencl_init(void);
 void					opencl_cleanup(void);

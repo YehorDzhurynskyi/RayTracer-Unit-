@@ -15,69 +15,78 @@
 #include "ft.h"
 #include <assert.h>
 
-static void	*g_host_shapebuffer;
-static void	*g_host_lightbuffer;
-
-t_scene	scene_create(void)
+static t_scenebuffer_meta	scene_meta(void)
 {
-	t_scene	scene;
-	int		err;
+	t_scenebuffer_meta	meta;
 
-	scene.shapebuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY
-	| CL_MEM_ALLOC_HOST_PTR, SHAPEBUFFER_CAPACITY, NULL, &err);
-	if (scene.shapebuffer == NULL || err != CL_SUCCESS)
-		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
-	scene.shapebuffer_size = 0;
-	scene.nshapes = 0;
-	g_host_shapebuffer = malloc(SHAPEBUFFER_CAPACITY);
-	if (!g_host_shapebuffer)
-		log_fatal("Failed to allocate memory for shape buffer", RT_MEM_ALLOC_ERROR);
-	scene.host_shapebuffer = g_host_shapebuffer;
-
-	scene.lightbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY
-	| CL_MEM_ALLOC_HOST_PTR, LIGHTBUFFER_CAPACITY, NULL, &err);
-	if (scene.lightbuffer == NULL || err != CL_SUCCESS)
-		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
-	scene.lightbuffer_size = 0;
-	scene.nlights = 0;
-	g_host_lightbuffer = malloc(LIGHTBUFFER_CAPACITY);
-	if (!g_host_lightbuffer)
-		log_fatal("Failed to allocate memory for light buffer", RT_MEM_ALLOC_ERROR);
-	scene.host_lightbuffer = g_host_lightbuffer;
-	return (scene);
+	meta.nshapes = 0;
+	meta.shapes_size = 0;
+	meta.nlightsources = 0;
+	meta.lightsources_size = 0;
+	meta.nmaterials = 0;
+	meta.materials_size = 0;
+	return (meta);
 }
 
-void	scene_cleanup(t_scene *scene)
+static t_scene_config		scene_config(void)
 {
-	clReleaseMemObject(scene->shapebuffer);
-	free(g_host_shapebuffer);
-	scene->host_shapebuffer = NULL;
-	scene->shapebuffer_size = 0;
-	scene->nshapes = 0;
-	clReleaseMemObject(scene->lightbuffer);
-	free(g_host_lightbuffer);
-	scene->host_lightbuffer = NULL;
-	scene->lightbuffer_size = 0;
-	scene->nlights = 0;
+	t_scene_config config;
+
+	config.trace_depth = 20;
+	config.aa = NOAA;
+	config.global_illumination = FALSE;
+	config.ambient = 0.15;
+	config.fov = 60.0;
+	return (config);
 }
 
-void	scene_unmap(t_scene *scene, t_buffer_target target)
+static void					scene_init_device_buffers(t_scene *scene)
 {
 	int	err;
 
-	assert(target == SHAPE_BUFFER_TARGET || target == LIGHT_BUFFER_TARGET);
-	if (target == SHAPE_BUFFER_TARGET)
-	{
-		err = clEnqueueUnmapMemObject(g_clcontext.command_queue, scene->shapebuffer, scene->host_shapebuffer, 0, NULL, NULL);
-		if (err != CL_SUCCESS)
-			log_error(opencl_get_error(err), RT_OPENCL_ERROR);
-		scene->host_shapebuffer = g_host_shapebuffer;
-	}
-	else if (target == LIGHT_BUFFER_TARGET)
-	{
-		err = clEnqueueUnmapMemObject(g_clcontext.command_queue, scene->lightbuffer, scene->host_lightbuffer, 0, NULL, NULL);
-		if (err != CL_SUCCESS)
-			log_error(opencl_get_error(err), RT_OPENCL_ERROR);
-		scene->host_lightbuffer = g_host_lightbuffer;
-	}
+	scene->device_shapebuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY
+	| CL_MEM_ALLOC_HOST_PTR, SHAPEBUFF_CAPACITY, NULL, &err);
+	if (scene->device_shapebuffer == NULL || err != CL_SUCCESS)
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
+	scene->device_lightsourcebuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY
+	| CL_MEM_ALLOC_HOST_PTR, LIGHTSOURCEBUFF_CAPACITY, NULL, &err);
+	if (scene->device_lightsourcebuffer == NULL || err != CL_SUCCESS)
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
+	scene->device_materialbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY
+	| CL_MEM_ALLOC_HOST_PTR, MATERIALBUFF_CAPACITY, NULL, &err);
+	if (scene->device_materialbuffer == NULL || err != CL_SUCCESS)
+		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
+}
+
+t_scene						scene_create(void)
+{
+	t_scene	scene;
+
+	scene_init_device_buffers(&scene);
+	scene.host_shapebuffer = malloc(SHAPEBUFF_CAPACITY);
+	if (scene.host_shapebuffer == NULL)
+		log_fatal("Failed to allocate memory for shape buffer", RT_MEM_ALLOC_ERROR);
+	scene.host_lightsourcebuffer = malloc(LIGHTSOURCEBUFF_CAPACITY);
+	if (scene.host_lightsourcebuffer == NULL)
+		log_fatal("Failed to allocate memory for lightsource buffer", RT_MEM_ALLOC_ERROR);
+	scene.host_materialbuffer = malloc(MATERIALBUFF_CAPACITY);
+	if (scene.host_materialbuffer == NULL)
+		log_fatal("Failed to allocate memory for material buffer", RT_MEM_ALLOC_ERROR);
+	scene.config = scene_config();
+	scene.meta = scene_meta();
+	scene.mapped_device_buffer = NULL;
+	scene.mapped_host_buffer = NULL;
+	return (scene);
+}
+
+void						scene_cleanup(t_scene *scene)
+{
+	clReleaseMemObject(scene->device_shapebuffer);
+	clReleaseMemObject(scene->device_lightsourcebuffer);
+	clReleaseMemObject(scene->device_materialbuffer);
+	// TODO: this is scene that is mapped on host
+	// for faster CPU access
+	free(scene->host_shapebuffer);
+	free(scene->host_lightsourcebuffer);
+	free(scene->host_materialbuffer);
 }

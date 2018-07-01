@@ -2,22 +2,69 @@ camera:
 	position: [0.0 0.0 3.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
-geometry: [
+materials: [
 	{
-		primitive: "sphere"
-		radius: 1.0
-		position: [0.0 0.0 0.0]
-		color: "0x00750e08"
-		shininess: 20.0
+		"diffuse color": "0x00750e08"
+		"specular color": "0x00750e08"
 		glossiness: 1.0
+		ior: 1.0
 	}
 ]
-light: [
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [-3.0 0.0 0.0]
+			radius: 1.0
+		}
+	}
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [3.0 0.0 0.0]
+			radius: 3.0
+			limitations: [
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+			]
+		}
+	}
+]
+lightsources: [
 	{
 		type: "point"
-		position: [5.0 0.0 5.0]
-		attenuation: [1.0 0.0 0.0]
+		position: [5.0 -5.0 5.0]
+		attenuation: [0.75 0.001 0.0005]
 		intensity: 0.6
 		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+	{
+		type: "point"
+		position: [-5.0 5.0 5.0]
+		attenuation: [0.75 0.001 0.0005]
+		intensity: 0.6
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
 	}
 ]

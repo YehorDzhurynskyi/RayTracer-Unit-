@@ -17,44 +17,52 @@
 
 typedef enum
 {
-	PLANE = 1,
+	COMPOSITE = 1,
+	POINT,
+	PLANE,
 	SPHERE,
 	CONE,
 	CYLINDER
-}	t_shape_type;
+}	t_primitive_type;
 
-typedef struct		__attribute__ ((packed)) s_shape
+# define ZERO_SIZE_PRIMITIVE(type) (type == POINT || type == COMPOSITE || type == PLANE)
+
+typedef enum
 {
-	t_clvec4		position; // it's 16 bytes because of alignment
-	cl_uchar4		color;
-	cl_uint			buffer_offset;
-	cl_float		shininess;
-	cl_float		reflectivity;
-	cl_float		opacity;
-	cl_float		ior;
-	t_shape_type	shapetype;
+	UNION = 1,
+	INTERSECTION,
+	NEGATION
+}	t_relation_type;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_claddress			addr;
+	t_claddress			material_addr;
+	cl_int				nchildren;
+	t_relation_type		relation_type;
 }	t_shape;
 
-typedef struct		__attribute__ ((packed)) s_sphere
+typedef struct			__attribute__ ((packed))
 {
-	cl_float		radius2;
+	t_clmat4x4			orientation;
+	t_clvec4			position;
+	cl_int				nlimitations;
+	t_primitive_type	primitive_type;
+}	t_primitive;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_clscalar			radius2;
 }	t_sphere;
 
-typedef struct		__attribute__ ((packed)) s_plane
+typedef struct			__attribute__ ((packed))
 {
-	t_clvec4		normal;
-}	t_plane;
-
-typedef struct		__attribute__ ((packed)) s_cylinder
-{
-	t_clvec4		direction;
-	cl_float		radius2;
+	t_clscalar			radius2;
 }	t_cylinder;
 
-typedef struct		__attribute__ ((packed)) s_cone
+typedef struct			__attribute__ ((packed))
 {
-	t_clvec4		direction;
-	cl_float		cos2angle;
+	t_clscalar			cos2angle;
 }	t_cone;
 
 #endif

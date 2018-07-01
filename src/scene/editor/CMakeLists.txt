@@ -1,7 +1,10 @@
 target_sources(${PROJECT_NAME} PUBLIC
+	"${CMAKE_CURRENT_LIST_DIR}/common.c"
 	"${CMAKE_CURRENT_LIST_DIR}/shape.c"
-	"${CMAKE_CURRENT_LIST_DIR}/light.c"
-	# "${CMAKE_CURRENT_LIST_DIR}/common.c"
+	"${CMAKE_CURRENT_LIST_DIR}/material.c"
+	"${CMAKE_CURRENT_LIST_DIR}/lightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/scene_mapper.c"
+	"${CMAKE_CURRENT_LIST_DIR}/sceneiterator.c"
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")

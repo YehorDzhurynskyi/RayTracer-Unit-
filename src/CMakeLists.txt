@@ -1,9 +1,7 @@
 target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/main.c"
 	"${CMAKE_CURRENT_LIST_DIR}/window.c"
-	"${CMAKE_CURRENT_LIST_DIR}/camera_input_handler.c"
 	"${CMAKE_CURRENT_LIST_DIR}/renderer.c"
-	"${CMAKE_CURRENT_LIST_DIR}/logger.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/gui.c"
 	
@@ -13,7 +11,11 @@ target_sources(${PROJECT_NAME} PUBLIC
 
 	"${CMAKE_CURRENT_LIST_DIR}/scene/scene.c"
 	"${CMAKE_CURRENT_LIST_DIR}/scene/camera.c"
-)
+
+	"${CMAKE_CURRENT_LIST_DIR}/input/camera_handler.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/utilities/logger.c"
+	)
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 

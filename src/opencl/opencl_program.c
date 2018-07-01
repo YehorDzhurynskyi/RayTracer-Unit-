@@ -6,7 +6,7 @@
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 15:08:24 by ydzhuryn          #+#    #+#             */
-/*   Updated: 2018/01/05 17:20:48 by ydzhuryn         ###   ########.fr       */
+/*   Updated: 2018/06/26 19:04:00 by ydzhuryn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,25 @@
 
 #define BUILDLOG_BUFF_SIZE	4096
 
+// -cl-opt-disable - turn off optimization flag
+#define BUILD_OPTIONS	"-I src/opencl/kernel -cl-single-precision-constant -cl-std=CL1.2"
+
 extern int			g_frame_width;
 extern int			g_frame_height;
 
 static void			build_program(t_opencl_program *clprogram)
 {
-	char	logbuffer[BUILDLOG_BUFF_SIZE + 1];
-	size_t	ret_size;
-	int		err;
+	char		logbuffer[BUILDLOG_BUFF_SIZE + 1];
+	size_t		ret_size;
+	int			err;
 
-	err = clBuildProgram(clprogram->program, 0, NULL, NULL, NULL, NULL);
-	if (err != CL_SUCCESS)
+	log_notify("Building kernel with options: \"" BUILD_OPTIONS "\"");
+	err = clBuildProgram(clprogram->program, 0, NULL, BUILD_OPTIONS, NULL, NULL);
+	if (err == CL_SUCCESS)
+		log_notify("Kernel was built sucessfully");
+	else
 	{
+
 		clGetProgramBuildInfo(clprogram->program, g_clcontext.device_id,
 		CL_PROGRAM_BUILD_LOG, sizeof(logbuffer), logbuffer, &ret_size);
 		if (ret_size > BUILDLOG_BUFF_SIZE)
@@ -56,7 +63,7 @@ t_opencl_program	opencl_program_create(const char *sourcefile, const char *kerne
 	clprogram.kernel = clCreateKernel(clprogram.program, kernel_name, &err);
 	if (clprogram.kernel == NULL || err != CL_SUCCESS)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
-	clprogram.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_READ_WRITE,
+	clprogram.outputbuffer = clCreateBuffer(g_clcontext.context, CL_MEM_WRITE_ONLY | CL_MEM_HOST_READ_ONLY,
 	g_frame_width * g_frame_height * 4, NULL, &err);
 	if (clprogram.outputbuffer == NULL || err != CL_SUCCESS)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
@@ -66,6 +73,6 @@ t_opencl_program	opencl_program_create(const char *sourcefile, const char *kerne
 void				opencl_program_cleanup(t_opencl_program *clprogram)
 {
 	clReleaseMemObject(clprogram->outputbuffer);
-	clReleaseProgram(clprogram->program);
 	clReleaseKernel(clprogram->kernel);
+	clReleaseProgram(clprogram->program);
 }

@@ -19,19 +19,10 @@
 
 t_sphere	deserialize_sphere(const t_cson *cson, t_err_code *err)
 {
-	t_sphere		sphere;
-	const t_cson	*radius_cson;
+	t_sphere	sphere;
 
 	(void)err;
-	radius_cson = cson_valueof(cson, CSON_RADIUS_KEY);
-	if (radius_cson == NULL || cson_is_real(radius_cson) == FALSE)
-	{
-		log_notify("Sphere radius is absent or is not real-type"
-		" value, the value is set to " RADIUS_STR " by default");
-		sphere.radius2 = RADIUS;
-	}
-	else
-		sphere.radius2 = cson_get_real(radius_cson);
+	sphere.radius2 = deserialize_real(cson, CSON_RADIUS_KEY, RADIUS, RADIUS_STR);
 	sphere.radius2 *= sphere.radius2;
 	return (sphere);
 }

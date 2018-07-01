@@ -41,7 +41,7 @@ const t_vec3d *spot, const t_vec3d *up)
 	t_vec3d		right;
 	t_vec3d		nup;
 
-	camera.position = (t_clvec4){{position->x, position->y, position->z, 0.0f}};
+	camera.position = (t_clvec3){{position->x, position->y, position->z}};
 	nup = vec3d_normalize(up);
 	forward = vec3d_sub(spot, position);
 	forward = vec3d_normalize(&forward);
@@ -61,7 +61,6 @@ const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up)
 	camera.position.x = position->x;
 	camera.position.y = position->y;
 	camera.position.z = position->z;
-	camera.position.w = 0.0;
 	camera_set_rotation_matrix(&camera, forward, right, up);
 	return (camera);
 }
