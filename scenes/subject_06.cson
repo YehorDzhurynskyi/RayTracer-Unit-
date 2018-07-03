@@ -1,4 +1,4 @@
-ambient: 0.08
+ambient: 0.15
 camera:
 	position: [0.0 2.0 30.0]
 	spot: [0.0 0.0 0.0]
@@ -44,6 +44,23 @@ shapes: [
 			type: "sphere"
 			position: [0.0 -5.0 10.0]
 			radius: 1.5
+			limitations: [
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+			]
+		}
+	}
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [0.0 -5.0 5.0]
+			radius: 1.5
 		}
 	}
 # WALLS, FLOOR, CEIL
@@ -82,6 +99,20 @@ shapes: [
 			type: "sphere"
 			position: [-8.0 7.0 8.0]
 			radius: 3.0
+			# limitations: [
+			# 	{
+			# 		type: "x-axis"
+			# 		"is relative": true
+			# 		"apply if less": false
+			# 		limit: 2.0
+			# 	}
+			# 	{
+			# 		type: "x-axis"
+			# 		"is relative": true
+			# 		"apply if less": true
+			# 		limit: -2.0
+			# 	}
+			# ]
 		}
 	}
 	{
@@ -91,6 +122,20 @@ shapes: [
 			type: "sphere"
 			position: [-8.0 -7.0 8.0]
 			radius: 3.0
+			limitations: [
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 2.0
+				}
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -2.0
+				}
+			]
 		}
 	}
 	{
@@ -188,9 +233,31 @@ shapes: [
 	}
 ]
 lightsources: [
+	# {
+	# 	type: "point"
+	# 	position: [15.0 0.0 15.0]
+	# 	attenuation: [0.65 0.003 0.001]
+	# 	intensity: 1.0
+	# 	color: "0x00ffffff"
+	# 	primitive: {
+	# 		type: "point"
+	# 		position: [0.0 0.0 0.0]
+	# 	}
+	# }
+	# {
+	# 	type: "point"
+	# 	position: [-15.0 0.0 15.0]
+	# 	attenuation: [0.65 0.003 0.001]
+	# 	intensity: 1.0
+	# 	color: "0x00ffffff"
+	# 	primitive: {
+	# 		type: "point"
+	# 		position: [0.0 0.0 0.0]
+	# 	}
+	# }
 	{
 		type: "point"
-		position: [30.0 0.0 30.0]
+		position: [0.0 5.0 -10.0]
 		attenuation: [0.65 0.003 0.001]
 		intensity: 1.0
 		color: "0x00ffffff"
@@ -201,9 +268,9 @@ lightsources: [
 	}
 	{
 		type: "point"
-		position: [-30.0 0.0 30.0]
-		attenuation: [0.65 0.003 0.001]
-		intensity: 1.0
+		position: [0.0 2.0 30.0]
+		attenuation: [0.85 0.003 0.001]
+		intensity: 0.8
 		color: "0x00ffffff"
 		primitive: {
 			type: "point"

@@ -25,8 +25,8 @@ typedef enum
 
 typedef struct			__attribute__ ((packed))
 {
-	t_clcolor			color;
 	t_claddress			addr;
+	t_clcolor			color;
 	t_clscalar			intensity;
 	t_lightsource_type	lightsource_type;
 }	t_lightsource;

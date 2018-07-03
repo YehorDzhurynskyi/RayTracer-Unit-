@@ -115,7 +115,14 @@ __constant t_byte	*primitive_get_actual(__constant t_primitive *primitive)
 {
 	return ((__constant t_byte*)++primitive);
 }
+
 __constant t_byte			*lightsource_get_actual(__constant t_lightsource *lightsource)
 {
 	return ((__constant t_byte*)++lightsource);
 }
+
+__constant t_byte			*limitation_get_actual(__constant t_limitation *limitation)
+{
+	return ((__constant t_byte*)++limitation);
+}
+

@@ -27,9 +27,12 @@ typedef union
 	t_resourceid	res_id;
 }	t_color_variant;
 
+typedef int			t_material_mask;
+
 typedef struct		__attribute__ ((packed))
 {
 	t_address			addr;
+	t_material_mask		mask;
 	t_color_variant		diffuse_albedo;
 	t_color_variant		specular_albedo;
 	t_scalar_variant	glossiness;
@@ -38,6 +41,8 @@ typedef struct		__attribute__ ((packed))
 }	t_material;
 
 __constant t_material	*get_material(const t_scene_buffers *buffers, __constant t_shape *shape);
-t_scalar	get_opacity(t_color color);
+t_scalar				get_opacity(t_color color);
+t_color					get_diffuse_color(__constant t_material *material);
+t_color					get_specular_color(__constant t_material *material);
 
 #endif

@@ -29,9 +29,12 @@ typedef union
 	t_clresourceid	res_id;
 }	t_color_variant;
 
+typedef cl_int		t_material_mask;
+
 typedef struct		__attribute__ ((packed))
 {
 	t_claddress			addr;
+	t_material_mask		mask;
 	t_color_variant		diffuse_albedo;
 	t_color_variant		specular_albedo;
 	t_scalar_variant	glossiness;

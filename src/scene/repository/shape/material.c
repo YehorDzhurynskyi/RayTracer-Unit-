@@ -21,6 +21,7 @@ t_material	deserialize_material(const t_cson *cson, t_err_code *err)
 {
 	t_material	material;
 
+	material.mask = 0;
 	material.diffuse_albedo.color = deserialize_color(cson, CSON_DIFFUSE_COLOR_KEY, err);
 	material.specular_albedo.color = deserialize_color(cson, CSON_SPECULAR_COLOR_KEY, err);
 	material.glossiness.value = deserialize_real(cson, CSON_GLOSSINESS_KEY,
@@ -28,5 +29,6 @@ t_material	deserialize_material(const t_cson *cson, t_err_code *err)
 	material.ior = deserialize_real(cson, CSON_IOR_KEY,
 	IOR, IOR_STR);
 	material.normal_map = NULL_RESOURCE_ID;
+
 	return (material);
 }

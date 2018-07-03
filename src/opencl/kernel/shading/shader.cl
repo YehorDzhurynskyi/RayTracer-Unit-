@@ -40,7 +40,7 @@ const t_scene_buffers *buffers, __constant t_shape *shape)
 		__constant t_lightsource *lightsrc = lightsource_next(&lightsrc_iter);
 		// TODO: add soft shadows
 		color = color_add(color, color_scalar(illuminate(lightsrc, &fragment),
-		lightsrc->intensity * (1.0f - dimness(point, scene, buffers, lightsrc))));
+		lightsrc->intensity * (1.0f - dimness(point, scene, buffers, lightsrc, shape))));
 	}
 	return (color);
 }

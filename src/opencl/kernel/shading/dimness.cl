@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 t_scalar	dimness(const t_vec4 *point, const t_scene *scene,
-const t_scene_buffers *buffers, __constant t_lightsource *lightsrc)
+const t_scene_buffers *buffers, __constant t_lightsource *lightsrc, __constant t_shape *shape)
 {
 	const t_vec4 to_light = to_lightsource(lightsrc, point);
 	const t_vec4 shadow_ray_direction = normalize(to_light);
@@ -19,7 +19,7 @@ const t_scene_buffers *buffers, __constant t_lightsource *lightsrc)
 	t_ray	shadow_ray = (t_ray){*point + shadow_ray_direction * bias, shadow_ray_direction};
 	t_scalar t;
 	__constant t_shape *nearest_shape = cast_ray(scene, buffers, &shadow_ray, &t);
-	if (nearest_shape != NULL)
+	if (nearest_shape != shape && nearest_shape != NULL)
 	{
 		__constant t_material *material = get_material(buffers, nearest_shape);
 		const t_scalar opacity = get_opacity(material->diffuse_albedo.color);
@@ -33,5 +33,5 @@ const t_scene_buffers *buffers, __constant t_lightsource *lightsrc)
 			return (spotlightsource_is_in_shadow(spotlight, &to_light, t) * opacity);
 		}
 	}
-	return (0.0);
+	return (0.0f);
 }

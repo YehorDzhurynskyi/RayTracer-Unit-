@@ -77,6 +77,7 @@ const t_scene_buffers *buffers, const t_ray *ray)
 	t_color				result_color = 0;
 	t_scalar				opacity = 1.0f;
 	int					trace_depth = scene->config.trace_depth;
+	const t_scalar		bias = 0.005f;
 
 	do {
 		nearest_shape = cast_ray(scene, buffers, &next_ray, &t);
@@ -91,7 +92,6 @@ const t_scene_buffers *buffers, const t_ray *ray)
 		opacity *= (1.0f - nearest_shape_opacity);
 		const t_vec4 normal = obtain_normal(&point, nearest_shape);
 		next_ray.direction = refract4(next_ray.direction, normal, material->ior);
-		const t_scalar bias = 0.005f;
 		next_ray.origin = point + next_ray.direction * bias;
 		--trace_depth;
 	} while (trace_depth > 0);
