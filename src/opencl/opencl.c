@@ -46,7 +46,7 @@ void		opencl_init(void)
 {
 	int	err;
 
-	err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_CPU, 1, &g_clcontext.device_id, NULL);
+	err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, 1, &g_clcontext.device_id, NULL);
 	if (CL_SUCCESS != err)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	print_device_info();

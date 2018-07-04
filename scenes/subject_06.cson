@@ -1,6 +1,6 @@
-ambient: 0.15
+ambient: 0.1
 camera:
-	position: [0.0 -1.0 15.0]
+	position: [0.0 2.0 30.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
 materials: [

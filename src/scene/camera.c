@@ -12,28 +12,31 @@
 
 #include "scene.h"
 
-static inline void	camera_set_rotation_matrix(t_camera *camera,
-const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up)
+t_clmat4x4	camera_rotation_matrix(const t_vec3d *forward,
+const t_vec3d *right, const t_vec3d *up)
 {
-	camera->rotation_matrix.s0 = right->x;
-	camera->rotation_matrix.s4 = right->y;
-	camera->rotation_matrix.s8 = right->z;
-	camera->rotation_matrix.sc = 0.0;
-	camera->rotation_matrix.s1 = up->x;
-	camera->rotation_matrix.s5 = up->y;
-	camera->rotation_matrix.s9 = up->z;
-	camera->rotation_matrix.sd = 0.0;
-	camera->rotation_matrix.s2 = -forward->x;
-	camera->rotation_matrix.s6 = -forward->y;
-	camera->rotation_matrix.sa = -forward->z;
-	camera->rotation_matrix.se = 0.0;
-	camera->rotation_matrix.s3 = 0.0;
-	camera->rotation_matrix.s7 = 0.0;
-	camera->rotation_matrix.sb = 0.0;
-	camera->rotation_matrix.sf = 0.0;
+	t_clmat4x4	rotation_matrix;
+
+	rotation_matrix.s0 = right->x;
+	rotation_matrix.s4 = right->y;
+	rotation_matrix.s8 = right->z;
+	rotation_matrix.sc = 0.0;
+	rotation_matrix.s1 = up->x;
+	rotation_matrix.s5 = up->y;
+	rotation_matrix.s9 = up->z;
+	rotation_matrix.sd = 0.0;
+	rotation_matrix.s2 = -forward->x;
+	rotation_matrix.s6 = -forward->y;
+	rotation_matrix.sa = -forward->z;
+	rotation_matrix.se = 0.0;
+	rotation_matrix.s3 = 0.0;
+	rotation_matrix.s7 = 0.0;
+	rotation_matrix.sb = 0.0;
+	rotation_matrix.sf = 0.0;
+	return (rotation_matrix);
 }
 
-t_camera			camera_look_at(const t_vec3d *position,
+t_camera	camera_look_at(const t_vec3d *position,
 const t_vec3d *spot, const t_vec3d *up)
 {
 	t_camera	camera;
@@ -49,11 +52,11 @@ const t_vec3d *spot, const t_vec3d *up)
 	right = vec3d_normalize(&right);
 	nup = vec3d_cross(&right, &forward);
 	nup = vec3d_normalize(&nup);
-	camera_set_rotation_matrix(&camera, &forward, &right, &nup);
+	camera.rotation_matrix = camera_rotation_matrix(&forward, &right, &nup);
 	return (camera);
 }
 
-t_camera			camera_create(const t_vec3d *position,
+t_camera	camera_create(const t_vec3d *position,
 const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up)
 {
 	t_camera	camera;
@@ -61,6 +64,6 @@ const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up)
 	camera.position.x = position->x;
 	camera.position.y = position->y;
 	camera.position.z = position->z;
-	camera_set_rotation_matrix(&camera, forward, right, up);
+	camera.rotation_matrix = camera_rotation_matrix(forward, right, up);
 	return (camera);
 }

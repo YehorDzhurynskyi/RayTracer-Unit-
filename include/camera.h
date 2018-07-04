@@ -26,5 +26,7 @@ t_camera			camera_look_at(const t_vec3d *position,
 const t_vec3d *spot, const t_vec3d *up);
 t_camera			camera_create(const t_vec3d *position,
 const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up);
+t_clmat4x4			camera_rotation_matrix(const t_vec3d *forward,
+const t_vec3d *right, const t_vec3d *up);
 
 #endif
