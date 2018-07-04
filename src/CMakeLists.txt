@@ -21,3 +21,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 
 include(${CMAKE_CURRENT_LIST_DIR}/scene/repository/CMakeLists.txt)
 include(${CMAKE_CURRENT_LIST_DIR}/scene/editor/CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/scene/iterator/CMakeLists.txt)

@@ -45,7 +45,7 @@ t_primitive	deserialize_primitive(const t_cson *cson, t_err_code *err)
 
 	primitive.position = deserialize_vec3(cson, CSON_POSITION_KEY,
 	RT_VEC_REPO_REQUIRED, err);
-	primitive.orientation = deserialize_orientation(cson, 0, err);
+	primitive.orientation = deserialize_orientation(cson, err);
 	primitive.primitive_type = recognize_primitive_type(cson_get_string(
 		cson_valueof(cson, CSON_TYPE_KEY)), err);
 	primitive.nlimitations = 0;

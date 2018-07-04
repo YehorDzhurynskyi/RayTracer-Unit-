@@ -9,6 +9,12 @@ materials: [
 		glossiness: 1.0
 		ior: 1.0
 	}
+	{
+		"diffuse color": "0x00888888"
+		"specular color": "0x00888888"
+		glossiness: 1.0
+		ior: 1.0
+	}
 ]
 shapes: [
 	# {
@@ -26,6 +32,7 @@ shapes: [
 		primitive: {
 			type: "sphere"
 			position: [0.0 0.0 0.0]
+			orientation: [0.0 0.0 30.0]
 			radius: 3.0
 			limitations: [
 				{
@@ -53,6 +60,15 @@ shapes: [
 				# 	limit: 1.0
 				# }
 			]
+		}
+	}
+	{
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -20.0]
+			orientation: [-90.0 0.0 0.0]
 		}
 	}
 ]

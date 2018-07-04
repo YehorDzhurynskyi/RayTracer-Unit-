@@ -153,7 +153,7 @@ t_cson				*serialize_color(const t_clcolor *color);
 t_clscalar			deserialize_real(const t_cson *cson, const char *key,
 const t_clscalar default_value, const char *default_value_str);
 t_clmat4x4			deserialize_orientation(const t_cson *cson,
-int mask, t_err_code *err);
+t_err_code *err);
 
 /*
 **	This prototype is required because of norminette

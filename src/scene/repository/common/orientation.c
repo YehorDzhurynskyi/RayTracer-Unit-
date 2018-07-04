@@ -36,12 +36,12 @@ static inline t_clmat4x4	orientation_matrix(const t_clscalar *r)
 	return (orientation);
 }
 
-t_clmat4x4	deserialize_orientation(const t_cson *cson, int mask, t_err_code *err)
+t_clmat4x4	deserialize_orientation(const t_cson *cson, t_err_code *err)
 {
 	t_clvec3	rotation;
 	t_clscalar	r[6];
 
-	rotation = deserialize_vec3(cson, CSON_ORIENTATION_KEY, mask, err);
+	rotation = deserialize_vec3(cson, CSON_ORIENTATION_KEY, 0, err);
 	if (*err == RT_NO_OPTIONAL_VALUE_ERROR)
 	{
 		rotation = (t_clvec3){{0.0, 0.0, 0.0}};

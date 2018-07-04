@@ -15,7 +15,8 @@ static t_bool sphere_limit(__constant t_primitive *primitive, __constant t_spher
 	t_iterator limit_iter = limitation_begin(primitive);
 	if (has_next(&limit_iter))
 	{
-		const t_vec4 point = ray->origin + *t * ray->direction;
+		const t_vec4 init_point = ray->origin + *t * ray->direction;
+		const t_vec4 point = mat4x4_mult_vec4(primitive->orientation, init_point - primitive->position) + primitive->position;
 		while (has_next(&limit_iter))
 		{
 			__constant t_limitation *limit = limitation_next(&limit_iter);
@@ -47,12 +48,15 @@ static t_bool sphere_limit(__constant t_primitive *primitive, __constant t_spher
 					if ((axial_limit->apply_if_less && axis < axial_limit->limit) ||
 					(!axial_limit->apply_if_less && axis > axial_limit->limit))
 					{
+						t_vec4 lim = (t_vec4)(0.0f, axial_limit->limit, 0.0f, 0.0f);
+						lim = mat4x4_mult_vec4(primitive->orientation, lim);
+						// printf("%f %f %f %f\n", lim.x, lim.y, lim.z, lim.w);
 						t_vec4 newpoint;
-						newpoint.y = limit->is_relative ? axial_limit->limit + primitive->position.y : axial_limit->limit;
+						newpoint.y = limit->is_relative ? lim.y + primitive->position.y : lim.y;
 						newpoint.x = ((newpoint.y - point.y) * (point.x - ray->origin.x)) / (point.y - ray->origin.y) + point.x;
 						newpoint.z = ((newpoint.y - point.y) * (point.z - ray->origin.z)) / (point.y - ray->origin.y) + point.z;
 						newpoint.w = 0.0f;
-						const t_vec4 to_new = newpoint - primitive->position;;
+						const t_vec4 to_new = newpoint - primitive->position;
 						if (dot(to_new, to_new) <= sphere->radius2)
 							*t = length(newpoint - ray->origin);
 						else
@@ -105,6 +109,8 @@ t_vec4	obtain_sphere_normal(const t_vec4 *point, __constant t_primitive *primiti
 	t_iterator limit_iter = limitation_begin(primitive);
 	if (has_next(&limit_iter))
 	{
+		// printf("%f %f %f %f\n", point->x - primitive->position.x,
+		// point->y - primitive->position.y, point->z - primitive->position.z, point->w - primitive->position.w);
 		while (has_next(&limit_iter))
 		{
 			__constant t_limitation *limit = limitation_next(&limit_iter);
@@ -123,7 +129,7 @@ t_vec4	obtain_sphere_normal(const t_vec4 *point, __constant t_primitive *primiti
 				{
 					t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.y : axial_limit->limit;
 					if (axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
-						return ((t_vec4)(0.0f, -1.0f, 0.0f, 0.0f));
+						return (mat4x4_mult_vec4(primitive->orientation, (t_vec4)(0.0f, -1.0f, 0.0f, 0.0f)));
 					if (!axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
 						return ((t_vec4)(0.0f, 1.0f, 0.0f, 0.0f));
 				}

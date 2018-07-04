@@ -67,13 +67,14 @@ int					main(int argc, const char *argv[])
 	}
 	renderer_init();
 	scene = scene_create();
-	window_create();
 	err_code = scene_load(&scene, scene_file);
 	if (err_code != 0) // TODO: replace it later
 	{
+		scene_cleanup(&scene);
 		ft_printf("Error has been occured with code %x\n", err_code);
 		return (EXIT_FAILURE);
 	}
+	window_create();
 	{
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;

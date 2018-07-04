@@ -1,6 +1,6 @@
 ambient: 0.15
 camera:
-	position: [0.0 2.0 30.0]
+	position: [0.0 -1.0 15.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
 materials: [
@@ -43,10 +43,41 @@ shapes: [
 		primitive: {
 			type: "sphere"
 			position: [0.0 -5.0 10.0]
+			# orientation: [0.0 0.0 30.0]
 			radius: 1.5
 			limitations: [
 				{
 					type: "y-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+				{
+					type: "z-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+				{
+					type: "z-axis"
 					"is relative": true
 					"apply if less": false
 					limit: 1.0
@@ -123,18 +154,18 @@ shapes: [
 			position: [-8.0 -7.0 8.0]
 			radius: 3.0
 			limitations: [
-				{
-					type: "x-axis"
-					"is relative": true
-					"apply if less": false
-					limit: 2.0
-				}
-				{
-					type: "x-axis"
-					"is relative": true
-					"apply if less": true
-					limit: -2.0
-				}
+				# {
+				# 	type: "x-axis"
+				# 	"is relative": true
+				# 	"apply if less": false
+				# 	limit: 2.0
+				# }
+				# {
+				# 	type: "x-axis"
+				# 	"is relative": true
+				# 	"apply if less": true
+				# 	limit: -2.0
+				# }
 			]
 		}
 	}

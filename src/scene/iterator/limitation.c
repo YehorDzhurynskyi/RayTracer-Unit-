@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   limitation.h                                       :+:      :+:    :+:   */
+/*   limitation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,31 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIMITATION_H
-# define LIMITATION_H
+#include "sceneiterator.h"
 
-typedef enum
+t_iterator			limitation_begin(const t_primitive *primitive)
 {
-	XAXIS = 1,
-	YAXIS,
-	ZAXIS,
-	LINEAR,
-	SIN,
-	RADIAL
-}	t_limitation_type;
+	return ((t_iterator){primitive->nlimitations, primitive_skip(primitive)});
+}
 
-# define IS_AXIAL(type) (type == XAXIS || type == YAXIS || type == ZAXIS)
-
-typedef struct			__attribute__ ((packed))
+const t_limitation	*limitation_next(t_iterator *iterator)
 {
-	t_bool				is_relative;
-	t_limitation_type	limitation_type;
-}	t_limitation;
+	const t_limitation	*current = (const t_limitation*)iterator->current;
+	iterator->current = limitation_skip(current);
+	--iterator->count;
+	return (current);
+}
 
-typedef struct			__attribute__ ((packed))
+const t_byte		*limitation_get_actual(const t_limitation *limitation)
 {
-	t_scalar			limit;
-	t_bool				apply_if_less;
-}	t_axial_limitation;
-
-#endif
+	return ((const t_byte*)++limitation);
+}
