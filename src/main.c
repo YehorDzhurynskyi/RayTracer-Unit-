@@ -53,7 +53,7 @@ int					main(int argc, const char *argv[])
 	t_err_code	err_code;
 	t_scene		scene;
 
-	scene_file = "scenes/subject_01.cson";
+	scene_file = RT_CWD "/scenes/subject_01.cson";
 	parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);

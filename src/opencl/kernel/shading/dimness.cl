@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 t_scalar	dimness(const t_vec4 *point, const t_scene *scene,
+const t_scene_buffers *buffers, __constant t_lightsource *lightsrc, __constant t_shape *shape);
+
+t_scalar	dimness(const t_vec4 *point, const t_scene *scene,
 const t_scene_buffers *buffers, __constant t_lightsource *lightsrc, __constant t_shape *shape)
 {
 	const t_vec4 to_light = to_lightsource(lightsrc, point);

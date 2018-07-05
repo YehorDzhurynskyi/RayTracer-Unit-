@@ -28,8 +28,11 @@ const t_shape		*shape_next(t_iterator *iterator)
 		while (has_next(&limitation_iter))
 			limitation_next(&limitation_iter);
 		iterator->current = limitation_iter.current;
-		const t_shape	*child = (const t_shape*)iterator->current;
-		nchildren += child->nchildren;
+		if (nchildren >= 0)
+		{
+			const t_shape	*child = (const t_shape*)iterator->current;
+			nchildren += child->nchildren;
+		}
 	}
 	--iterator->count;
 	return (current);
