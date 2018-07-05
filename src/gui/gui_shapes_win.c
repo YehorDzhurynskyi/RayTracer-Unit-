@@ -74,6 +74,6 @@ void display_shapes_win(void)
             }
             i++;
         }
-        nk_end(g_nk_context);
     }
+    nk_end(g_nk_context);
 }
