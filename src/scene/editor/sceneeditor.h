@@ -15,24 +15,23 @@
 
 # include "scene.h"
 # include "shape.h"
-# include "light.h"
+# include "material.h"
+# include "limitation.h"
+# include "lightsource.h"
 
-/*
-**	SHAPE EDITING
-*/
-void	scene_add_shape(t_scene *scene, t_shape *shape,
-const void *actual_shape);
-void	scene_update_shape(t_scene *scene, const t_shape *shape,
-const void *actual_shape);
-void	scene_remove_shape(t_scene *scene, const t_shape *shape);
+void	scenebuffer_map(t_scene *scene, int offset, size_t size, t_buff_target target);
+void	scenebuffer_unmap(t_scene *scene, t_buff_target target);
 
-/*
-**	LIGHT EDITING
-*/
-void	scene_add_light(t_scene *scene, t_light *light,
-const void *actual_light);
-void	scene_update_light(t_scene *scene, const t_light *light,
-const void *actual_light);
-void	scene_remove_light(t_scene *scene, const t_light *light);
+void	scenebuffer_append(t_scene *scene,
+const void *data, size_t size, t_buff_target target);
+
+void	scenebuffer_add_lightsource(t_scene *scene,
+t_lightsource *lightsource, const void *actuial_lightsource);
+void	scenebuffer_add_primitive(t_scene *scene, const t_primitive *primitive,
+const void *actual_primitive, t_buff_target target);
+void	scenebuffer_add_material(t_scene *scene, t_material *material);
+void	scenebuffer_add_shape(t_scene *scene, t_shape *shape, t_bool is_child);
+void	scenebuffer_add_limitation(t_scene *scene, const t_limitation *limitation,
+const void *actual_limitation, t_buff_target target);
 
 #endif

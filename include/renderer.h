@@ -23,14 +23,11 @@ typedef struct
 	t_opencl_program	rt_prgm;
 	t_opencl_program	filter_prgms[RT_MAX_FILTERS];
 	unsigned int		nfilters;
-	t_scene				scene;
 }	t_renderer;
 
 void					renderer_init(void);
-void					renderer_render(unsigned char *pixelbuffer,
-int width, int height);
+void					renderer_render(const t_scene *scene,
+unsigned char *pixelbuffer, int width, int height);
 void					renderer_cleanup(void);
-
-extern t_renderer		g_scene_renderer;
 
 #endif

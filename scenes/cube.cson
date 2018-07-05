@@ -1,0 +1,74 @@
+camera:
+	position: [0.0 0.0 10.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse color": "0x00ffd700"
+		"specular color": "0x00ffd700"
+		glossiness: 1.0
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [0.0 0.0 0.0]
+			radius: 3.0
+			limitations: [
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+				{
+					type: "x-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 1.0
+				}
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -1.0
+				}
+				# {
+				# 	type: "z-axis"
+				# 	"is relative": true
+				# 	"apply if less": true
+				# 	limit: -1.0
+				# }
+				# {
+				# 	type: "z-axis"
+				# 	"is relative": true
+				# 	"apply if less": false
+				# 	limit: 1.0
+				# }
+			]
+		}
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [0.0 10.0 10.0]
+		attenuation: [1.0 0.0 0.0]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]

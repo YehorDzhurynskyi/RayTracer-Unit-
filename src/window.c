@@ -27,8 +27,6 @@
 #define NK_SDL_GL2_IMPLEMENTATION
 #define NK_PRIVATE
 
-#include <SDL.h>
-#include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
 
@@ -97,11 +95,11 @@ void						window_create(void)
 	log_fatal("SDL window creation was failed", RT_SDL_ERROR);
 }
 
-static void					poll_events(void)
+static void					poll_events(t_scene *scene)
 {
 	SDL_Event	event;
 
-	camera_key_handler();
+	camera_key_handler(&scene->camera);
 	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
@@ -112,6 +110,8 @@ static void					poll_events(void)
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				g_window_should_close = TRUE;
 		}
+		else if (event.type == SDL_MOUSEBUTTONDOWN)
+			pick_shape(&event.button, scene);
 		nk_sdl_handle_event(&event);
 	}
 	nk_input_end(g_nk_context);
@@ -130,7 +130,7 @@ static void					render_scene(void)
 	nk_draw_image(canvas, total_space, &image, nk_rgba(255, 255, 255, 255));
 }
 
-void						window_loop(t_render_callback render_callback)
+void						window_loop(t_render_callback render_callback, t_scene *scene)
 {
 	Uint64	start;
 	Uint64	freq;
@@ -143,7 +143,7 @@ void						window_loop(t_render_callback render_callback)
 	while (!g_window_should_close)
 	{
 		start = SDL_GetPerformanceCounter();
-		poll_events();
+		poll_events(scene);
 		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
 		render_callback(g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER|NK_WINDOW_TITLE))
@@ -162,6 +162,6 @@ void						window_loop(t_render_callback render_callback)
 		nk_sdl_render(NK_ANTI_ALIASING_ON);
 		SDL_GL_SwapWindow(g_sdl_window);
 		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
-		//ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
+		// ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 	}
 }

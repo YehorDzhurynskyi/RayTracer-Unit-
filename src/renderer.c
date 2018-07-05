@@ -13,19 +13,20 @@
 #include "renderer.h"
 #include "logger.h"
 
-t_renderer	g_scene_renderer;
+static t_renderer	g_scene_renderer;
 
-static void	renderer_prepare(void)
+static void	renderer_prepare(const t_scene *scene)
 {
 	int	err;
 
 	err = clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 0,
 	sizeof(cl_mem), &g_scene_renderer.rt_prgm.outputbuffer);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 1, sizeof(cl_mem), &g_scene_renderer.scene.shapebuffer);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 2, sizeof(cl_int), &g_scene_renderer.scene.nshapes);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 3, sizeof(cl_mem), &g_scene_renderer.scene.lightbuffer);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(cl_int), &g_scene_renderer.scene.nlights);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_camera), &g_scene_renderer.scene.camera);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 1, sizeof(cl_mem), &scene->device_shapebuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 2, sizeof(cl_mem), &scene->device_lightsourcebuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 3, sizeof(cl_mem), &scene->device_materialbuffer);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(t_scenebuffer_meta), &scene->meta);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_scene_config), &scene->config);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 6, sizeof(t_camera), &scene->camera);
 	if (err)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
@@ -56,12 +57,12 @@ static cl_mem	*enqueue_filters(int width, int height)
 	return (out_buffer);
 }
 
-void	renderer_render(unsigned char *pixelbuffer, int width, int height)
+void	renderer_render(const t_scene *scene, unsigned char *pixelbuffer, int width, int height)
 {
 	int			err;
 	cl_mem		*outputbuffer_ptr;
 
-	renderer_prepare();
+	renderer_prepare(scene);
 	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.rt_prgm.kernel,
 	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
 	if (err)
@@ -80,14 +81,12 @@ void	renderer_init(void)
 	opencl_init();
 	g_scene_renderer.rt_prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace"); // TODO: replace hardcoded values
 	g_scene_renderer.nfilters = 0;
-	g_scene_renderer.scene = scene_create();
 }
 
 void	renderer_cleanup(void)
 {
 	int	i;
 
-	scene_cleanup(&g_scene_renderer.scene);
 	opencl_program_cleanup(&g_scene_renderer.rt_prgm);
 	i = 0;
 	while (i < (int)g_scene_renderer.nfilters)

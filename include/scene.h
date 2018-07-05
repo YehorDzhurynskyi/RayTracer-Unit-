@@ -13,54 +13,72 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-# include "ft.h"
+# include "camera.h"
 # include "shape.h"
-# include "light.h"
+# include "lightsource.h"
 
-# ifndef SHAPEBUFFER_CAPACITY
-#  define SHAPEBUFFER_CAPACITY	1024 * 16
+# ifndef SHAPEBUFF_CAPACITY
+#  define SHAPEBUFF_CAPACITY	1024 * 12
 # endif
 
-# ifndef LIGHTBUFFER_CAPACITY
-#  define LIGHTBUFFER_CAPACITY	1024 * 4
+# ifndef LIGHTSOURCEBUFF_CAPACITY
+#  define LIGHTSOURCEBUFF_CAPACITY	1024 * 4
 # endif
 
-typedef struct	__attribute__ ((packed)) s_camera
-{
-	t_clmat4x4		rotation_matrix;
-	t_clvec4		position;
-}	t_camera;
-
-typedef struct
-{
-	cl_mem			shapebuffer;
-	void			*host_shapebuffer;
-	size_t			shapebuffer_size;
-	unsigned int	nshapes;
-	cl_mem			lightbuffer;
-	void			*host_lightbuffer;
-	size_t			lightbuffer_size;
-	unsigned int	nlights;
-	t_camera		camera;
-	cl_float		ambient;
-	// cube map texture
-}	t_scene;
+# ifndef MATERIALBUFF_CAPACITY
+#  define MATERIALBUFF_CAPACITY	1024 * 1
+# endif
 
 typedef enum
 {
-	SHAPE_BUFFER_TARGET = 1,
-	LIGHT_BUFFER_TARGET
-}	t_buffer_target;
+	SHAPEBUFF_TARGET = 1,
+	LIGHTSOURCEBUFF_TARGET,
+	MATERIALBUFF_TARGET
+}	t_buff_target;
 
-t_camera			camera_look_at(const t_vec3d *position,
-const t_vec3d *spot, const t_vec3d *up);
-t_camera			camera_create(const t_vec3d *position,
-const t_vec3d *forward, const t_vec3d *right, const t_vec3d *up);
+typedef enum
+{
+	NOAA = 1,
+	SSAAx4,
+	SSAAx8
+}	t_aa;
 
-t_scene				scene_create(void);
-void				scene_cleanup(t_scene *scene);
-void				scene_unmap(t_scene *scene, t_buffer_target target);
-size_t				shape_sizeof(t_shape_type type);
-size_t				light_sizeof(t_light_type type);
+typedef struct			__attribute__ ((packed))
+{
+	cl_int				trace_depth;
+	t_aa				aa;
+	t_clbool			global_illumination;
+	t_clscalar			ambient;
+	t_clscalar			fov;
+	t_claddress			selected_shape_addr;
+}	t_scene_config;
+
+typedef struct			__attribute__ ((packed))
+{
+	cl_int				nshapes;
+	cl_uint				shapes_size;
+	cl_int				nlightsources;
+	cl_uint				lightsources_size;
+	cl_int				nmaterials;
+	cl_uint				materials_size;
+}	t_scenebuffer_meta;
+
+typedef struct
+{
+	cl_mem				device_shapebuffer;
+	void				*host_shapebuffer;
+	cl_mem				device_lightsourcebuffer;
+	void				*host_lightsourcebuffer;
+	cl_mem				device_materialbuffer;
+	void				*host_materialbuffer;
+	void				*mapped_device_buffer;
+	void				*mapped_host_buffer;
+	t_scene_config		config;
+	t_scenebuffer_meta	meta;
+	t_camera			camera;
+}	t_scene;
+
+t_scene					scene_create(void);
+void					scene_cleanup(t_scene *scene);
 
 #endif

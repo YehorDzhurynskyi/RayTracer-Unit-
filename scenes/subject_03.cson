@@ -2,34 +2,62 @@ camera:
 	position: [0.0 3.0 10.0]
 	spot: [0.0 1.0 0.0]
 	up: [0.0 1.0 0.0]
-geometry: [
+materials: [
 	{
-		primitive: "plane"
-		normal: [0.0 1.0 0.0]
-		position: [0.0 0.0 0.0]
 		color: "0x000000ff"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
 	}
 	{
-		primitive: "cone"
-		angle: 45.0
-		direction: [0.0 1.0 0.0]
-		position: [0.0 2.0 0.0]
 		color: "0x00ffff00"
-	}
-	{
-		primitive: "cone"
-		angle: 45.0
-		direction: [0.0 -1.0 0.0]
-		position: [0.0 2.0 0.0]
-		color: "0x00ffff00"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
 	}
 ]
-light: [
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 0.0]
+			radius: 1.0
+		}
+	}
+	{
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "cone"
+			angle: 45.0
+			position: [0.0 2.0 0.0]
+			radius: 1.0
+		}
+	}
+	{
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "cone"
+			angle: 45.0
+			position: [0.0 2.0 0.0]
+			orientation: [180.0 0.0 0.0]
+			radius: 1.0
+		}
+	}
+]
+lightsources: [
 	{
 		type: "point"
 		position: [5.0 2.0 5.0]
-		attenuation: [0.8 0.005 0.008]
+		attenuation: [0.75 0.001 0.0005]
 		intensity: 0.6
 		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
 	}
 ]

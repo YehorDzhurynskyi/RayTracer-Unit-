@@ -37,7 +37,7 @@ shapes: [
 		radius: 2.0
 		position: [0.0 0.0 5.0]
 		glossiness: 0.5
-		shininess: 5.0
+		shininess: 10.0
 		color: "0x00cc00cc"
 		reflectivity: 0.5
 	}

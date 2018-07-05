@@ -1,0 +1,99 @@
+ambient: 0.15
+"anti aliasing": "NOAA"
+"global illumination": false
+"trace depth": 15
+fov: 60.0
+camera:
+	position: [0.0 0.0 10.0]
+	forward: [0.0 0.0 -1.0]
+	right: [1.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		color: "0x000000ff"
+		specularity: 0.3
+		glossiness: 0.4
+		ior: 1.0
+	}
+	{
+		color: "0x0000ffff"
+		specularity: 0.0
+		glossiness: 0.0
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		primitive: {
+			type: "composite"
+			position: [0.0 3.0 0.0]
+		}
+		children: [
+			{
+				relation: "union"
+				primitive: {
+					type: "sphere"
+					radius: 1.0
+					position: [0.0 0.0 0.0]
+				}
+				material: 0
+			}
+		]
+	}
+	{
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [0.0 3.0 0.0]
+			limitations: [
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 2.0
+				}
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": true
+					limit: -2.0
+				}
+			]
+		}
+		material: 1
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [50.0 50.0 0.0]
+		attenuation: [0.75 0.001 0.0005]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [0.0 0.0 0.0]
+			limitations: [
+				{
+					type: "y-axis"
+					"is relative": true
+					"apply if less": false
+					limit: 0.5
+				}
+			]
+		}
+	}
+	{
+		type: "point"
+		position: [0.0 50.0 0.0]
+		attenuation: [0.75 0.001 0.0005]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]
