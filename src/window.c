@@ -43,6 +43,7 @@ extern int					g_frame_height;
 #define WINDOW_TITLE	"RT"
 
 //https://www.opengl.org/discussion_boards/showthread.php/185739-Store-a-2D-texture-to-file
+
 void						window_cleanup(void)
 {
 	free(g_pixelbuffer);

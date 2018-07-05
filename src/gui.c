@@ -23,6 +23,8 @@
 #define NK_SDL_GL2_IMPLEMENTATION
 #define NK_PRIVATE
 
+#define IMGNUM 5
+
 #include <sys/stat.h>
 
 #include <SDL.h>
@@ -34,14 +36,15 @@
 #include <time.h>
 
 extern struct nk_context	*g_nk_context;
-struct nk_image				gui_images[6];
-static unsigned int			g_gl_image_textures[6];
-
+struct nk_image				gui_images[11];
+static unsigned int			g_gl_image_textures[11];
 extern int					g_frame_width;
 extern int					g_frame_height;
 
 //make -C build
 //./Debug/bin/RT
+//перейти на ветку девеллоп
+//git merge --squash gui_windows
 
 void			ui_delete_images()
 {
@@ -74,7 +77,7 @@ void	ui_init_images(void)
 	char buffer[32];
 
 	i = 0;
-	while (i < 6)
+	while (i < IMGNUM)
 	{
 		sprintf(buffer, "../../img/scr%d.bmp", i);
 		g_gl_image_textures[i] = i;
@@ -83,12 +86,9 @@ void	ui_init_images(void)
 			exit(-1);
 		glGenTextures(1, &g_gl_image_textures[i]);
 		glBindTexture(GL_TEXTURE_2D, g_gl_image_textures[i]);
-		int Mode = GL_RGB;
-		if(surf->format->BytesPerPixel == 4)
-			Mode = GL_RGBA;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, Mode, surf->w, surf->h, 0, Mode, GL_UNSIGNED_BYTE, surf->pixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surf->w, surf->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surf->pixels);
 		gui_images[i] = nk_image_id(g_gl_image_textures[i]);
 		SDL_FreeSurface(surf);
 		i++;
@@ -96,14 +96,12 @@ void	ui_init_images(void)
 }
 
 void	render_gui(void)
-{
+{	
 		display_mainmnu();
 		display_console();
-		if (nk_begin(g_nk_context, "Objects", nk_rect(1070, 5, 220, 600),
-			NK_WINDOW_BORDER|NK_WINDOW_MOVABLE|NK_WINDOW_SCALABLE|
-			NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
-		{
-			
-		}
-		nk_end(g_nk_context);
+		display_shapes_win();
+		display_object_win();
+		
+		
+		display_info();
 }

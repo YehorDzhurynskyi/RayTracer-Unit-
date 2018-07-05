@@ -45,6 +45,9 @@ add_subdirectory(Dependencies/libft)
 add_subdirectory(Dependencies/cson)
 
 add_subdirectory(Dependencies/nuklear)
+
+add_subdirectory(Dependencies/targa)
+
 ###
 
 add_executable(${PROJECT_NAME} "")
@@ -64,4 +67,5 @@ target_link_libraries(${PROJECT_NAME}
 	ft
 	cson
 	nuklear
+	targa
 )

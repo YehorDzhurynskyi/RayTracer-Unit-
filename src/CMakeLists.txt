@@ -5,10 +5,11 @@ target_sources(${PROJECT_NAME} PUBLIC
 
 	"${CMAKE_CURRENT_LIST_DIR}/gui.c"
 	"${CMAKE_CURRENT_LIST_DIR}/gui_windows.c"
-	"${CMAKE_CURRENT_LIST_DIR}/gui_popups.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_scenes_pop.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_shapes_win.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_object_win.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui_functions.c"
 
-	"${CMAKE_CURRENT_LIST_DIR}/targa.c"
-	
 	"${CMAKE_CURRENT_LIST_DIR}/opencl/opencl.c"
 	"${CMAKE_CURRENT_LIST_DIR}/opencl/opencl_error.c"
 	"${CMAKE_CURRENT_LIST_DIR}/opencl/opencl_program.c"

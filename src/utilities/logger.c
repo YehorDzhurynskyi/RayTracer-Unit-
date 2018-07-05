@@ -14,10 +14,34 @@
 #include "ft.h"
 #include <stdlib.h>
 
+#include "gui.h"
+
+#define LOGBUFFER_SIZE	256
+
+char	log_type[LOGBUFFER_SIZE];
+char	*log_buf;
+
 void				log_notify(const char *message)
 {
 	// TODO: add status console as notification target
+	int text_len;
+
+	ft_bzero(log_type, LOGBUFFER_SIZE);
+	text_len = ft_strlen(message);
+	ft_memcpy(&log_type, "[INFO]\n", 7);
+	ft_memcpy(&log_type[7], message, text_len);
+	ft_memcpy(&log_type[7 + text_len], "\n", 1);
 	ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
+	if (!log_buf)
+		log_buf = ft_strdup(log_type);
+	else
+	{
+		char *buff = ft_strdup(log_buf);
+		ft_strdel(&log_buf);
+		log_buf = ft_strjoin(log_type, buff);
+		ft_strdel(&buff);
+		ft_printf("--> %d\n", ft_strlen(log_buf));
+	}
 }
 
 static const char	*get_error_message(t_err_code code)
@@ -64,7 +88,29 @@ static const char	*get_error_message(t_err_code code)
 static void			log_violation(const char *level,
 const char *message, t_err_code code)
 {
+	// int level_len;
+	// int text_len;
+	
+	// level_len = ft_strlen(level);
+	
 	ft_printf_fd(2, "{red}[%s - %s]{eoc}: %s\n", level, get_error_message(code), message);
+	
+	// ft_bzero(log_type, LOGBUFFER_SIZE);
+	// text_len = ft_strlen(message);
+	// ft_memcpy(&log_type, level_len, 7);
+	// ft_memcpy(&log_type[7], message, text_len);
+	// ft_memcpy(&log_type[7 + text_len], "\n", 1);
+	// ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
+	// if (!log_buf)
+	// 	log_buf = ft_strdup(log_type);
+	// else
+	// {
+	// 	char *buff = ft_strdup(log_buf);
+	// 	ft_strdel(&log_buf);
+	// 	log_buf = ft_strjoin(log_type, buff);
+	// 	ft_strdel(&buff);
+	// 	ft_printf("--> %d\n", ft_strlen(log_buf));
+	// }
 }
 
 void				log_error(const char *message, t_err_code code)
