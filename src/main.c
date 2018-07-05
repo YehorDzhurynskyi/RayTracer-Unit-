@@ -53,7 +53,7 @@ int					main(int argc, const char *argv[])
 	t_err_code	err_code;
 	t_scene		scene;
 
-	scene_file = "scenes/subject_06.cson";
+	scene_file = "scenes/subject_01.cson";
 	parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
@@ -68,7 +68,7 @@ int					main(int argc, const char *argv[])
 		ft_printf("Error has been occured with code %x\n", err_code);
 		return (EXIT_FAILURE);
 	}
-	// g_main_scene = &scene;
+	g_main_scene = &scene;
 	{
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;

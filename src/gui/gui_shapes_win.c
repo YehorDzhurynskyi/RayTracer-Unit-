@@ -27,52 +27,34 @@
 #include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
+#include "sceneiterator.h"
 
 extern struct nk_context *g_nk_context;
 
-char *testbuf[] = {"Point", "Plane", "Sphere", "Cone", "Cylinder"};
-
-static int shapesnum = 5;
-
-typedef enum {
-    COMPOSITE = 0,
-    POINT,
-    PLANE,
-    SPHERE,
-    CONE,
-    CYLINDER
-} t_primitive_type;
-
-typedef struct __attribute__((packed))
-{
-    // t_claddress			material_addr;
-    // cl_int				nchildren;
-    t_primitive_type primitive_type;
-    // t_relation_type		relation_type; // show combo box
-} t_shape_ex;
+char *testbuf[] = {"Composite", "Point", "Plane", "Sphere", "Cone", "Cylinder"};
 
 void display_shapes_win(void)
 {
     int i;
 
-    t_shape_ex example[5];
-    example[0].primitive_type = 2;
-    example[1].primitive_type = 6;
-    example[2].primitive_type = 3;
-    example[3].primitive_type = 4;
-    example[4].primitive_type = 5;
-    i = 0;
     if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(10, 550, 220, 345),
                  NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
     {
-        while (i < shapesnum)
+        if (g_main_scene != NULL)
         {
-            if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
-                                testbuf[example[i].primitive_type - 2], NK_MINIMIZED, i))
+            t_iterator iter = shape_begin(g_main_scene);
+            i = 0;
+            while (has_next(&iter))
             {
-                nk_tree_pop(g_nk_context);
+                const t_shape *shape = shape_next(&iter);
+                const t_primitive *primitive = shape_get_primitive(shape);
+                if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+                                    testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i))
+                {
+                    nk_tree_pop(g_nk_context);
+                }
+                i++;
             }
-            i++;
         }
     }
     nk_end(g_nk_context);

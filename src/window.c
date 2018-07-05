@@ -86,6 +86,7 @@ void						window_create(void)
 		g_pixelbuffer = (unsigned char*)malloc(g_frame_width * g_frame_height * 4);
 		if (g_pixelbuffer == NULL)
 			break ;
+		ft_bzero(g_pixelbuffer, g_frame_width * g_frame_height * 4);
 		g_sdl_gl_context = SDL_GL_CreateContext(g_sdl_window);
 		generate_gl_texture();
 		struct nk_font_atlas *atlas;
