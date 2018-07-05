@@ -146,7 +146,7 @@ void						window_loop(t_render_callback render_callback, t_scene *scene)
 		start = SDL_GetPerformanceCounter();
 		poll_events(scene);
 		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
-		render_callback(g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
+		render_callback(scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER|NK_WINDOW_TITLE))
 			render_scene();
 
