@@ -51,6 +51,11 @@ add_subdirectory(Dependencies/targa)
 ###
 
 add_executable(${PROJECT_NAME} "")
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	RT_CWD="${CMAKE_CURRENT_LIST_DIR}"
+)
+
 include(src/CMakeLists.txt)
 
 include_directories(

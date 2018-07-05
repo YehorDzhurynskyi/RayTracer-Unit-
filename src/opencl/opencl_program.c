@@ -17,7 +17,7 @@
 #define BUILDLOG_BUFF_SIZE	4096
 
 // -cl-opt-disable - turn off optimization flag
-#define BUILD_OPTIONS	"-I src/opencl/kernel -cl-single-precision-constant -cl-std=CL1.2"
+#define BUILD_OPTIONS	"-I " RT_CWD "/src/opencl/kernel -cl-single-precision-constant -cl-std=CL1.2"
 
 extern int			g_frame_width;
 extern int			g_frame_height;

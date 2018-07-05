@@ -81,7 +81,7 @@ void	renderer_render(const t_scene *scene, unsigned char *pixelbuffer, int width
 void	renderer_init(void)
 {
 	opencl_init();
-	g_scene_renderer.rt_prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace"); // TODO: replace hardcoded values
+	g_scene_renderer.rt_prgm = opencl_program_create(RT_CWD "/src/opencl/kernel/raytracer.cl", "trace");
 	g_scene_renderer.nfilters = 0;
 }
 

@@ -61,8 +61,11 @@ __constant t_shape	*shape_next(t_iterator *iterator)
 		while (has_next(&limitation_iter))
 			limitation_next(&limitation_iter);
 		iterator->current = limitation_iter.current;
-		__constant t_shape	*child = (__constant t_shape*)iterator->current;
-		nchildren += child->nchildren;
+		if (nchildren >= 0)
+		{
+			__constant t_shape	*child = (__constant t_shape*)iterator->current;
+			nchildren += child->nchildren;
+		}
 	}
 	--iterator->count;
 	return (current);
