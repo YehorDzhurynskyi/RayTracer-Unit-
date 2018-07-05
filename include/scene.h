@@ -50,6 +50,7 @@ typedef struct			__attribute__ ((packed))
 	t_clbool			global_illumination;
 	t_clscalar			ambient;
 	t_clscalar			fov;
+	t_claddress			selected_shape_addr;
 }	t_scene_config;
 
 typedef struct			__attribute__ ((packed))

@@ -26,8 +26,6 @@
 #define NK_SDL_GL2_IMPLEMENTATION
 #define NK_PRIVATE
 
-#include <SDL.h>
-#include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
 
@@ -110,6 +108,8 @@ static void					poll_events(t_scene *scene)
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				g_window_should_close = TRUE;
 		}
+		else if (event.type == SDL_MOUSEBUTTONDOWN)
+			pick_shape(&event.button, scene);
 		nk_sdl_handle_event(&event);
 	}
 	nk_input_end(g_nk_context);

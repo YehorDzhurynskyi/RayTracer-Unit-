@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window.h                                           :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,20 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WINDOW_H
-# define WINDOW_H
+#include "intersection.h"
+#include "sceneiterator.h"
+#include <math.h>
 
-# include "scene.h"
-# include <SDL.h>
-# include <SDL_opengl.h>
+t_bool	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+{
+	const t_sphere	*sphere;
+	t_vec3d			to_orig;
+	t_vec3d			position;
+	float			b;
+	float			d;
 
-typedef void	(*t_render_callback)(const t_scene *scene,
-unsigned char *pixelbuffer, int width, int height);
-
-void	window_create(void);
-void	window_loop(t_render_callback render_callback, t_scene *scene);
-void	camera_key_handler(t_camera *camera);
-const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene);
-void	window_cleanup(void);
-
-#endif
+	position = opencl_vec4_to_vec3(primitive->position);
+	sphere = (const t_sphere*)primitive_get_actual(primitive);
+	to_orig = vec3d_sub(&ray->origin, &position);
+	b = vec3d_dot(&ray->direction, &to_orig);
+	d = b * b - (vec3d_dot(&to_orig, &to_orig) - sphere->radius2);
+	if (d < 0.0)
+		return (FALSE);
+	d = sqrt(d);
+	*t = -b - d;
+	if (*t < 0.0)
+		*t = -b + d;
+	return (*t > 0.0);
+}

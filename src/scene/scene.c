@@ -37,6 +37,7 @@ static t_scene_config		scene_config(void)
 	config.global_illumination = FALSE;
 	config.ambient = 0.15;
 	config.fov = 60.0;
+	config.selected_shape_addr = -1;
 	return (config);
 }
 

@@ -27,6 +27,7 @@ typedef struct	__attribute__ ((packed))
 	t_bool		global_illumination;
 	t_scalar	ambient;
 	t_scalar	fov;
+	t_address	selected_shape_addr;
 }	t_scene_config;
 
 typedef struct	__attribute__ ((packed))
