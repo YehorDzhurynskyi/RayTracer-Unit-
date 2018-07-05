@@ -81,4 +81,6 @@ typedef struct
 t_scene					scene_create(void);
 void					scene_cleanup(t_scene *scene);
 
+extern t_scene			*g_main_scene;
+
 #endif

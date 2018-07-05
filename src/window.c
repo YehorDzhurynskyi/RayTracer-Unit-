@@ -29,6 +29,7 @@
 
 #include "nuklear.h"
 #include "nuklear_sdl.h"
+#include "renderer.h"
 
 static SDL_Window			*g_sdl_window = NULL;
 static SDL_GLContext		*g_sdl_gl_context = NULL;
@@ -100,7 +101,8 @@ static void					poll_events(t_scene *scene)
 {
 	SDL_Event	event;
 
-	camera_key_handler(&scene->camera);
+	if (g_main_scene != NULL)
+		camera_key_handler(&scene->camera);
 	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
@@ -131,31 +133,24 @@ static void					render_scene(void)
 	nk_draw_image(canvas, total_space, &image, nk_rgba(255, 255, 255, 255));
 }
 
-void						window_loop(t_render_callback render_callback, t_scene *scene)
+void						window_loop(void)
 {
 	Uint64	start;
 	Uint64	freq;
 	double	mseconds;
-
-	//int i = 0;
 
 	freq = SDL_GetPerformanceFrequency();
 	ui_init_images();
 	while (!g_window_should_close)
 	{
 		start = SDL_GetPerformanceCounter();
-		poll_events(scene);
-		glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
-		render_callback(scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
-		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER|NK_WINDOW_TITLE))
-			render_scene();
-
-/*
-		if (i == 0 && ++i)
+		poll_events(g_main_scene);
+		renderer_render(g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
+		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 		{
-			
+			glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
+			render_scene();
 		}
-*/
 		nk_end(g_nk_context);
 		render_gui();
 		glClear(GL_COLOR_BUFFER_BIT);

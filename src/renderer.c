@@ -62,6 +62,8 @@ void	renderer_render(const t_scene *scene, unsigned char *pixelbuffer, int width
 	int			err;
 	cl_mem		*outputbuffer_ptr;
 
+	if (scene == NULL)
+		return ;
 	renderer_prepare(scene);
 	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, g_scene_renderer.rt_prgm.kernel,
 	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);

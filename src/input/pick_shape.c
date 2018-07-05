@@ -40,6 +40,8 @@ const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene)
 	const t_shape	*shape;
 	float			t;
 
+	if (scene == NULL)
+		return (NULL);
 	shape = NULL;
 	if (event->x > 240 && event->x < 240 + 820 && event->y > 5 && event->y < 5 + 640)
 	{

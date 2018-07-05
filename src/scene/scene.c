@@ -15,6 +15,9 @@
 #include "ft.h"
 #include <assert.h>
 
+
+t_scene						*g_main_scene = NULL;
+
 static t_scenebuffer_meta	scene_meta(void)
 {
 	t_scenebuffer_meta	meta;

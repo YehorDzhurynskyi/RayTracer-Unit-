@@ -23,7 +23,7 @@
 int					g_frame_width = 800;
 int					g_frame_height = 600;
 
-static const char	*parse_cli_arguments(int argc, const char *argv[])
+static void	parse_cli_arguments(int argc, const char *argv[])
 {
 	int	i;
 
@@ -34,13 +34,10 @@ static const char	*parse_cli_arguments(int argc, const char *argv[])
 			g_frame_width = ++i < argc ? ft_atoi(argv[i]) : 0;
 		else if (ft_strequ(argv[i], "-h"))
 			g_frame_height = ++i < argc ? ft_atoi(argv[i]) : 0;
-		else
-			return (argv[i]);
 		if (i >= argc || g_frame_width <= 0 || g_frame_height <= 0)
 			log_fatal("Invalid command line argument\n" RT_USAGE,
 			RT_COMMAND_LINE_PARSING_ERROR);
 	}
-	return (NULL);
 }
 
 void	atexit_callback(void)
@@ -56,16 +53,13 @@ int					main(int argc, const char *argv[])
 	t_err_code	err_code;
 	t_scene		scene;
 
-	scene_file = parse_cli_arguments(argc, argv);
+	scene_file = "scenes/subject_06.cson";
+	parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
-		if (scene_file == NULL)
-		{
-			ft_printf_fd(2, "usage: ./RT [-w framebuffer width] [-h framebuffer height] scene_file\n");
-			return (EXIT_FAILURE);
-		}
 	}
 	renderer_init();
+	window_create();
 	scene = scene_create();
 	err_code = scene_load(&scene, scene_file);
 	if (err_code != 0) // TODO: replace it later
@@ -74,7 +68,7 @@ int					main(int argc, const char *argv[])
 		ft_printf("Error has been occured with code %x\n", err_code);
 		return (EXIT_FAILURE);
 	}
-	window_create();
+	// g_main_scene = &scene;
 	{
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;
@@ -82,7 +76,7 @@ int					main(int argc, const char *argv[])
 		// g_scene_renderer.nfilters++;
 	}
 
-	window_loop(renderer_render, &scene);
+	window_loop();
 	window_cleanup();
 	scene_cleanup(&scene);
 	// renderer_cleanup();
