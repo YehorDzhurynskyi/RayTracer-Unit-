@@ -35,27 +35,24 @@ char *testbuf[] = {"Composite", "Point", "Plane", "Sphere", "Cone", "Cylinder"};
 
 void display_shapes_win(void)
 {
-    int i;
+	int i;
 
-    if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(10, 550, 220, 345),
-                 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
-    {
-        if (g_main_scene != NULL)
-        {
-            t_iterator iter = shape_begin(g_main_scene);
-            i = 0;
-            while (has_next(&iter))
-            {
-                const t_shape *shape = shape_next(&iter);
-                const t_primitive *primitive = shape_get_primitive(shape);
-                if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
-                                    testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i))
-                {
-                    nk_tree_pop(g_nk_context);
-                }
-                i++;
-            }
-        }
-    }
-    nk_end(g_nk_context);
+	if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(10, 550, 220, 345),
+				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+	{
+		t_iterator iter = shape_begin(&g_main_scene);
+		i = 0;
+		while (has_next(&iter))
+		{
+			const t_shape *shape = shape_next(&iter);
+			const t_primitive *primitive = shape_get_primitive(shape);
+			if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+								testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i))
+			{
+				nk_tree_pop(g_nk_context);
+			}
+			i++;
+		}
+	}
+	nk_end(g_nk_context);
 }

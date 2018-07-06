@@ -49,26 +49,14 @@ void	atexit_callback(void)
 
 int					main(int argc, const char *argv[])
 {
-	const char	*scene_file;
-	t_err_code	err_code;
-	t_scene		scene;
-
-	scene_file = RT_CWD "/scenes/subject_01.cson";
 	parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
 	}
 	renderer_init();
+	g_main_scene = scene_create();
 	window_create();
-	scene = scene_create();
-	err_code = scene_load(&scene, scene_file);
-	if (err_code != 0) // TODO: replace it later
-	{
-		scene_cleanup(&scene);
-		ft_printf("Error has been occured with code %x\n", err_code);
-		return (EXIT_FAILURE);
-	}
-	g_main_scene = &scene;
+	window_loop();
 	{
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;
@@ -76,9 +64,8 @@ int					main(int argc, const char *argv[])
 		// g_scene_renderer.nfilters++;
 	}
 
-	window_loop();
 	window_cleanup();
-	scene_cleanup(&scene);
+	scene_cleanup(&g_main_scene);
 	// renderer_cleanup();
 	return (EXIT_SUCCESS);
 }

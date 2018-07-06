@@ -102,8 +102,7 @@ static void					poll_events(t_scene *scene)
 {
 	SDL_Event	event;
 
-	if (g_main_scene != NULL)
-		camera_key_handler(&scene->camera);
+	camera_key_handler(&scene->camera);
 	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
@@ -145,8 +144,8 @@ void						window_loop(void)
 	while (!g_window_should_close)
 	{
 		start = SDL_GetPerformanceCounter();
-		poll_events(g_main_scene);
-		renderer_render(g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
+		poll_events(&g_main_scene);
+		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 		{
 			glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
