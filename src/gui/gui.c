@@ -101,7 +101,5 @@ void	render_gui(void)
 		display_console();
 		display_shapes_win();
 		display_object_win();
-		
-		
-		display_info();
+		display_input_win();
 }

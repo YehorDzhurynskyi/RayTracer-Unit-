@@ -33,42 +33,42 @@ extern struct nk_context *g_nk_context;
 
 extern char *log_buf;
 
-void show_shapes_p2(void)
-{
-	nk_layout_row_dynamic(g_nk_context, 75, 2);
-	nk_image(g_nk_context, gui_images[3]);
-	nk_image(g_nk_context, gui_images[4]);
-	nk_layout_row_dynamic(g_nk_context, 20, 2);
-	nk_label(g_nk_context, "Pyramid", NK_TEXT_LEFT);
-	nk_label(g_nk_context, "Cone", NK_TEXT_LEFT);
-	if (nk_button_label(g_nk_context, "Add"))
-		printf("Pyramid add");
-	if (nk_button_label(g_nk_context, "Add"))
-		printf("Cone add");
-}
 void show_shapes(void)
 {
-	nk_layout_row_dynamic(g_nk_context, 55, 3);
-	nk_image(g_nk_context, gui_images[0]);
-	nk_image(g_nk_context, gui_images[1]);
-	nk_image(g_nk_context, gui_images[2]);
+	nk_layout_row_dynamic(g_nk_context, 75, 3);
+	nk_image(g_nk_context, gui_images[3]);
+	nk_image(g_nk_context, gui_images[4]);
+	nk_image(g_nk_context, gui_images[4]);
 	nk_layout_row_dynamic(g_nk_context, 20, 3);
-	nk_label_colored(g_nk_context, "Sphere", NK_TEXT_LEFT, nk_rgb(255, 255, 0));
-	nk_label(g_nk_context, "Cube", NK_TEXT_LEFT);
-	nk_label(g_nk_context, "Cylinder", NK_TEXT_LEFT);
+	nk_label(g_nk_context, "Pyramid", NK_TEXT_LEFT);
+	nk_label(g_nk_context, "Cone", NK_TEXT_LEFT);
+	nk_label(g_nk_context, "Plane", NK_TEXT_LEFT);
 	if (nk_button_label(g_nk_context, "Add"))
-		printf("Sphere add");
+		ft_printf("Pyramid add\n");
 	if (nk_button_label(g_nk_context, "Add"))
-		printf("Cube add");
+		ft_printf("Cone add\n");
 	if (nk_button_label(g_nk_context, "Add"))
-		printf("Cylinder add");
-	show_shapes_p2();
+		ft_printf("Cone add\n");
 }
 
-void shapes_tree(void)
+void shapes_add_tree(void)
 {
-	if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Add Shapes", NK_MAXIMIZED))
+	if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Add Shape", NK_MAXIMIZED))
 	{
+		nk_layout_row_dynamic(g_nk_context, 75, 3);
+		nk_image(g_nk_context, gui_images[0]);
+		nk_image(g_nk_context, gui_images[1]);
+		nk_image(g_nk_context, gui_images[2]);
+		nk_layout_row_dynamic(g_nk_context, 20, 3);
+		nk_label(g_nk_context, "Sphere", NK_TEXT_LEFT);
+		nk_label(g_nk_context, "Cube", NK_TEXT_LEFT);
+		nk_label(g_nk_context, "Cylinder", NK_TEXT_LEFT);
+		if (nk_button_label(g_nk_context, "Add"))
+			ft_printf("Sphere add\n");
+		if (nk_button_label(g_nk_context, "Add"))
+			ft_printf("Cube add\n");
+		if (nk_button_label(g_nk_context, "Add"))
+			ft_printf("Cylinder add\n");
 		show_shapes();
 		nk_tree_pop(g_nk_context);
 	}
@@ -76,7 +76,7 @@ void shapes_tree(void)
 
 void display_mainmnu(void)
 {
-	if (nk_begin(g_nk_context, "Menu", nk_rect(10, 5, 220, 545),
+	if (nk_begin(g_nk_context, "Menu", nk_rect(5, 5, 300, 545),
 				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
 	{
 		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Scene", NK_MAXIMIZED)) //ON RELEASE: Minimized
@@ -87,14 +87,14 @@ void display_mainmnu(void)
 				scren_shot();
 			nk_tree_pop(g_nk_context);
 		}
-		shapes_tree();
+		shapes_add_tree();
 	}
 	nk_end(g_nk_context);
 }
 
 void display_console(void)
 {
-	if (nk_begin(g_nk_context, "Information log", nk_rect(240, 650, 820, 245),
+	if (nk_begin(g_nk_context, "Information log", nk_rect(X_CENTERED, 650, 820, 245),
 				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
 	{
 		static int box_len;

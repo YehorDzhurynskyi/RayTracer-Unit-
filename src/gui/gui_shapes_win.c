@@ -27,17 +27,22 @@
 #include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
-#include "sceneiterator.h"
 
 extern struct nk_context *g_nk_context;
 
 char *testbuf[] = {"Composite", "Point", "Plane", "Sphere", "Cone", "Cylinder"};
 
+
+void close_tabs(void)
+{
+
+}
+
 void display_shapes_win(void)
 {
     int i;
-
-    if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(10, 550, 220, 345),
+    
+    if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(5, 550, 300, 345),
                  NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
     {
         if (g_main_scene != NULL)
@@ -48,14 +53,82 @@ void display_shapes_win(void)
             {
                 const t_shape *shape = shape_next(&iter);
                 const t_primitive *primitive = shape_get_primitive(shape);
+
                 if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
-                                    testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i))
+                                    testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i++))
                 {
+                    if (nk_button_label(g_nk_context, "Choose"))
+                    {
+                        set_object(shape->addr);
+                    }
+                    if (nk_tree_push_id(g_nk_context, NK_TREE_NODE, "Expand Me", NK_MINIMIZED, i++))
+                    {
+                        if (nk_button_label(g_nk_context, "Choose"))
+                        {
+                            ft_printf("%i\n", shape->addr);
+                        }
+
+                        nk_tree_pop(g_nk_context);
+                    }
                     nk_tree_pop(g_nk_context);
                 }
-                i++;
             }
         }
     }
     nk_end(g_nk_context);
+    /*
+    // static int active1 = 0;
+    static int active2 = 0;
+    static int active3 = 0;
+    // static int active4 = 0;
+    struct nk_rect rect = nk_rect(10, 10, 600, 300);
+    if (nk_begin(g_nk_context, "Bug Demo", rect, NK_WINDOW_MOVABLE | NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_CLOSABLE))
+    {
+        int id = 0;
+        struct nk_rect w;
+        if (nk_tree_push_id(g_nk_context, NK_TREE_NODE, "Children", NK_MAXIMIZED, id++))
+        {
+            if (nk_tree_push_id(g_nk_context, NK_TREE_NODE, "Expand Me", NK_MINIMIZED, id++))
+            {
+                w = nk_layout_widget_bounds(g_nk_context);
+                nk_layout_row_begin(g_nk_context, NK_STATIC, 18, 2);
+                nk_layout_row_push(g_nk_context, 24);
+
+                nk_button_label(g_nk_context, "...");
+                nk_layout_row_push(g_nk_context, w.w - 24);
+
+                nk_selectable_label(g_nk_context, "Hello", NK_TEXT_ALIGN_LEFT, &active2);
+                nk_layout_row_end(g_nk_context);
+                nk_tree_pop(g_nk_context);
+            }
+            w = nk_layout_widget_bounds(g_nk_context);
+            nk_layout_row_begin(g_nk_context, NK_STATIC, 18, 2);
+            nk_layout_row_push(g_nk_context, 24);
+
+            nk_button_label(g_nk_context, "...");
+            nk_layout_row_push(g_nk_context, w.w - 24);
+
+            nk_selectable_label(g_nk_context, "I will disappear.", NK_TEXT_ALIGN_LEFT, &active3);
+            nk_layout_row_end(g_nk_context);
+            nk_tree_pop(g_nk_context);
+        }
+    }
+    nk_end(g_nk_context);
+
+
+                nk_layout_row_static(g_nk_context, 5, 30, 1);
+                // nk_layout_row_dynamic(g_nk_context, 1, 1);
+                struct nk_rect bounds = nk_widget_bounds(g_nk_context);
+
+                if (nk_contextual_begin(g_nk_context, 0, nk_vec2(100, 300), bounds))
+                {
+                    nk_layout_row_dynamic(g_nk_context, 25, 1);
+                    nk_label(g_nk_context, "Right click me for menu", NK_TEXT_LEFT);
+                    // nk_checkbox_label(ctx, "Menu", &show_menu);
+                    ft_printf("HELLO\n", shape->addr);
+                    nk_contextual_end(g_nk_context);
+                }
+
+
+    */
 }

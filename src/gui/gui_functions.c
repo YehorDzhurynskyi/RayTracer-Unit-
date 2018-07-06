@@ -31,9 +31,9 @@
 
 extern struct nk_context	*g_nk_context;
 
-void	display_info(void)
+void	display_input_win(void)
 {
-	if (nk_begin(g_nk_context, "Input commands", nk_rect(1070, 550, 220, 345),
+	if (nk_begin(g_nk_context, "Input commands", nk_rect(X_CENTERED + 825, 550, 300, 345), //avoid calculation
 			NK_WINDOW_BORDER|NK_WINDOW_MINIMIZABLE|NK_WINDOW_TITLE))
 	{
 	static char text[100];
