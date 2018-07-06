@@ -49,6 +49,9 @@ void	atexit_callback(void)
 
 int					main(int argc, const char *argv[])
 {
+	const char	*scene_file;
+
+	scene_file = RT_CWD "/scenes/subject_06.cson";
 	parse_cli_arguments(argc, argv);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
@@ -63,7 +66,7 @@ int					main(int argc, const char *argv[])
 		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
 		// g_scene_renderer.nfilters++;
 	}
-
+	window_loop();
 	window_cleanup();
 	scene_cleanup(&g_main_scene);
 	// renderer_cleanup();

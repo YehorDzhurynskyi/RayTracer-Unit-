@@ -4,7 +4,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/renderer.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/gui/gui.c"
-	"${CMAKE_CURRENT_LIST_DIR}/gui/gui_windows.c"
+	"${CMAKE_CURRENT_LIST_DIR}/gui/gui_mainmnu_win.c"
 	"${CMAKE_CURRENT_LIST_DIR}/gui/gui_scenes_pop.c"
 	"${CMAKE_CURRENT_LIST_DIR}/gui/gui_shapes_win.c"
 	"${CMAKE_CURRENT_LIST_DIR}/gui/gui_object_win.c"

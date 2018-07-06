@@ -1,6 +1,6 @@
 
 
-
+// nk_label_colored(g_nk_context, "Sphere", NK_TEXT_LEFT, nk_rgb(255, 255, 0));
 /*
 static int active = 0;
 nk_layout_row_dynamic(g_nk_context, 30, 2);

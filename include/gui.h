@@ -12,8 +12,11 @@
 
 #ifndef GUI_H
 # define GUI_H
+# define WINDOW_WDTH 1440
+# define X_CENTERED (WINDOW_WDTH / 2) - (820 / 2)  //aka 310
 
 # include "libft.h"
+#include "sceneiterator.h"
 
 void	render_gui(void);
 void	display_mainmnu(void);
@@ -22,10 +25,10 @@ void	ui_init_images(void);
 void	display_scenes(void);
 void	display_shapes_win(void);
 void    display_object_win(void);
-//void	display_info(void);
+void    set_object(t_claddress addr);
 int		scren_shot(void);
-
-void display_info(void);
+void    show_shapes(void);
+void    display_input_win(void);
 
 // void log_gui(const char *message);
 

@@ -79,7 +79,7 @@ void						window_create(void)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		g_sdl_window = SDL_CreateWindow(WINDOW_TITLE,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		1300, 900, SDL_WINDOW_OPENGL);
+		WINDOW_WDTH, 900, SDL_WINDOW_OPENGL);
 		if (g_sdl_window == NULL)
 			break ;
 		g_nk_context = nk_sdl_init(g_sdl_window);
@@ -146,7 +146,7 @@ void						window_loop(void)
 		start = SDL_GetPerformanceCounter();
 		poll_events(&g_main_scene);
 		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
-		if (nk_begin(g_nk_context, "Scene", nk_rect(240, 5, 820, 640), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+		if (nk_begin(g_nk_context, "Scene", nk_rect(X_CENTERED, 5, 820, 640), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 		{
 			glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
 			render_scene();

@@ -21,7 +21,6 @@ void	scenebuffer_add_shape(t_scene *scene, t_shape *shape, t_bool is_child)
 	if (shape->material_addr != DEFAULT_MATERIAL_ID)
 		shape->material_addr *= sizeof(t_material);
 	scenebuffer_append(scene, shape, sizeof(t_shape), SHAPEBUFF_TARGET);
-	scene->meta.shapes_size += sizeof(t_shape);
 	if (!is_child)
 		scene->meta.nshapes++;
 }
