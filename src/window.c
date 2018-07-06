@@ -102,8 +102,7 @@ static void					poll_events(t_scene *scene)
 {
 	SDL_Event	event;
 
-	if (g_main_scene != NULL)
-		camera_key_handler(&scene->camera);
+	camera_key_handler(&scene->camera);
 	nk_input_begin(g_nk_context);
 	while (SDL_PollEvent(&event))
 	{
@@ -129,28 +128,36 @@ static void					render_scene(void)
 
 	canvas = nk_window_get_canvas(g_nk_context);
 	total_space = nk_window_get_content_region(g_nk_context);
+	// ft_printf("X: %f %f %f %f\n", total_space.x, total_space.y, total_space.w, total_space.h);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, g_frame_width, g_frame_height, GL_RGBA, GL_UNSIGNED_BYTE, g_pixelbuffer);
 	image = nk_image_id((int)g_gl_texture_name);
-	nk_draw_image(canvas, total_space, &image, nk_rgba(255, 255, 255, 255));
+	struct nk_rect	rect;
+	rect.x = SCENE_X + 16.0;
+	rect.y = SCENE_Y + 16.0;
+	rect.w = SCENE_W;
+	rect.h = SCENE_HEIGHT;
+	nk_draw_image(canvas, rect, &image, nk_rgba(255, 255, 255, 255));
 }
 
 void						window_loop(void)
 {
 	Uint64	start;
 	Uint64	freq;
-	double	mseconds;
+	float	mseconds;
 
 	freq = SDL_GetPerformanceFrequency();
 	ui_init_images();
 	while (!g_window_should_close)
 	{
 		start = SDL_GetPerformanceCounter();
-		poll_events(g_main_scene);
-		renderer_render(g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
-		if (nk_begin(g_nk_context, "Scene", nk_rect(X_CENTERED, 5, 820, 640), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+		poll_events(&g_main_scene);
+		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
+
+		if (nk_begin(g_nk_context, "Scene", nk_rect(SCENE_X, SCENE_Y, SCENE_W, SCENE_HEIGHT), NK_WINDOW_BORDER))
 		{
 			glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
 			render_scene();
+			display_fps(mseconds);
 		}
 		nk_end(g_nk_context);
 		render_gui();
@@ -158,7 +165,8 @@ void						window_loop(void)
 		glClearColor(0.10f, 0.18f, 0.24f, 1.0f);
 		nk_sdl_render(NK_ANTI_ALIASING_ON);
 		SDL_GL_SwapWindow(g_sdl_window);
-		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
+		mseconds = (SDL_GetPerformanceCounter() - start) / (float)freq * 1000.0;
+		
 		// ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 	}
 }

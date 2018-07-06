@@ -28,6 +28,7 @@
 #include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
+#include "scene.h"
 
 extern struct nk_context	*g_nk_context;
 static int					g_scenes_active;
@@ -68,7 +69,7 @@ void	show_pop_scenes(void)
 	nk_layout_row_dynamic(g_nk_context, 25, 2);
 	if (nk_button_label(g_nk_context, "CHANGE") && g_diropened)
 	{
-		printf("Change scene to %s!\n", g_chosen_scene);
+		scene_change(g_chosen_scene);
 		g_scenes_active = 0;
 		g_diropened = 0;
 		ft_strdel(&g_scenes_buf);

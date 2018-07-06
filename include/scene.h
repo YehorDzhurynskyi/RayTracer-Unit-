@@ -80,7 +80,8 @@ typedef struct
 
 t_scene					scene_create(void);
 void					scene_cleanup(t_scene *scene);
+void					scene_change(const char *scene_name);
 
-extern t_scene			*g_main_scene;
+extern t_scene			g_main_scene;
 
 #endif

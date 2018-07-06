@@ -11,26 +11,41 @@
 /* ************************************************************************** */
 
 #ifndef GUI_H
-# define GUI_H
-#define WINDOW_WDTH 1440
-#define X_CENTERED (WINDOW_WDTH / 2) - (820 / 2)  //aka 310
+#define GUI_H
+// # define WINDOW_WDTH 1440`
+#define WINDOW_HGHT 900
+// # define SCENEFRM_W WINDOW_WDTH * 0.57
 
-# include "libft.h"
+#define GAP 5.0
+#define MENU_W 300
+#define MENU_H 540
+#define MENU_X GAP
+#define MENU_Y GAP
+#define OBJ_X (GAP + MENU_W + GAP + SCENE_W + GAP)
+#define OBJ_Y GAP
+#define SCENE_X (GAP + MENU_W + GAP)
+#define SCENE_Y GAP
+#define SCENE_W 820
+#define SCENE_HEIGHT 640
+#define WINDOW_WDTH (GAP + MENU_W + GAP + SCENE_W + GAP + MENU_W + GAP)
+#define X_CENTERED ((WINDOW_WDTH / 2) - (SCENE_W / 2))
+
+#include "libft.h"
 #include "sceneiterator.h"
 
-void	render_gui(void);
-void	display_mainmnu(void);
-void	display_console(void);
-void	ui_init_images(void);
-void	display_scenes(void);
-void	display_shapes_win(void);
-void    display_object_win(void);
-void    set_object(t_claddress addr);
-int		scren_shot(void);
-void    show_shapes(void);
-void    display_input_win(void);
-
-// void log_gui(const char *message);
-
+void render_gui(void);
+void display_mainmnu(void);
+void display_console(void);
+void ui_init_images(void);
+void display_scenes(void);
+void display_shapes_win(void);
+void display_object_win(void);
+void set_object(t_claddress addr);
+int scren_shot(void);
+void show_shapes(void);
+void display_input_win(void);
+void loading_message(char *message);
+void loading_stop(void);
+void display_fps(float mseconds);
 
 #endif

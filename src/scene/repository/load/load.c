@@ -20,6 +20,8 @@
 #define FOV			60.0
 #define FOV_STR		TO_STRING(FOV)
 
+#define SCENE_DIR	RT_CWD "/scenes/"
+
 static inline t_err_code	map_err_code(int err)
 {
 	if (err == CSON_MEM_ALLOC_ERROR)
@@ -103,8 +105,11 @@ t_err_code					scene_load(t_scene *scene, const char *filename)
 {
 	t_cson		*scene_cson;
 	t_err_code	err;
+	char		path[2048];
 
-	scene_cson = cson_parse_file(filename, &err);
+	ft_strcpy(path, SCENE_DIR);
+	ft_strcpy(path + ft_strlen(SCENE_DIR), filename);
+	scene_cson = cson_parse_file(path, &err);
 	if (err != 0)
 		return (map_err_code(err));
 	scene->config.trace_depth = cson_get_default_integer(

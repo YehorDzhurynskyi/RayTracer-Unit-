@@ -33,6 +33,13 @@ extern struct nk_context *g_nk_context;
 
 extern char *log_buf;
 
+void display_fps(float	mseconds)
+{
+	// nk_layout_row_dynamic(g_nk_context, 30, 1);
+	nk_layout_row_static(g_nk_context, 30, 100, 1);
+	nk_property_float(g_nk_context, "ms:", 0, &mseconds, 64.0f, 0.1f, 0.2f);
+}
+
 void show_shapes(void)
 {
 	nk_layout_row_dynamic(g_nk_context, 75, 3);
@@ -76,7 +83,7 @@ void shapes_add_tree(void)
 
 void display_mainmnu(void)
 {
-	if (nk_begin(g_nk_context, "Menu", nk_rect(5, 5, 300, 545),
+	if (nk_begin(g_nk_context, "Menu", nk_rect(MENU_X, MENU_Y, MENU_W, MENU_H),
 				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
 	{
 		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Scene", NK_MAXIMIZED)) //ON RELEASE: Minimized
@@ -94,14 +101,16 @@ void display_mainmnu(void)
 
 void display_console(void)
 {
-	if (nk_begin(g_nk_context, "Information log", nk_rect(X_CENTERED, 650, 820, 245),
-				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+	static int box_len;
+
+	if (nk_begin(g_nk_context, "Information log", nk_rect(X_CENTERED, 650,
+		SCENE_W, 245),  NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE
+		| NK_WINDOW_TITLE))
 	{
-		static int box_len;
 		box_len = ft_strlen(log_buf);
 		nk_layout_row_static(g_nk_context, 190, 790, 1);
 		nk_edit_string(g_nk_context, NK_EDIT_BOX | NK_EDIT_SIG_ENTER, log_buf,
-					   &box_len, 4096, nk_filter_binary);
+						&box_len, 4096, nk_filter_binary);
 	}
 	nk_end(g_nk_context);
 }

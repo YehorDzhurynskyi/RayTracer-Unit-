@@ -14,9 +14,9 @@
 #include "logger.h"
 #include "ft.h"
 #include <assert.h>
+#include "scenerepository.h"
 
-
-t_scene						*g_main_scene = NULL;
+t_scene						g_main_scene;
 
 static t_scenebuffer_meta	scene_meta(void)
 {
@@ -81,6 +81,19 @@ t_scene						scene_create(void)
 	scene.mapped_device_buffer = NULL;
 	scene.mapped_host_buffer = NULL;
 	return (scene);
+}
+
+void						scene_change(const char *scene_name)
+{
+	t_err_code	err_code;
+	t_scene		saved_scene;
+
+	saved_scene = g_main_scene;
+	g_main_scene.config = scene_config();
+	g_main_scene.meta = scene_meta();
+	err_code = scene_load(&g_main_scene, scene_name);
+	if (err_code != 0)
+		g_main_scene = saved_scene;
 }
 
 void						scene_cleanup(t_scene *scene)
