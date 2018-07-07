@@ -91,14 +91,14 @@ void	load_scenes(void)
 	size_t			len;
 
 	len = 0;
-	d = opendir("scenes");
+	d = opendir(SCENE_DIR);
 	while ((dir = readdir(d)) != NULL)
 		if (ft_strstr(dir->d_name, ".cson"))
 			len += ft_strlen(dir->d_name) + 1;
 	closedir(d);
 	g_scenes_buf = ft_memalloc(sizeof(char) * len + 1);
 	put = g_scenes_buf;
-	d = opendir("scenes");
+	d = opendir(SCENE_DIR);
 	while ((dir = readdir(d)) != NULL)
 	{
 		if (ft_strstr(dir->d_name, ".cson"))

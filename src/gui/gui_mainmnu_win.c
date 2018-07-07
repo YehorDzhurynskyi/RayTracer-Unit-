@@ -90,7 +90,7 @@ void display_mainmnu(void)
 			display_scenes();
 			nk_layout_row_dynamic(g_nk_context, 25, 1);
 			if (nk_button_label(g_nk_context, "Take-a-Snapshot"))
-				scren_shot();
+				screen_shot();
 			nk_tree_pop(g_nk_context);
 		}
 		shapes_add_tree();

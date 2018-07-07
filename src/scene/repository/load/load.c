@@ -20,8 +20,6 @@
 #define FOV			60.0
 #define FOV_STR		TO_STRING(FOV)
 
-#define SCENE_DIR	RT_CWD "/scenes/"
-
 static inline t_err_code	map_err_code(int err)
 {
 	if (err == CSON_MEM_ALLOC_ERROR)

@@ -51,24 +51,23 @@ void			ui_delete_images()
 	glDeleteTextures(6, g_gl_image_textures);
 }
 
-int scren_shot(void)
+void	screen_shot(void)
 {
-	time_t ltime;
+	time_t	now;
+	t_byte	*pixels;
+	char	*buff;
+	char	*path;
 
-	time(&ltime);
-	char *buf;
-	char *buffer;
-	unsigned char		*pixelbuffer = NULL;
-	pixelbuffer = malloc(sizeof(unsigned char) * ((g_frame_width * g_frame_height) * 3));
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer);
-	mkdir("Screenshots", S_IRWXU | S_IRWXG | S_IRWXO);
-	buf = ft_strjoin(ctime(&ltime), ".bmp");
-	buffer = ft_strjoin("Screenshots/ ", buf);
-	tga_write_rgb(buffer, pixelbuffer, (uint16_t)g_frame_width, (uint16_t)g_frame_height, 24);
-	ft_strdel(&buf);
-	ft_strdel(&buffer);
-	free(pixelbuffer);
-	return 1;
+	pixels = malloc(sizeof(t_byte) * ((g_frame_width * g_frame_height) * 3));
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	mkdir(RT_CWD "/Screenshots", S_IRWXU | S_IRWXG | S_IRWXO);
+	time(&now);
+	buff = ft_strjoin(ctime(&now), ".bmp");
+	path = ft_strjoin(RT_CWD "/Screenshots/ ", buff);
+	tga_write_rgb(path, pixels, (uint16_t)g_frame_width, (uint16_t)g_frame_height, 24);
+	ft_strdel(&buff);
+	ft_strdel(&path);
+	free(pixels);
 }
 
 void	ui_init_images(void)

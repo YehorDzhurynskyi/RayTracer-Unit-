@@ -29,6 +29,8 @@
 #  define MATERIALBUFF_CAPACITY	1024 * 1
 # endif
 
+# define SCENE_DIR	RT_CWD "/scenes/"
+
 typedef enum
 {
 	SHAPEBUFF_TARGET = 1,

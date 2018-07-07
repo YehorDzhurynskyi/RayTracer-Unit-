@@ -60,7 +60,7 @@ void	display_scenes(void);
 void	display_shapes_win(void);
 void	display_object_win(void);
 void	select_object(t_claddress addr);
-int		scren_shot(void);
+void	screen_shot(void);
 void	show_shapes(void);
 void	display_input_win(void);
 void	loading_message(char *message);
