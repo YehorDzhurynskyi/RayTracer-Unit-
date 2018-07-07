@@ -42,7 +42,7 @@ shapes: [
 		material: 0
 		primitive: {
 			type: "sphere"
-			position: [0.0 -5.0 10.0]
+			position: [0.0 -5.125 10.5]
 			# orientation: [0.0 0.0 30.0]
 			radius: 1.5
 			limitations: [

@@ -24,7 +24,7 @@ struct			s_fragment
 	t_scalar	glossiness;
 };
 
-t_color			shade(const t_vec4 *point, const t_scene *scene,
+t_color			shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
 const t_scene_buffers *buffers, __constant t_shape *shape);
 
 #endif

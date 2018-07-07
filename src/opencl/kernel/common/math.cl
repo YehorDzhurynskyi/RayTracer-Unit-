@@ -46,7 +46,7 @@ t_vec3	refract3(t_vec3 incident, t_vec3 normal, t_scalar ior)
 
 t_vec4	refract4(t_vec4 incident, t_vec4 normal, t_scalar ior)
 {
-	t_scalar	cosi = dot(incident, normal); 
+	t_scalar	cosi = dot(incident, normal);
 	t_scalar	snell;
 	if (cosi < 0)
 	{

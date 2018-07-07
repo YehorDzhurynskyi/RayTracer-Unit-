@@ -47,9 +47,9 @@ void show_shapes(void)
 	nk_image(g_nk_context, gui_images[4]);
 	nk_image(g_nk_context, gui_images[4]);
 	nk_layout_row_dynamic(g_nk_context, 20, 3);
-	nk_label(g_nk_context, "Pyramid", NK_TEXT_LEFT);
-	nk_label(g_nk_context, "Cone", NK_TEXT_LEFT);
-	nk_label(g_nk_context, "Plane", NK_TEXT_LEFT);
+	nk_label(g_nk_context, "Pyramid", NK_TEXT_CENTERED);
+	nk_label(g_nk_context, "Cone", NK_TEXT_CENTERED);
+	nk_label(g_nk_context, "Plane", NK_TEXT_CENTERED);
 	if (nk_button_label(g_nk_context, "Add"))
 		ft_printf("Pyramid add\n");
 	if (nk_button_label(g_nk_context, "Add"))
@@ -67,9 +67,9 @@ void shapes_add_tree(void)
 		nk_image(g_nk_context, gui_images[1]);
 		nk_image(g_nk_context, gui_images[2]);
 		nk_layout_row_dynamic(g_nk_context, 20, 3);
-		nk_label(g_nk_context, "Sphere", NK_TEXT_LEFT);
-		nk_label(g_nk_context, "Cube", NK_TEXT_LEFT);
-		nk_label(g_nk_context, "Cylinder", NK_TEXT_LEFT);
+		nk_label(g_nk_context, "Sphere", NK_TEXT_CENTERED);
+		nk_label(g_nk_context, "Cube", NK_TEXT_CENTERED);
+		nk_label(g_nk_context, "Cylinder", NK_TEXT_CENTERED);
 		if (nk_button_label(g_nk_context, "Add"))
 			ft_printf("Sphere add\n");
 		if (nk_button_label(g_nk_context, "Add"))
@@ -83,8 +83,7 @@ void shapes_add_tree(void)
 
 void display_mainmnu(void)
 {
-	if (nk_begin(g_nk_context, "Menu", nk_rect(MENU_X, MENU_Y, MENU_W, MENU_H),
-				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+	if (nk_begin(g_nk_context, "Menu", nk_rect(MENU_X, MENU_Y, MENU_WIDTH, MENU_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 	{
 		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Scene", NK_MAXIMIZED)) //ON RELEASE: Minimized
 		{
@@ -103,9 +102,8 @@ void display_console(void)
 {
 	static int box_len;
 
-	if (nk_begin(g_nk_context, "Information log", nk_rect(X_CENTERED, 650,
-		SCENE_W, 245),  NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE
-		| NK_WINDOW_TITLE))
+	if (nk_begin(g_nk_context, "Information log", nk_rect(LOG_X, LOG_Y,
+		LOG_WIDTH, LOG_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 	{
 		box_len = ft_strlen(log_buf);
 		nk_layout_row_static(g_nk_context, 190, 790, 1);

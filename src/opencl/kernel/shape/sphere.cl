@@ -106,43 +106,90 @@ t_bool	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t
 
 t_vec4	obtain_sphere_normal(const t_vec4 *point, __constant t_primitive *primitive)
 {
-	t_iterator limit_iter = limitation_begin(primitive);
-	if (has_next(&limit_iter))
+	// t_iterator limit_iter = limitation_begin(primitive);
+	// if (has_next(&limit_iter))
+	// {
+	// 	// printf("%f %f %f %f\n", point->x - primitive->position.x,
+	// 	// point->y - primitive->position.y, point->z - primitive->position.z, point->w - primitive->position.w);
+	// 	while (has_next(&limit_iter))
+	// 	{
+	// 		__constant t_limitation *limit = limitation_next(&limit_iter);
+	// 		if (IS_AXIAL(limit->limitation_type))
+	// 		{
+	// 			__constant t_axial_limitation *axial_limit = (__constant t_axial_limitation*)limitation_get_actual(limit);
+	// 			if (limit->limitation_type == XAXIS)
+	// 			{
+	// 				t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.x : axial_limit->limit;
+	// 				if (axial_limit->apply_if_less && fabs(point->x - lim) <= 1.0E-5)
+	// 					return ((t_vec4)(-1.0f, 0.0f, 0.0f, 0.0f));
+	// 				if (!axial_limit->apply_if_less && fabs(point->x - lim) <= 1.0E-5)
+	// 					return ((t_vec4)(1.0f, 0.0f, 0.0f, 0.0f));
+	// 			}
+	// 			if (limit->limitation_type == YAXIS)
+	// 			{
+	// 				t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.y : axial_limit->limit;
+	// 				if (axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
+	// 					return (mat4x4_mult_vec4(primitive->orientation, (t_vec4)(0.0f, -1.0f, 0.0f, 0.0f)));
+	// 				if (!axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
+	// 					return ((t_vec4)(0.0f, 1.0f, 0.0f, 0.0f));
+	// 			}
+	// 			if (limit->limitation_type == ZAXIS)
+	// 			{
+	// 				t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.z : axial_limit->limit;
+	// 				if (axial_limit->apply_if_less && fabs(point->z - lim) <= 1.0E-5)
+	// 					return ((t_vec4)(0.0f, 0.0f, -1.0f, 0.0f));
+	// 				if (!axial_limit->apply_if_less && fabs(point->z - lim) <= 1.0E-5)
+	// 					return ((t_vec4)(0.0f, 0.0f, 1.0f, 0.0f));
+	// 			}
+	// 		}
+	// 	}
+	// }
+	const t_vec4 init_normal = normalize(*point - primitive->position);
+	t_scalar max_dot = 0.0f;
+	t_vec4 normal = init_normal;
+	t_vec4 n = (t_vec4)(-1.0f, 0.0f, 0.0f, 0.0f);
+	t_scalar d = dot(n, init_normal);
+	if (d > max_dot)
 	{
-		// printf("%f %f %f %f\n", point->x - primitive->position.x,
-		// point->y - primitive->position.y, point->z - primitive->position.z, point->w - primitive->position.w);
-		while (has_next(&limit_iter))
-		{
-			__constant t_limitation *limit = limitation_next(&limit_iter);
-			if (IS_AXIAL(limit->limitation_type))
-			{
-				__constant t_axial_limitation *axial_limit = (__constant t_axial_limitation*)limitation_get_actual(limit);
-				if (limit->limitation_type == XAXIS)
-				{
-					t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.x : axial_limit->limit;
-					if (axial_limit->apply_if_less && fabs(point->x - lim) <= 1.0E-5)
-						return ((t_vec4)(-1.0f, 0.0f, 0.0f, 0.0f));
-					if (!axial_limit->apply_if_less && fabs(point->x - lim) <= 1.0E-5)
-						return ((t_vec4)(1.0f, 0.0f, 0.0f, 0.0f));
-				}
-				if (limit->limitation_type == YAXIS)
-				{
-					t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.y : axial_limit->limit;
-					if (axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
-						return (mat4x4_mult_vec4(primitive->orientation, (t_vec4)(0.0f, -1.0f, 0.0f, 0.0f)));
-					if (!axial_limit->apply_if_less && fabs(point->y - lim) <= 1.0E-5)
-						return ((t_vec4)(0.0f, 1.0f, 0.0f, 0.0f));
-				}
-				if (limit->limitation_type == ZAXIS)
-				{
-					t_scalar lim = limit->is_relative ? axial_limit->limit + primitive->position.z : axial_limit->limit;
-					if (axial_limit->apply_if_less && fabs(point->z - lim) <= 1.0E-5)
-						return ((t_vec4)(0.0f, 0.0f, -1.0f, 0.0f));
-					if (!axial_limit->apply_if_less && fabs(point->z - lim) <= 1.0E-5)
-						return ((t_vec4)(0.0f, 0.0f, 1.0f, 0.0f));
-				}
-			}
-		}
+		max_dot = d;
+		normal = n;
 	}
-	return (normalize(*point - primitive->position));
+	n = (t_vec4)(1.0f, 0.0f, 0.0f, 0.0f);
+	d = dot(n, init_normal);
+	if (d > max_dot)
+	{
+		max_dot = d;
+		normal = n;
+	}
+	n = (t_vec4)(0.0f, -1.0f, 0.0f, 0.0f);
+	d = dot(n, init_normal);
+	if (d > max_dot)
+	{
+		max_dot = d;
+		normal = n;
+	}
+	n = (t_vec4)(0.0f, 1.0f, 0.0f, 0.0f);
+	d = dot(n, init_normal);
+	if (d > max_dot)
+	{
+		max_dot = d;
+		normal = n;
+	}
+	n = (t_vec4)(0.0f, 0.0f, -1.0f, 0.0f);
+	d = dot(n, init_normal);
+	if (d > max_dot)
+	{
+		max_dot = d;
+		normal = n;
+	}
+	n = (t_vec4)(0.0f, 0.0f, 1.0f, 0.0f);
+	d = dot(n, init_normal);
+	if (d > max_dot)
+	{
+		max_dot = d;
+		normal = n;
+	}
+	// printf("%f %f %f %f\n", normal.x, normal.y, normal.z, normal.w);
+	// return (normal);
+	return (init_normal);
 }

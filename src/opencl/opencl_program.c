@@ -24,9 +24,9 @@ extern int			g_frame_height;
 
 static void			build_program(t_opencl_program *clprogram)
 {
-	char		logbuffer[BUILDLOG_BUFF_SIZE + 1];
-	size_t		ret_size;
-	int			err;
+	char	logbuffer[BUILDLOG_BUFF_SIZE + 1];
+	size_t	ret_size;
+	int		err;
 
 	log_notify("Building kernel with options: \"" BUILD_OPTIONS "\"");
 	err = clBuildProgram(clprogram->program, 0, NULL, BUILD_OPTIONS, NULL, NULL);
@@ -34,7 +34,6 @@ static void			build_program(t_opencl_program *clprogram)
 		log_notify("Kernel was built sucessfully");
 	else
 	{
-
 		clGetProgramBuildInfo(clprogram->program, g_clcontext.device_id,
 		CL_PROGRAM_BUILD_LOG, sizeof(logbuffer), logbuffer, &ret_size);
 		if (ret_size > BUILDLOG_BUFF_SIZE)

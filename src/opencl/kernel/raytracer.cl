@@ -86,7 +86,7 @@ const t_scene_buffers *buffers, const t_ray *ray)
 		__constant t_material *material = get_material(buffers, nearest_shape);
 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
 		const t_scalar nearest_shape_opacity = get_opacity(material->diffuse_albedo.color);
-		t_color shape_color = shade(&point, scene, buffers, nearest_shape);
+		t_color shape_color = shade(&point, &next_ray, scene, buffers, nearest_shape);
 		if (scene->config.selected_shape_addr == nearest_shape->addr)
 			shape_color = color_add(shape_color, (t_color)(25, 51, 127, 0));
 		result_color = color_add(result_color, color_scalar(shape_color, opacity * nearest_shape_opacity));

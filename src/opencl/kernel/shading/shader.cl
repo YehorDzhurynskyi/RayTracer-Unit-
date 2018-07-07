@@ -15,9 +15,7 @@ const t_vec4 *point, __constant t_shape *shape)
 {
 	t_fragment	fragment;
 	__constant t_material *material = get_material(buffers, shape);
-	__constant t_byte *ptr = (__constant t_byte*)shape;
-	ptr += sizeof(t_shape);
-	__constant t_primitive *primitive = (__constant t_primitive*)ptr;
+	__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(shape);
 
 	fragment.point = *point;
 	fragment.normal = obtain_normal(point, shape);
@@ -28,12 +26,19 @@ const t_vec4 *point, __constant t_shape *shape)
 	return (fragment);
 }
 
-t_color	shade(const t_vec4 *point, const t_scene *scene,
+t_color	shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
 const t_scene_buffers *buffers, __constant t_shape *shape)
 {
 	__constant t_material *material = get_material(buffers, shape);
 	t_color color = color_scalar(material->diffuse_albedo.color, scene->config.ambient);
-	const t_fragment fragment = compose_fragment(scene, buffers, point, shape);
+	t_fragment fragment = compose_fragment(scene, buffers, point, shape);
+	__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(shape);
+	if (dot(fragment.normal, ray->direction) > 0.0)
+	{
+		if (primitive->primitive_type != PLANE)
+			return (0);
+		fragment.normal = -fragment.normal;
+	}
 	t_iterator lightsrc_iter = lightsource_begin(scene, buffers);
 	while (has_next(&lightsrc_iter))
 	{

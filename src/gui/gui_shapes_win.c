@@ -30,14 +30,13 @@
 
 extern struct nk_context *g_nk_context;
 
-char *testbuf[] = {"Composite", "Point", "Plane", "Sphere", "Cone", "Cylinder"};
+static const char *g_primitive_names[] = {"Composite", "Point", "Plane", "Sphere", "Cone", "Cylinder"};
 
 void display_shapes_win(void)
 {
 	int i;
 
-	if (nk_begin(g_nk_context, "Scene's Shapes", nk_rect(5, 550, 300, 345),
-				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+	if (nk_begin(g_nk_context, "Scene tree", nk_rect(TREE_X, TREE_Y, TREE_WIDTH, TREE_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 	{
 		t_iterator iter = shape_begin(&g_main_scene);
 		i = 0;
@@ -45,21 +44,19 @@ void display_shapes_win(void)
 		{
 			const t_shape *shape = shape_next(&iter);
 			const t_primitive *primitive = shape_get_primitive(shape);
-
-			if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
-								testbuf[primitive->primitive_type - 1], NK_MINIMIZED, i++))
+			if (nk_tree_push_id(g_nk_context, NK_TREE_NODE,
+								g_primitive_names[primitive->primitive_type - 1], NK_MINIMIZED, i++))
 			{
-				if (nk_button_label(g_nk_context, "Choose"))
+				if (nk_button_label(g_nk_context, "Select"))
 				{
-					set_object(shape->addr);
+					select_object(shape->addr);
 				}
 				if (nk_tree_push_id(g_nk_context, NK_TREE_NODE, "Expand Me", NK_MINIMIZED, i++))
 				{
-					if (nk_button_label(g_nk_context, "Choose"))
+					if (nk_button_label(g_nk_context, "Select"))
 					{
 						ft_printf("%i\n", shape->addr);
 					}
-
 					nk_tree_pop(g_nk_context);
 				}
 				nk_tree_pop(g_nk_context);
