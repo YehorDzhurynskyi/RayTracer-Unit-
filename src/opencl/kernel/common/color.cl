@@ -10,40 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_color	color_mult(const t_color a, const t_color b)
+t_rcolor	color2rcolor(const t_color color)
 {
-	t_color result;
-
-	result.r = (a.r / 255.0f) * b.r;
-	result.g = (a.g / 255.0f) * b.g;
-	result.b = (a.b / 255.0f) * b.b;
-	result.a = (a.a / 255.0f) * b.a;
-	return (result);
+	t_rcolor rcolor = convert_float4(color);
+	return (rcolor / 255.0f);
 }
 
-t_color	color_add(const t_color a, const t_color b)
+t_color		rcolor2color(t_rcolor color)
 {
-	t_color result;
-
-	result.r = min(a.r + b.r, 0xff);
-	result.g = min(a.g + b.g, 0xff);
-	result.b = min(a.b + b.b, 0xff);
-	result.a = min(a.a + b.a, 0xff);
-	return (result);
+	color *= 255.0f;
+	color.r = min(color.r, 255.0f);
+	color.g = min(color.g, 255.0f);
+	color.b = min(color.b, 255.0f);
+	color.a = min(color.a, 255.0f);
+	return (convert_uchar4(color));
 }
 
-t_color	color_scalar(const t_color color, const t_scalar factor)
+t_rcolor	color_mult(const t_rcolor a, const t_rcolor b)
 {
-	t_color result;
-
-	result.r = min((int)(color.r * factor), 0xff);
-	result.g = min((int)(color.g * factor), 0xff);
-	result.b = min((int)(color.b * factor), 0xff);
-	result.a = min((int)(color.a * factor), 0xff);
-	return (result);
+	return (a * b);
 }
 
-t_color	color_mix(const t_color a, const t_color b, const t_scalar factor)
+t_rcolor	color_add(const t_rcolor a, const t_rcolor b)
+{
+	return (a + b);
+}
+
+t_rcolor	color_scalar(const t_rcolor color, const t_scalar factor)
+{
+	return (color * factor);
+}
+
+t_rcolor	color_mix(const t_rcolor a, const t_rcolor b, const t_scalar factor)
 {
 	return (color_add(color_scalar(a, factor), color_scalar(b, 1.0 - factor)));
 }

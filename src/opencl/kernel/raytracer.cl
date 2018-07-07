@@ -68,13 +68,13 @@
 
 // // TODO: implement call stack :) https://github.com/RenatoUtsch/clTracer/blob/master/source/clSampler/cl/recursion.cl
 
-static t_color		trace_ray(const t_scene *scene,
+static t_rcolor		trace_ray(const t_scene *scene,
 const t_scene_buffers *buffers, const t_ray *ray)
 {
 	t_scalar				t;
 	__constant t_shape	*nearest_shape;
 	t_ray				next_ray = *ray;
-	t_color				result_color = 0;
+	t_rcolor			result_color = 0.0f;
 	t_scalar				opacity = 1.0f;
 	int					trace_depth = scene->config.trace_depth;
 	const t_scalar		bias = 0.005f;
@@ -86,9 +86,9 @@ const t_scene_buffers *buffers, const t_ray *ray)
 		__constant t_material *material = get_material(buffers, nearest_shape);
 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
 		const t_scalar nearest_shape_opacity = get_opacity(material->diffuse_albedo.color);
-		t_color shape_color = shade(&point, &next_ray, scene, buffers, nearest_shape);
+		t_rcolor shape_color = shade(&point, &next_ray, scene, buffers, nearest_shape);
 		if (scene->config.selected_shape_addr == nearest_shape->addr)
-			shape_color = color_add(shape_color, (t_color)(25, 51, 127, 0));
+			shape_color = color_add(shape_color, (t_rcolor)(0.1f, 0.2f, 0.5f, 0));
 		result_color = color_add(result_color, color_scalar(shape_color, opacity * nearest_shape_opacity));
 		if (nearest_shape_opacity == 1.0)
 			return (result_color);
@@ -116,24 +116,24 @@ int width, int height, t_scalar xbias, t_scalar ybias)
 	return (camera_ray);
 }
 
-static t_color		trace_noaa(const t_scene *scene, const t_scene_buffers *buffers,
+static t_rcolor		trace_noaa(const t_scene *scene, const t_scene_buffers *buffers,
 int x, int y, int width, int height)
 {
 	const t_ray camera_ray = obtain_camera_ray(scene, x, y, width, height, 0.5f, 0.5f);
 	return (trace_ray(scene, buffers, &camera_ray));
 }
 
-static t_color		trace_ssaax4(const t_scene *scene, const t_scene_buffers *buffers,
+static t_rcolor		trace_ssaax4(const t_scene *scene, const t_scene_buffers *buffers,
 int x, int y, int width, int height)
 {
 	const t_ray camera_ray1 = obtain_camera_ray(scene, x, y, width, height, 0.2f, 0.8f);
-	const uchar4 pixelcolor1 = trace_ray(scene, buffers, &camera_ray1);
+	const t_rcolor pixelcolor1 = trace_ray(scene, buffers, &camera_ray1);
 	const t_ray camera_ray2 = obtain_camera_ray(scene, x, y, width, height, 0.4f, 0.4f);
-	const uchar4 pixelcolor2 = trace_ray(scene, buffers, &camera_ray2);
+	const t_rcolor pixelcolor2 = trace_ray(scene, buffers, &camera_ray2);
 	const t_ray camera_ray3 = obtain_camera_ray(scene, x, y, width, height, 0.6f, 0.6f);
-	const uchar4 pixelcolor3 = trace_ray(scene, buffers, &camera_ray3);
+	const t_rcolor pixelcolor3 = trace_ray(scene, buffers, &camera_ray3);
 	const t_ray camera_ray4 = obtain_camera_ray(scene, x, y, width, height, 0.8f, 0.2f);
-	const uchar4 pixelcolor4 = trace_ray(scene, buffers, &camera_ray4);
+	const t_rcolor pixelcolor4 = trace_ray(scene, buffers, &camera_ray4);
 
 	return (color_add(
 		color_add(
@@ -145,7 +145,7 @@ int x, int y, int width, int height)
 		));
 }
 
-static t_color		trace_ssaax8(const t_scene *scene, const t_scene_buffers *buffers,
+static t_rcolor		trace_ssaax8(const t_scene *scene, const t_scene_buffers *buffers,
 int x, int y, int width, int height)
 {
 	// TODO: implement 8xSSAA
@@ -179,12 +179,13 @@ __kernel void		trace(
 	buffers.lightsourcebuffer = lightsourcebuffer;
 	buffers.materialbuffer = materialbuffer;
 
-	t_color	pixelcolor;
+	t_rcolor	pixelcolor;
 	if (config.aa == NOAA)
 		pixelcolor = trace_noaa(&scene, &buffers, x, y, width, height);
 	else if (config.aa == SSAAx4)
 		pixelcolor = trace_ssaax4(&scene, &buffers, x, y, width, height);
 	else if (config.aa == SSAAx8)
 		pixelcolor = trace_ssaax8(&scene, &buffers, x, y, width, height);
-	outputbuffer[x + y * width] = pixelcolor;
+
+	outputbuffer[x + y * width] = rcolor2color(pixelcolor);
 }

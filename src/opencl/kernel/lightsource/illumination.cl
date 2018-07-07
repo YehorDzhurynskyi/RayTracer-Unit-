@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_color	illuminate(__constant t_lightsource *lightsrc, const t_fragment *fragment)
+t_rcolor	illuminate(__constant t_lightsource *lightsrc, const t_fragment *fragment)
 {
 	__constant t_byte *actual = lightsource_get_actual(lightsrc);
 	if (lightsrc->lightsource_type == POINTLIGHT)

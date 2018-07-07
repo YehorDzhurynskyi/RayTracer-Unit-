@@ -21,13 +21,13 @@ t_bool	pointlightsource_is_in_shadow(const t_vec4 *to_light, t_scalar t)
 	return (t <= length(*to_light));
 }
 
-t_color	pointlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	pointlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_pointlightsource *pointlightsrc, const t_fragment *fragment)
 {
 	t_vec4 to_light = to_pointlightsource(pointlightsrc, &fragment->point);
 	const t_scalar	attenuation = attenuate(pointlightsrc->attenuation, length(to_light));
 	to_light = normalize(to_light);
-	const t_color diffcolor = diffuse(lightsrc, fragment, to_light);
-	const t_color speccolor = specular(lightsrc, fragment, to_light);
+	const t_rcolor diffcolor = diffuse(lightsrc, fragment, to_light);
+	const t_rcolor speccolor = specular(lightsrc, fragment, to_light);
 	return (color_scalar(color_add(diffcolor, speccolor), attenuation));
 }

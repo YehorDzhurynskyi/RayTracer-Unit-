@@ -20,17 +20,17 @@ const t_vec4 *point, __constant t_shape *shape)
 	fragment.point = *point;
 	fragment.normal = obtain_normal(point, shape);
 	fragment.to_eye = normalize(scene->camera.position - primitive->position);
-	fragment.diffuse_albedo = material->diffuse_albedo.color;
-	fragment.specular_albedo = material->specular_albedo.color;
+	fragment.diffuse_albedo = color2rcolor(material->diffuse_albedo.color);
+	fragment.specular_albedo = color2rcolor(material->specular_albedo.color);
 	fragment.glossiness = material->glossiness.value;
 	return (fragment);
 }
 
-t_color	shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
+t_rcolor	shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
 const t_scene_buffers *buffers, __constant t_shape *shape)
 {
 	__constant t_material *material = get_material(buffers, shape);
-	t_color color = color_scalar(material->diffuse_albedo.color, scene->config.ambient);
+	t_rcolor color = color_scalar(color2rcolor(material->diffuse_albedo.color), scene->config.ambient);
 	t_fragment fragment = compose_fragment(scene, buffers, point, shape);
 	__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(shape);
 	if (dot(fragment.normal, ray->direction) > 0.0)

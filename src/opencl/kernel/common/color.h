@@ -13,9 +13,11 @@
 #ifndef COLOR_H
 # define COLOR_H
 
-t_color	color_mult(const t_color a, const t_color b);
-t_color	color_add(const t_color a, const t_color b);
-t_color	color_scalar(const t_color color, const t_scalar factor);
-t_color	color_mix(const t_color a, const t_color b, const t_scalar factor);
+t_rcolor	color2rcolor(const t_color color);
+t_color		rcolor2color(t_rcolor color);
+t_rcolor	color_mult(const t_rcolor a, const t_rcolor b);
+t_rcolor	color_add(const t_rcolor a, const t_rcolor b);
+t_rcolor	color_scalar(const t_rcolor color, const t_scalar factor);
+t_rcolor	color_mix(const t_rcolor a, const t_rcolor b, const t_scalar factor);
 
 #endif

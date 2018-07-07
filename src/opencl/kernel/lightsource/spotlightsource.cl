@@ -23,7 +23,7 @@ const t_vec4 *to_light, t_scalar t)
 	&& spotlightsrc->cosangle <= -dot(*to_light, spotlightsrc->direction));
 }
 
-t_color	spotlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	spotlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_spotlightsource *spotlightsrc, const t_fragment *fragment)
 {
 	t_vec4 to_light = to_spotlightsource(spotlightsrc, &fragment->point);
@@ -31,7 +31,7 @@ __constant t_spotlightsource *spotlightsrc, const t_fragment *fragment)
 		return (0);
 	const t_scalar	attenuation = attenuate(spotlightsrc->attenuation, length(to_light));
 	to_light = normalize(to_light);
-	const t_color diffcolor = diffuse(lightsrc, fragment, to_light);
-	const t_color speccolor = specular(lightsrc, fragment, to_light);
+	const t_rcolor diffcolor = diffuse(lightsrc, fragment, to_light);
+	const t_rcolor speccolor = specular(lightsrc, fragment, to_light);
 	return (color_scalar(color_add(diffcolor, speccolor), attenuation));
 }

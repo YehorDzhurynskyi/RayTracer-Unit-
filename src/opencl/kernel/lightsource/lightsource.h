@@ -60,8 +60,8 @@ t_bool					dirlightsource_is_in_shadow(void);
 t_bool					spotlightsource_is_in_shadow(__constant t_spotlightsource *spotlightsrc,
 const t_vec4 *to_light, t_scalar t);
 
-t_color					diffuse(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light);
-t_color					specular(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light);
+t_rcolor				diffuse(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light);
+t_rcolor				specular(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light);
 t_scalar				attenuate(t_vec4 attenuation, t_scalar distance);
 
 #endif

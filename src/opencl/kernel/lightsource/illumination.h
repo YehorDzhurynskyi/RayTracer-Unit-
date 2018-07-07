@@ -13,13 +13,13 @@
 #ifndef ILLUMINATION_H
 # define ILLUMINATION_H
 
-t_color	illuminate(__constant t_lightsource *lightsource, const t_fragment *fragment);
+t_rcolor	illuminate(__constant t_lightsource *lightsource, const t_fragment *fragment);
 
-t_color	pointlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	pointlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_pointlightsource *pointlightsrc, const t_fragment *fragment);
-t_color	dirlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	dirlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_dirlightsource *dirlightsrc, const t_fragment *fragment);
-t_color	spotlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	spotlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_spotlightsource *spotlightsrc, const t_fragment *fragment);
 
 #endif

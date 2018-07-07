@@ -20,11 +20,11 @@ t_bool	dirlightsource_is_in_shadow(void)
 	return (TRUE);
 }
 
-t_color	dirlightsource_illuminate(__constant t_lightsource *lightsrc,
+t_rcolor	dirlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_dirlightsource *dirlightsrc, const t_fragment *fragment)
 {
 	const t_vec4 to_light = normalize(to_dirlightsource(dirlightsrc));
-	const t_color diffcolor = diffuse(lightsrc, fragment, to_light);
-	const t_color speccolor = specular(lightsrc, fragment, to_light);
+	const t_rcolor diffcolor = diffuse(lightsrc, fragment, to_light);
+	const t_rcolor speccolor = specular(lightsrc, fragment, to_light);
 	return (color_add(diffcolor, speccolor));
 }

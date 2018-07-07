@@ -13,8 +13,6 @@
 #ifndef TYPES_H
 # define TYPES_H
 
-typedef uchar4	t_color;
-
 typedef unsigned char	t_byte;
 
 typedef int		t_address;
@@ -30,6 +28,9 @@ typedef float	t_scalar;
 typedef float3	t_vec3;
 typedef float4	t_vec4;
 typedef float16	t_mat4x4;
+
+typedef uchar4	t_color;
+typedef t_vec4	t_rcolor;
 
 typedef struct
 {

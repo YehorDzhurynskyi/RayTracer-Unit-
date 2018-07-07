@@ -19,12 +19,12 @@ struct			s_fragment
 	t_vec4		point;
 	t_vec4		normal;
 	t_vec4		to_eye;
-	t_color		diffuse_albedo;
-	t_color		specular_albedo;
+	t_rcolor	diffuse_albedo;
+	t_rcolor	specular_albedo;
 	t_scalar	glossiness;
 };
 
-t_color			shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
+t_rcolor		shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
 const t_scene_buffers *buffers, __constant t_shape *shape);
 
 #endif
