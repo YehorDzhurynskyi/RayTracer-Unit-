@@ -36,8 +36,19 @@ extern char *log_buf;
 void display_fps(float	mseconds)
 {
 	// nk_layout_row_dynamic(g_nk_context, 30, 1);
-	nk_layout_row_static(g_nk_context, 30, 100, 1);
+	char string[64];
+	int len = 5;
+	char *buf;
+	buf = nk_dtoa(string, (double)mseconds);
+	nk_edit_string(g_nk_context, NK_EDIT_SIMPLE, buf, &len, 255, nk_filter_float);
+	nk_layout_space_begin(g_nk_context, NK_STATIC, 20, 1);
+	nk_layout_space_push(g_nk_context, nk_rect(SCENE_W - 132, 20, 100, 30));
+	//v1
 	nk_property_float(g_nk_context, "ms:", 0, &mseconds, 64.0f, 0.1f, 0.2f);
+	//v2
+	nk_edit_string(g_nk_context, NK_EDIT_SIMPLE, buf, &len, 255, nk_filter_float);
+	nk_layout_space_end(g_nk_context);
+	// ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
 }
 
 void show_shapes(void)
@@ -103,7 +114,7 @@ void display_console(void)
 {
 	static int box_len;
 
-	if (nk_begin(g_nk_context, "Information log", nk_rect(X_CENTERED, 650,
+	if (nk_begin(g_nk_context, "Information log", nk_rect(SCENE_X, 650,
 		SCENE_W, 245),  NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE
 		| NK_WINDOW_TITLE))
 	{

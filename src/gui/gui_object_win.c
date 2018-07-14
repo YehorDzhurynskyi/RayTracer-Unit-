@@ -45,7 +45,6 @@ void distplay_shape_position(float posx, float posy, float posz)
 	xpos = posx;
 	ypos = posy;
 	zpos = posz;
-
 	nk_layout_row_dynamic(g_nk_context, 30, 1);
 	nk_label(g_nk_context, "Positioning:", NK_TEXT_LEFT);
 	nk_property_float(g_nk_context, "#X:", 0, &xpos, 64.0f, 0.1f, 0.2f);

@@ -12,10 +12,8 @@
 
 #ifndef GUI_H
 #define GUI_H
-// # define WINDOW_WDTH 1440`
-#define WINDOW_HGHT 900
-// # define SCENEFRM_W WINDOW_WDTH * 0.57
 
+#define WINDOW_HGHT 900
 #define GAP 5.0
 #define MENU_W 300
 #define MENU_H 540
@@ -28,7 +26,6 @@
 #define SCENE_W 820
 #define SCENE_HEIGHT 640
 #define WINDOW_WDTH (GAP + MENU_W + GAP + SCENE_W + GAP + MENU_W + GAP)
-#define X_CENTERED ((WINDOW_WDTH / 2) - (SCENE_W / 2))
 
 #include "libft.h"
 #include "sceneiterator.h"

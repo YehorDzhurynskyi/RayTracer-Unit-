@@ -38,6 +38,7 @@ void loading_message(char *message)
 	g_isloading = TRUE;
 	ft_strcpy(g_message_buf, message);
 }
+
 void loading_stop()
 {
 	g_isloading = FALSE;
@@ -45,7 +46,7 @@ void loading_stop()
 
 void display_loading(void)
 {
-	if (g_isloading == TRUE &&nk_begin(g_nk_context, "Loading",
+	if (g_isloading == TRUE && nk_begin(g_nk_context, "Loading",
 	nk_rect(500, 100, 0, 0), NK_WINDOW_TITLE))
 	{
 		nk_label(g_nk_context, g_message_buf, NK_TEXT_LEFT);
@@ -55,7 +56,7 @@ void display_loading(void)
 
 void display_input_win(void)
 {
-	if (nk_begin(g_nk_context, "Input commands", nk_rect(X_CENTERED + 825, 550, 300, 345), //avoid calculation
+	if (nk_begin(g_nk_context, "Input commands", nk_rect(OBJ_X, 550, 300, 345), //avoid calculation
 				 NK_WINDOW_BORDER | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
 	{
 		static char text[100];
