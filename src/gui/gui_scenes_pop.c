@@ -56,14 +56,17 @@ void	display_scenes_list(void)
 	}
 }
 
-void	show_pop_scenes(void)
+void	show_pop_scenes(int scenesnum)
 {
+	int scene_h;
+
+	scene_h = (scenesnum / 2) * 30 + 45;
 	if (nk_popup_begin(g_nk_context, NK_POPUP_STATIC, "Choose file", 0,
-						nk_rect(400, 30, 450, 350)))
+						nk_rect(400, 30, 450, scene_h)))
 	{
 		nk_layout_row_dynamic(g_nk_context, 25, 1);
 		nk_label(g_nk_context, "Choose scene", NK_TEXT_LEFT);
-		nk_layout_row_dynamic(g_nk_context, 0, 2);
+		nk_layout_row_dynamic(g_nk_context, 25, 2);
 		display_scenes_list();
 	}
 	nk_layout_row_dynamic(g_nk_context, 25, 2);
@@ -74,16 +77,15 @@ void	show_pop_scenes(void)
 		g_diropened = 0;
 		ft_strdel(&g_scenes_buf);
 	}
-	if (nk_button_label(g_nk_context, "CANCEL"))
+	if (nk_button_label(g_nk_context, "CANCEL") && !(g_diropened = 0))
 	{
 		g_scenes_active = 0;
-		g_diropened = 0;
 		ft_strdel(&g_scenes_buf);
 	}
 	nk_popup_end(g_nk_context);
 }
 
-void	load_scenes(void)
+int	load_scenes(int num)
 {
 	DIR				*d;
 	struct dirent	*dir;
@@ -99,7 +101,7 @@ void	load_scenes(void)
 	g_scenes_buf = ft_memalloc(sizeof(char) * len + 1);
 	put = g_scenes_buf;
 	d = opendir("scenes");
-	while ((dir = readdir(d)) != NULL)
+	while ((dir = readdir(d)) != NULL && ++num)
 	{
 		if (ft_strstr(dir->d_name, ".cson"))
 		{
@@ -107,20 +109,24 @@ void	load_scenes(void)
 			put += ft_strlen(dir->d_name) + 1;
 		}
 	}
+	ft_printf("NUM %d\n", num);
 	closedir(d);
+	return(num);
 }
 
 void	display_scenes(void)
 {
+	static int scenesnum;
+
 	if (nk_button_label(g_nk_context, "Choose scene from file"))
 		g_scenes_active = !g_scenes_active;
 	if (g_scenes_active)
 	{
 		if (!g_diropened)
 		{
-			load_scenes();
+			scenesnum = load_scenes(0);
 			g_diropened = !g_diropened;
 		}
-		show_pop_scenes();
+		show_pop_scenes(scenesnum);
 	}
 }
