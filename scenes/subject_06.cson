@@ -1,5 +1,5 @@
 ambient: 0.1
-"anti aliasing": "4xSSAA"
+# "anti aliasing": "4xSSAA"
 camera:
 	position: [0.0 2.0 30.0]
 	spot: [0.0 0.0 0.0]
@@ -13,8 +13,8 @@ materials: [
 	}
 	{
 		"diffuse color": "0x000000ff"
-		"specular color": "0x000000ff"
-		glossiness: 0.3
+		"specular color": "0x00555555"
+		glossiness: 1.0
 		ior: 1.0
 	}
 	{

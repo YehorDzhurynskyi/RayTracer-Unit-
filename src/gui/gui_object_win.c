@@ -46,7 +46,6 @@ static void distplay_shape_position(const t_primitive *primitive)
 	xpos = primitive->position.x;
 	ypos = primitive->position.y;
 	zpos = primitive->position.z;
-
 	nk_layout_row_dynamic(g_nk_context, 30, 1);
 	nk_label(g_nk_context, "position", NK_TEXT_LEFT);
 	nk_property_float(g_nk_context, "#x:", -INFINITY, &xpos, INFINITY, 1.0f, 1.0f);

@@ -35,9 +35,11 @@ extern char *log_buf;
 
 void display_fps(float	mseconds)
 {
-	// nk_layout_row_dynamic(g_nk_context, 30, 1);
-	nk_layout_row_static(g_nk_context, 30, 100, 1);
-	nk_property_float(g_nk_context, "ms:", 0, &mseconds, 64.0f, 0.1f, 0.2f);
+	nk_layout_space_begin(g_nk_context, NK_STATIC, 20, 1);
+	nk_layout_space_push(g_nk_context, nk_rect(20, 20, 100, 30));
+	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%4d fps", (int)(1000 / mseconds));
+	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%.2f ms", mseconds);
+	nk_layout_space_end(g_nk_context);
 }
 
 void show_shapes(void)

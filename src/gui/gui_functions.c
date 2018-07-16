@@ -38,6 +38,7 @@ void loading_message(char *message)
 	g_isloading = TRUE;
 	ft_strcpy(g_message_buf, message);
 }
+
 void loading_stop()
 {
 	g_isloading = FALSE;
