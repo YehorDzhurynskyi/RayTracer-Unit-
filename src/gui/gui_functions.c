@@ -24,60 +24,53 @@
 #define NK_SDL_GL2_IMPLEMENTATION
 #define NK_PRIVATE
 
+#define SHOW_SOLID nk_button_symbol(g_nk_context, NK_SYMBOL_CIRCLE_SOLID)
+#define SHOW_OUTLINE nk_button_symbol(g_nk_context, NK_SYMBOL_CIRCLE_OUTLINE);
+
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "nuklear.h"
 #include "nuklear_sdl.h"
 
 extern struct nk_context *g_nk_context;
-static t_bool g_isloading;
-static char g_message_buf[24];
+static t_bool g_isloading = TRUE;
 
-void loading_message(char *message)
-{
-	g_isloading = TRUE;
-	ft_strcpy(g_message_buf, message);
-}
-
-void loading_stop()
+void	loading_stop(void)
 {
 	g_isloading = FALSE;
 }
 
-void display_loading(void)
+void	display_loading(void)
 {
-	if (g_isloading == TRUE && nk_begin(g_nk_context, "Loading",
-	nk_rect(500, 100, 0, 0), NK_WINDOW_TITLE))
+	static int	i = 1;
+	static int	stage = 1;
+	int			n;
+
+	n = 0;
+	if (g_isloading == TRUE && nk_popup_begin(g_nk_context, NK_POPUP_STATIC,
+		"Loading", 0, nk_rect(POPUP_X, 200, POPUP_WIDTH, 110)))
 	{
-		nk_label(g_nk_context, g_message_buf, NK_TEXT_LEFT);
-		nk_end(g_nk_context);
+		nk_layout_row_dynamic(g_nk_context, 25, 1);
+		nk_label(g_nk_context, "Loading, please wait", NK_TEXT_ALIGN_CENTERED);
+		if (!(i % 150))
+			i = 0;
+		stage = (int)(i++ / 120.0 * 5);
+		nk_layout_row_dynamic(g_nk_context, 25, 5);
+		while (++n && n < 6)
+			n == stage ? SHOW_SOLID : SHOW_OUTLINE;
+		nk_layout_row_dynamic(g_nk_context, 25, 1);
+		if (nk_button_label(g_nk_context, "close"))
+			loading_stop();
 	}
+	nk_popup_end(g_nk_context);
 }
 
-void display_input_win(void)
+void	display_fps(float mseconds)
 {
-	// if (nk_begin(g_nk_context, "Command line", nk_rect(CMD_X, CMD_Y, CMD_WIDTH, CMD_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
-	// {
-	// 	static char text[100];
-	// 	static int text_len;
-	// 	static char box_buffer[10];
-	// 	static int box_len;
-	// 	nk_flags active;
-	// 	nk_layout_row_static(g_nk_context, 30, 193, 1);
-	// 	active = nk_edit_string(g_nk_context, NK_EDIT_FIELD | NK_EDIT_SIG_ENTER,
-	// 							text, &text_len, 100, nk_filter_ascii);
-	// 	if (active & NK_EDIT_COMMITED)
-	// 	{
-	// 		text[text_len] = '\n';
-	// 		text_len++;
-	// 		memcpy(&box_buffer[box_len], &text, (nk_size)text_len);
-	// 		box_len += text_len;
-	// 		bzero(text, 100);
-	// 		text_len = 0;
-	// 	}
-	// 	nk_layout_row_static(g_nk_context, 250, 193, 1);
-	// 	nk_edit_string(g_nk_context, NK_EDIT_BOX | NK_EDIT_SIG_ENTER, box_buffer,
-	// 				   &box_len, 512, nk_filter_binary);
-	// }
-	// nk_end(g_nk_context);
+	nk_layout_space_begin(g_nk_context, NK_STATIC, 20, 1);
+	nk_layout_space_push(g_nk_context, nk_rect(20, 20, 100, 30));
+	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%4d fps",
+		(int)(1000 / mseconds));
+	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%.2f ms", mseconds);
+	nk_layout_space_end(g_nk_context);
 }

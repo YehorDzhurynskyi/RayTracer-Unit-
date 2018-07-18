@@ -132,7 +132,7 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *));
 char				*ft_str_format(const char *format, ...);
 void				*ft_lstreduce(t_list *lst, void *(*f)
 		(const void *, const void *));
-char				*ft_strreplallchr(char const *s, char from, char to);
+void				ft_strreplallchr(char *src, char from, char to);
 char				*ft_strreplallstr(char const *s, char const *from,
 		char const *to);
 int					mini(int *arr, size_t size);

@@ -70,16 +70,16 @@ void	show_pop_scenes(int scenesnum)
 		display_scenes_list();
 	}
 	nk_layout_row_dynamic(g_nk_context, 25, 2);
+	if (nk_button_label(g_nk_context, "CANCEL") && !(g_diropened = 0))
+	{
+		g_scenes_active = 0;
+		ft_strdel(&g_scenes_buf);
+	}
 	if (nk_button_label(g_nk_context, "CHANGE") && g_diropened)
 	{
 		scene_change(g_chosen_scene);
 		g_scenes_active = 0;
 		g_diropened = 0;
-		ft_strdel(&g_scenes_buf);
-	}
-	if (nk_button_label(g_nk_context, "CANCEL") && !(g_diropened = 0))
-	{
-		g_scenes_active = 0;
 		ft_strdel(&g_scenes_buf);
 	}
 	nk_popup_end(g_nk_context);

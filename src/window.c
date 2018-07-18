@@ -15,7 +15,6 @@
 #include "gui.h"
 #include "logger.h"
 
-
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
@@ -155,9 +154,11 @@ void						window_loop(void)
 			glBindTexture(GL_TEXTURE_2D, g_gl_texture_name);
 			render_scene();
 			display_fps(mseconds);
+			// display_opencl_choice();
 		}
 		nk_end(g_nk_context);
 		render_gui();
+		
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.10f, 0.18f, 0.24f, 1.0f);
 		nk_sdl_render(NK_ANTI_ALIASING_ON);

@@ -19,7 +19,7 @@
 #define LOGBUFFER_SIZE	256
 
 char	log_type[LOGBUFFER_SIZE];
-char	*log_buf;
+char	*g_log_buf;
 
 void				log_notify(const char *message)
 {
@@ -32,15 +32,14 @@ void				log_notify(const char *message)
 	ft_memcpy(&log_type[7], message, text_len);
 	ft_memcpy(&log_type[7 + text_len], "\n", 1);
 	ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
-	if (!log_buf)
-		log_buf = ft_strdup(log_type);
+	if (!g_log_buf)
+		g_log_buf = ft_strdup(log_type);
 	else
 	{
-		char *buff = ft_strdup(log_buf);
-		ft_strdel(&log_buf);
-		log_buf = ft_strjoin(log_type, buff);
+		char *buff = ft_strdup(g_log_buf);
+		ft_strdel(&g_log_buf);
+		g_log_buf = ft_strjoin(log_type, buff);
 		ft_strdel(&buff);
-		ft_printf("--> %d\n", ft_strlen(log_buf));
 	}
 }
 

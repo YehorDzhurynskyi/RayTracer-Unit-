@@ -21,12 +21,12 @@
 # define MENU_X			GAP
 # define MENU_Y			GAP
 # define MENU_WIDTH		300
-# define MENU_HEIGHT	540
+# define MENU_HEIGHT	560
 
 # define TREE_X			GAP
 # define TREE_Y			(MENU_Y + MENU_HEIGHT + GAP)
 # define TREE_WIDTH		MENU_WIDTH
-# define TREE_HEIGHT	345
+# define TREE_HEIGHT	325
 
 # define SCENE_X		(MENU_X + MENU_WIDTH + GAP)
 # define SCENE_Y		GAP
@@ -52,6 +52,9 @@
 # define WINDOW_WIDTH	(GAP + MENU_WIDTH + GAP + SCENE_WIDTH + GAP + OBJ_WIDTH + GAP)
 # define WINDOW_HEGHT	(OBJ_Y + OBJ_HEIGHT + GAP)
 
+# define POPUP_WIDTH	200
+# define POPUP_X		(SCENE_WIDTH - POPUP_WIDTH)
+
 void	render_gui(void);
 void	display_mainmnu(void);
 void	display_console(void);
@@ -62,9 +65,11 @@ void	display_object_win(void);
 void	select_object(t_claddress addr);
 void	screen_shot(void);
 void	show_shapes(void);
-void	display_input_win(void);
 void	loading_message(char *message);
 void	loading_stop(void);
 void	display_fps(float mseconds);
+void	display_opencl_choice(void);
+void	display_loading(void);
+void 	display_corresponding_options(const t_primitive *prim);
 
 #endif
