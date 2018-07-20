@@ -135,14 +135,7 @@ int x, int y, int width, int height)
 	const t_ray camera_ray4 = obtain_camera_ray(scene, x, y, width, height, 0.8f, 0.2f);
 	const t_rcolor pixelcolor4 = trace_ray(scene, buffers, &camera_ray4);
 
-	return (color_add(
-		color_add(
-			color_scalar(pixelcolor1, 0.25f),
-			color_scalar(pixelcolor2, 0.25f)),
-		color_add(
-			color_scalar(pixelcolor3, 0.25f),
-			color_scalar(pixelcolor4, 0.25f))
-		));
+	return ((pixelcolor1 + pixelcolor2 + pixelcolor3 + pixelcolor4) / 4.0f);
 }
 
 static t_rcolor		trace_ssaax8(const t_scene *scene, const t_scene_buffers *buffers,

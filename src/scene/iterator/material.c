@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lightsource.c                                      :+:      :+:    :+:   */
+/*   material.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,27 +12,17 @@
 
 #include "sceneiterator.h"
 
-t_iterator			lightsource_begin(const t_scene *scene)
+t_iterator			material_begin(const t_scene *scene)
 {
-	return ((t_iterator){scene->meta.nlightsources, scene->host_lightsourcebuffer});
+	return ((t_iterator){scene->meta.nmaterials, scene->host_materialbuffer});
 }
 
-const t_lightsource	*lightsource_next(t_iterator *iterator)
+const t_material	*material_next(t_iterator *iterator)
 {
-	const t_lightsource	*current = (const t_lightsource*)iterator->current;
-	iterator->current = lightsource_skip(current);
-	if (current->lightsource_type == POINTLIGHT || current->lightsource_type == SPOTLIGHT)
-	{
-		t_iterator limitation_iter = limitation_begin((const t_primitive*)iterator->current);
-		while (has_next(&limitation_iter))
-			limitation_next(&limitation_iter);
-		iterator->current = limitation_iter.current;
-	}
+	const t_material	*current;
+
+	current = (const t_material*)iterator->current;
+	iterator->current += sizeof(t_material);
 	--iterator->count;
 	return (current);
-}
-
-const t_byte		*lightsource_get_actual(const t_lightsource *lightsource)
-{
-	return ((const t_byte*)++lightsource);
 }

@@ -39,6 +39,8 @@ t_limitation	deserialize_limitation(const t_cson *cson, t_err_code *err)
 
 	limitation.is_relative = cson_get_default_boolean(
 		cson_valueof(cson, CSON_IS_RELATIVE_KEY), TRUE);
+	limitation.cutting = cson_get_default_boolean(
+		cson_valueof(cson, CSON_CUTTING_KEY), TRUE);
 	limitation.limitation_type = recognize_limitation_type(cson_get_string(
 		cson_valueof(cson, CSON_TYPE_KEY)), err);
 	return (limitation);

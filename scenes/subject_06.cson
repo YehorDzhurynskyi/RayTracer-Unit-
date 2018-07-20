@@ -8,7 +8,7 @@ materials: [
 	{
 		"diffuse color": "0x00ffd700"
 		"specular color": "0x00ffd700"
-		glossiness: 1.0
+		glossiness: 0.4
 		ior: 1.0
 	}
 	{

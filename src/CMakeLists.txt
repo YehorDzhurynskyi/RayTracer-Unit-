@@ -11,9 +11,6 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/scene/scene.c"
 	"${CMAKE_CURRENT_LIST_DIR}/scene/camera.c"
 
-	"${CMAKE_CURRENT_LIST_DIR}/input/camera_handler.c"
-	"${CMAKE_CURRENT_LIST_DIR}/input/pick_shape.c"
-
 	"${CMAKE_CURRENT_LIST_DIR}/utilities/logger.c"
 	)
 

@@ -82,6 +82,7 @@
 
 # define CSON_LIMITATIONS_KEY			"limitations"
 # define CSON_IS_RELATIVE_KEY			"is relative"
+# define CSON_CUTTING_KEY				"cutting"
 # define CSON_APPLY_IF_LESS_KEY			"apply if less"
 # define CSON_LIMIT_KEY					"limit"
 

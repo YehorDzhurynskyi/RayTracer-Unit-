@@ -30,4 +30,6 @@ void					renderer_render(const t_scene *scene,
 unsigned char *pixelbuffer, int width, int height);
 void					renderer_cleanup(void);
 
+extern t_bool			g_should_redraw_scene;
+
 #endif

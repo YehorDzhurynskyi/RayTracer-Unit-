@@ -4,6 +4,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
+#define NK_API extern
+#define NK_LIB extern
+#define NK_MEMSET memset
+
+#include <string.h>
+
+#include <stdarg.h>
+
 /*
  * ==============================================================
  *
@@ -53,7 +70,7 @@ extern "C" {
 
 #define NK_INTERN static
 #define NK_STORAGE static
-#define NK_GLOBAL static
+#define NK_GLOBAL
 
 #define NK_FLAG(x) (1 << (x))
 #define NK_STRINGIFY(x) #x

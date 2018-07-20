@@ -40,6 +40,7 @@ typedef int	t_err_code;
 # define RT_BUFFER_OVERFLOW_ERROR		17
 # define RT_NO_OPTIONAL_VALUE_ERROR		18
 # define RT_WRONG_VALUE_TYPE_ERROR		19
+# define RT_RESOURCE_LOADING_ERROR		20
 
 void	log_notify(const char *message);
 void	log_error(const char *message, t_err_code code);

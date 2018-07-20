@@ -6,7 +6,6 @@
  *                              VERTEX
  *
  * ===============================================================*/
-#ifdef NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 NK_API void
 nk_draw_list_init(struct nk_draw_list *list)
 {
@@ -1334,5 +1333,3 @@ nk__draw_next(const struct nk_draw_command *cmd,
 {
     return nk__draw_list_next(cmd, buffer, &ctx->draw_list);
 }
-#endif
-

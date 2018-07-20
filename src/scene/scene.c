@@ -15,8 +15,9 @@
 #include "ft.h"
 #include <assert.h>
 #include "scenerepository.h"
+#include "renderer.h"
 
-t_scene						g_main_scene;
+t_scene						*g_main_scene_ptr = NULL;
 
 static t_scenebuffer_meta	scene_meta(void)
 {
@@ -40,7 +41,7 @@ static t_scene_config		scene_config(void)
 	config.global_illumination = FALSE;
 	config.ambient = 0.15;
 	config.fov = 60.0;
-	config.selected_shape_addr = -1;
+	config.selected_shape_addr = NONE_SELECTED_ADDR;
 	return (config);
 }
 
@@ -84,16 +85,18 @@ t_scene						scene_create(void)
 }
 
 void						scene_change(const char *scene_name)
-{
-	t_err_code	err_code;
-	t_scene		saved_scene;
+{ //TODO: fixme
+	// t_err_code	err_code;
+	// t_scene		saved_scene;
 
-	saved_scene = g_main_scene;
-	g_main_scene.config = scene_config();
-	g_main_scene.meta = scene_meta();
-	err_code = scene_load(&g_main_scene, scene_name);
-	if (err_code != 0)
-		g_main_scene = saved_scene;
+	// saved_scene = *g_main_scene_ptr;
+	g_main_scene_ptr->config = scene_config();
+	g_main_scene_ptr->meta = scene_meta();
+	// err_code = scene_load(g_main_scene_ptr, scene_name);
+	scene_load(g_main_scene_ptr, scene_name);
+	g_should_redraw_scene = TRUE;
+	// if (err_code != 0)
+	// 	*g_main_scene_ptr = saved_scene;
 }
 
 void						scene_cleanup(t_scene *scene)

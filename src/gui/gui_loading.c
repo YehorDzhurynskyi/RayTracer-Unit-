@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gui_functions.c                                    :+:      :+:    :+:   */
+/*   gui_loading.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pzubar <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,24 +13,8 @@
 #include "gui.h"
 #include <dirent.h>
 
-#define NK_INCLUDE_FIXED_TYPES
-#define NK_INCLUDE_STANDARD_IO
-#define NK_INCLUDE_STANDARD_VARARGS
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#define NK_SDL_GL2_IMPLEMENTATION
-#define NK_PRIVATE
-
 #define SHOW_SOLID nk_button_symbol(g_nk_context, NK_SYMBOL_CIRCLE_SOLID)
 #define SHOW_OUTLINE nk_button_symbol(g_nk_context, NK_SYMBOL_CIRCLE_OUTLINE);
-
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include "nuklear.h"
-#include "nuklear_sdl.h"
 
 extern struct nk_context *g_nk_context;
 static t_bool g_isloading = TRUE;
@@ -63,14 +47,4 @@ void	display_loading(void)
 			loading_stop();
 	}
 	nk_popup_end(g_nk_context);
-}
-
-void	display_fps(float mseconds)
-{
-	nk_layout_space_begin(g_nk_context, NK_STATIC, 20, 1);
-	nk_layout_space_push(g_nk_context, nk_rect(20, 20, 100, 30));
-	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%4d fps",
-		(int)(1000 / mseconds));
-	nk_labelf_colored(g_nk_context, NK_TEXT_LEFT, nk_red, "%.2f ms", mseconds);
-	nk_layout_space_end(g_nk_context);
 }

@@ -94,15 +94,15 @@ NK_STATIC_ASSERT(sizeof(nk_uint) == 4);
 NK_STATIC_ASSERT(sizeof(nk_int) == 4);
 NK_STATIC_ASSERT(sizeof(nk_byte) == 1);
 
-NK_GLOBAL const struct nk_rect nk_null_rect = {-8192.0f, -8192.0f, 16384, 16384};
 #define NK_FLOAT_PRECISION 0.00000000000001
 
-NK_GLOBAL const struct nk_color nk_red = {255,0,0,255};
-NK_GLOBAL const struct nk_color nk_green = {0,255,0,255};
-NK_GLOBAL const struct nk_color nk_blue = {0,0,255,255};
-NK_GLOBAL const struct nk_color nk_white = {255,255,255,255};
-NK_GLOBAL const struct nk_color nk_black = {0,0,0,255};
-NK_GLOBAL const struct nk_color nk_yellow = {255,255,0,255};
+extern const struct nk_rect nk_null_rect;
+extern const struct nk_color nk_red;
+extern const struct nk_color nk_green;
+extern const struct nk_color nk_blue;
+extern const struct nk_color nk_white;
+extern const struct nk_color nk_black;
+extern const struct nk_color nk_yellow;
 
 /* widget */
 #define nk_widget_state_reset(s)\

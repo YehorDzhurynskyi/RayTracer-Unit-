@@ -52,7 +52,7 @@ const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene)
 		event->y - (SCENE_Y + SCENE_PADDING));
 		shape = cast_ray(scene, &ray, &t);
 		if (shape != NULL)
-			select_object(shape->addr);
+			gui_select_object(shape->addr, SHAPEBUFF_TARGET);
 	}
 	return (shape);
 }

@@ -16,6 +16,7 @@
 # include "camera.h"
 # include "shape.h"
 # include "lightsource.h"
+# include "material.h"
 
 # ifndef SHAPEBUFF_CAPACITY
 #  define SHAPEBUFF_CAPACITY	1024 * 12
@@ -31,9 +32,12 @@
 
 # define SCENE_DIR	RT_CWD "/scenes/"
 
+# define NONE_SELECTED_ADDR	-1
+
 typedef enum
 {
-	SHAPEBUFF_TARGET = 1,
+	NONE_TARGET = 0,
+	SHAPEBUFF_TARGET,
 	LIGHTSOURCEBUFF_TARGET,
 	MATERIALBUFF_TARGET
 }	t_buff_target;
@@ -84,6 +88,6 @@ t_scene					scene_create(void);
 void					scene_cleanup(t_scene *scene);
 void					scene_change(const char *scene_name);
 
-extern t_scene			g_main_scene;
+extern t_scene			*g_main_scene_ptr;
 
 #endif

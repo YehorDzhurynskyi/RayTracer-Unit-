@@ -43,6 +43,8 @@ add_library(${PROJECT_NAME} STATIC
 	${CMAKE_CURRENT_LIST_DIR}/src/nuklear_vertex.c
 	${CMAKE_CURRENT_LIST_DIR}/src/nuklear_widget.c
 	${CMAKE_CURRENT_LIST_DIR}/src/nuklear_window.c
+
+	${CMAKE_CURRENT_LIST_DIR}/nuklear_sdl.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window.h                                           :+:      :+:    :+:   */
+/*   gui_scene_tree.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 15:08:24 by ydzhuryn          #+#    #+#             */
-/*   Updated: 2018/01/05 17:20:48 by ydzhuryn         ###   ########.fr       */
+/*   Updated: 2018/05/28 16:48:36 by pzubar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WINDOW_H
-# define WINDOW_H
+#ifndef GUI_SCENE_TREE_H
+# define GUI_SCENE_TREE_H
 
-# include "scene.h"
-# include <SDL.h>
-# include <SDL_opengl.h>
+# include "gui.h"
 
-void	window_create(void);
-void	window_loop(void);
-void	window_cleanup(void);
+void	render_material_tree(void);
+void	render_lightsource_tree(void);
+void	render_shape_tree(void);
 
 #endif

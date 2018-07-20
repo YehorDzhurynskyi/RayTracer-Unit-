@@ -19,7 +19,7 @@
 #define LOGBUFFER_SIZE	256
 
 char	log_type[LOGBUFFER_SIZE];
-char	*g_log_buf;
+char	*g_log_buf; // TODO: fix log buffer
 
 void				log_notify(const char *message)
 {
@@ -28,10 +28,10 @@ void				log_notify(const char *message)
 
 	ft_bzero(log_type, LOGBUFFER_SIZE);
 	text_len = ft_strlen(message);
-	ft_memcpy(&log_type, "[INFO]\n", 7);
-	ft_memcpy(&log_type[7], message, text_len);
-	ft_memcpy(&log_type[7 + text_len], "\n", 1);
-	ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
+	ft_memcpy(&log_type, "[INFO]: ", 8);
+	ft_memcpy(&log_type[8], message, text_len);
+	ft_memcpy(&log_type[8 + text_len], "\n", 1);
+	// ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
 	if (!g_log_buf)
 		g_log_buf = ft_strdup(log_type);
 	else
@@ -81,6 +81,8 @@ static const char	*get_error_message(t_err_code code)
 		return ("OPENCL error");
 	else if (code == RT_BUFFER_OVERFLOW_ERROR)
 		return ("buffer overflow error");
+	else if (code == RT_RESOURCE_LOADING_ERROR)
+		return ("failed to load resource");
 	return (NULL);
 }
 

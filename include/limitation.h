@@ -31,6 +31,7 @@ typedef enum
 typedef struct			__attribute__ ((packed))
 {
 	t_clbool			is_relative;
+	t_clbool			cutting;
 	t_limitation_type	limitation_type;
 }	t_limitation;
 
