@@ -36,14 +36,11 @@ void		render_material_tree(void)
 	t_iterator			iter;
 	int					i;
 
-	if (g_main_scene_ptr != NULL) // TODO: fixme
+	iter = material_begin(&g_main_scene);
+	i = 0;
+	while (has_next(&iter))
 	{
-		iter = material_begin(g_main_scene_ptr);
-		i = 0;
-		while (has_next(&iter))
-		{
-			material = material_next(&iter);
-			render_material_tree_item(material, i++);
-		}
+		material = material_next(&iter);
+		render_material_tree_item(material, i++);
 	}
 }

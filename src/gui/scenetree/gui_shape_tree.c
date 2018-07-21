@@ -47,15 +47,12 @@ void				render_shape_tree(void)
 	t_iterator			iter;
 	int					i;
 
-	if (g_main_scene_ptr != NULL) // TODO: fixme
+	iter = shape_begin(&g_main_scene);
+	i = 0;
+	while (has_next(&iter))
 	{
-		iter = shape_begin(g_main_scene_ptr);
-		i = 0;
-		while (has_next(&iter))
-		{
-			shape = shape_next(&iter);
-			primitive = shape_get_primitive(shape);
-			render_shape_tree_item(shape, primitive, i++);
-		}
+		shape = shape_next(&iter);
+		primitive = shape_get_primitive(shape);
+		render_shape_tree_item(shape, primitive, i++);
 	}
 }

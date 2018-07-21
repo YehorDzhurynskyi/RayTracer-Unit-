@@ -82,8 +82,6 @@ void					gui_render_scene_menu(void)
 	if (nk_begin(g_nk_context, "Scene", nk_rect(SCENEMENU_X, SCENEMENU_Y, SCENEMENU_WIDTH, SCENEMENU_HEIGHT),
 	NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 	{
-		gui_choose_opencl_device();
-		display_loading();
 		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Move to menubar", NK_MAXIMIZED))
 		{
 			gui_choose_scene();

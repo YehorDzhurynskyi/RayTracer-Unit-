@@ -16,19 +16,19 @@
 #include "logger.h"
 #include "renderer.h"
 
-static SDL_Window			*g_sdl_window = NULL;
-static SDL_GLContext		*g_sdl_gl_context = NULL;
-static GLuint				g_gl_render_target_name;
+static SDL_Window		*g_sdl_window = NULL;
+static SDL_GLContext	*g_sdl_gl_context = NULL;
+static GLuint			g_gl_render_target_name;
 
-t_byte						*g_pixelbuffer = NULL;
-t_bool						g_window_should_close = FALSE;
+t_byte					*g_pixelbuffer = NULL;
+t_bool					g_window_should_close = FALSE;
 
-const int	g_frame_width = 800;
-const int	g_frame_height = 600;
+const int				g_frame_width = 800;
+const int				g_frame_height = 600;
 
-//https://www.opengl.org/discussion_boards/showthread.php/185739-Store-a-2D-texture-to-file
-extern struct nk_context		*g_nk_context;
-void						window_cleanup(void)
+// https://www.opengl.org/discussion_boards/showthread.php/185739-Store-a-2D-texture-to-file
+
+void					window_cleanup(void)
 {
 	free(g_pixelbuffer);
 	if (g_sdl_gl_context != NULL)
@@ -40,7 +40,7 @@ void						window_cleanup(void)
 	SDL_Quit();
 }
 
-static void					generate_render_target()
+static void				generate_render_target()
 {
 	glGenTextures(1, &g_gl_render_target_name);
 	glBindTexture(GL_TEXTURE_2D, g_gl_render_target_name);
@@ -51,7 +51,7 @@ static void					generate_render_target()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, g_frame_width, g_frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 }
 
-void						window_create(void)
+void					window_create(void)
 {
 	while (TRUE)
 	{
@@ -60,7 +60,7 @@ void						window_create(void)
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, TRUE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-		g_sdl_window = SDL_CreateWindow("RayTracer-Unit-",
+		g_sdl_window = SDL_CreateWindow(RT_APP_NAME,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WINDOW_WIDTH, WINDOW_HEGHT, SDL_WINDOW_OPENGL);
 		if (g_sdl_window == NULL)
@@ -79,7 +79,7 @@ void						window_create(void)
 	log_fatal("SDL window creation was failed", RT_SDL_ERROR);
 }
 
-void						window_loop(void)
+void					window_loop(void)
 {
 	Uint64	start;
 	Uint64	freq;
@@ -92,9 +92,8 @@ void						window_loop(void)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		start = SDL_GetPerformanceCounter();
-		gui_poll_events(g_main_scene_ptr);
-		if (g_main_scene_ptr != NULL) // TODO: fixme
-			renderer_render(g_main_scene_ptr, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
+		gui_poll_events(&g_main_scene);
+		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		glBindTexture(GL_TEXTURE_2D, g_gl_render_target_name);
 		gui_render_scene(mseconds);
 		gui_render();

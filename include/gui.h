@@ -53,28 +53,20 @@
 # define WINDOW_WIDTH	(GAP + SCENEMENU_WIDTH + GAP + SCENE_WIDTH + GAP + OBJ_WIDTH + GAP)
 # define WINDOW_HEGHT	(OBJ_Y + OBJ_HEIGHT + GAP)
 
-# define POPUP_X		(SCENE_X + SCENE_WIDTH / 2 - POPUP_WIDTH / 2)
-# define POPUP_Y		(SCENE_Y + SCENE_HEIGHT / 4)
-# define POPUP_WIDTH	400
+# define DEV_CHOOSE_POP_X		(SCENE_WIDTH / 2 - DEV_CHOOSE_POP_WIDTH / 2)
+# define DEV_CHOOSE_POP_Y		(-SCENE_HEIGHT + SCENE_HEIGHT / 4)
+# define DEV_CHOOSE_POP_WIDTH	400
+
+# define LOADING_POP_X		DEV_CHOOSE_POP_X
+# define LOADING_POP_Y		DEV_CHOOSE_POP_Y
+# define LOADING_POP_WIDTH	DEV_CHOOSE_POP_WIDTH
+
+# define SCENE_COOSE_POP_X		50
+# define SCENE_COOSE_POP_Y		50
+# define SCENE_COOSE_POP_WIDTH	DEV_CHOOSE_POP_WIDTH
+# define SCENE_COOSE_POP_HEIGHT	400
 
 # define RT_GUI_RESOURCE_PATH_BUFF_LEN	1024
-
-void	render_gui(void);
-void	display_mainmnu(void);
-void	display_console(void);
-void	ui_init_images(void);
-void	display_scenes(void);
-void	display_shapes_win(void);
-void	display_object_win(void);
-void	select_object(t_claddress addr);
-void	screen_shot(void);
-void	show_shapes(void);
-void	loading_message(char *message);
-void	loading_stop(void);
-void	display_fps(float mseconds);
-void	display_opencl_choice(void);
-void	display_loading(void);
-void 	display_corresponding_options(const t_primitive *prim);
 
 void	gui_init(SDL_Window *win, GLuint render_target);
 void	gui_poll_events(t_scene *scene);
@@ -84,6 +76,7 @@ void	gui_render_scene_menu(void);
 void	gui_render_info_log(void);
 void	gui_render_scene_tree(void);
 void	gui_render_object(void);
+void	gui_render_loading(void);
 void	gui_cleanup(void);
 void	gui_screenshot(void);
 void	gui_choose_opencl_device(void);
@@ -91,6 +84,10 @@ void	gui_choose_scene(void);
 void	gui_select_object(t_claddress addr, const t_buff_target target);
 void	gui_render_color_picker(struct nk_colorf *target_color);
 void	gui_init_style(void);
+void	gui_loading_start(const char *message);
+void	gui_loading_stop(void);
+void	gui_info_log_notify(const char *message);
+void	gui_info_log_error(const char *message, const char *err_code_message);
 
 // TODO: move in another header?
 void	camera_key_handler(t_camera *camera);

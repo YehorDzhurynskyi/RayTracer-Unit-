@@ -13,35 +13,8 @@
 #include "logger.h"
 #include "ft.h"
 #include <stdlib.h>
-
+#include "window.h"
 #include "gui.h"
-
-#define LOGBUFFER_SIZE	256
-
-char	log_type[LOGBUFFER_SIZE];
-char	*g_log_buf; // TODO: fix log buffer
-
-void				log_notify(const char *message)
-{
-	// TODO: add status console as notification target
-	int text_len;
-
-	ft_bzero(log_type, LOGBUFFER_SIZE);
-	text_len = ft_strlen(message);
-	ft_memcpy(&log_type, "[INFO]: ", 8);
-	ft_memcpy(&log_type[8], message, text_len);
-	ft_memcpy(&log_type[8 + text_len], "\n", 1);
-	// ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
-	if (!g_log_buf)
-		g_log_buf = ft_strdup(log_type);
-	else
-	{
-		char *buff = ft_strdup(g_log_buf);
-		ft_strdel(&g_log_buf);
-		g_log_buf = ft_strjoin(log_type, buff);
-		ft_strdel(&buff);
-	}
-}
 
 static const char	*get_error_message(t_err_code code)
 {
@@ -86,43 +59,23 @@ static const char	*get_error_message(t_err_code code)
 	return (NULL);
 }
 
-static void			log_violation(const char *level,
-const char *message, t_err_code code)
+void				log_notify(const char *message)
 {
-	// int level_len;
-	// int text_len;
-	
-	// level_len = ft_strlen(level);
-	
-	ft_printf_fd(2, "{red}[%s - %s]{eoc}: %s\n", level, get_error_message(code), message);
-	
-	// ft_bzero(log_type, LOGBUFFER_SIZE);
-	// text_len = ft_strlen(message);
-	// ft_memcpy(&log_type, level_len, 7);
-	// ft_memcpy(&log_type[7], message, text_len);
-	// ft_memcpy(&log_type[7 + text_len], "\n", 1);
-	// ft_printf_fd(2, "{green}[INFO]{eoc} %s\n", message);
-	// if (!log_buf)
-	// 	log_buf = ft_strdup(log_type);
-	// else
-	// {
-	// 	char *buff = ft_strdup(log_buf);
-	// 	ft_strdel(&log_buf);
-	// 	log_buf = ft_strjoin(log_type, buff);
-	// 	ft_strdel(&buff);
-	// 	ft_printf("--> %d\n", ft_strlen(log_buf));
-	// }
+	gui_info_log_notify(message);
 }
 
 void				log_error(const char *message, t_err_code code)
 {
-	// TODO: add status console as notification target
-	// add special behavior for opencl error and maybe SDL
-	log_violation("ERROR", message, code);
+	gui_info_log_error(message, get_error_message(code));
+	ft_printf_fd(2, "{red}[ERROR - %s]{eoc}: %s\n", get_error_message(code), message);
+	if (code == RT_OPENCL_ERROR)
+		window_warning(RT_APP_NAME " OpenCL error", message);
+	else if (code == RT_SDL_ERROR)
+		window_warning(RT_APP_NAME " SDL error", message);
 }
 
 void				log_fatal(const char *message, t_err_code code)
 {
-	log_violation("FATAL ERROR", message, code);
+	ft_printf_fd(2, "{red}[FATAL ERROR - %s]{eoc}: %s\n", get_error_message(code), message);
 	exit(EXIT_FAILURE);
 }

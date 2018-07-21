@@ -43,14 +43,11 @@ void				render_lightsource_tree(void)
 	t_iterator			iter;
 	int					i;
 
-	if (g_main_scene_ptr != NULL) // TODO: fixme
+	iter = lightsource_begin(&g_main_scene);
+	i = 0;
+	while (has_next(&iter))
 	{
-		iter = lightsource_begin(g_main_scene_ptr);
-		i = 0;
-		while (has_next(&iter))
-		{
-			lightsource = lightsource_next(&iter);
-			render_lightsource_tree_item(lightsource, i++);
-		}
+		lightsource = lightsource_next(&iter);
+		render_lightsource_tree_item(lightsource, i++);
 	}
 }

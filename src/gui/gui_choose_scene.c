@@ -39,25 +39,26 @@ static t_bool		render_pop_scenes(const char *scenenames, int scenesnum)
 {
 	int			scene_height;
 	const char	*choosen_scene_name;
+	t_bool		render_widget;
 
+	render_widget = TRUE;
 	scene_height = (scenesnum / 2) * 30 + 65;
-	if (nk_popup_begin(g_nk_context, NK_POPUP_STATIC, "Choose scene file", 0,
-						nk_rect(POPUP_X, POPUP_Y, POPUP_WIDTH, scene_height)))
-	{
-		nk_layout_row_dynamic(g_nk_context, 25, 1);
-		nk_label(g_nk_context, "Choose scene", NK_TEXT_RIGHT);
-		nk_layout_row_dynamic(g_nk_context, 25, 2);
-		choosen_scene_name = render_scene_list(scenenames, scenesnum);
-	}
+	nk_popup_begin(g_nk_context, NK_POPUP_STATIC, "Choose scene file", 0,
+						nk_rect(SCENE_COOSE_POP_X, SCENE_COOSE_POP_Y, SCENE_COOSE_POP_WIDTH, scene_height));
+	nk_layout_row_dynamic(g_nk_context, 25, 1);
+	nk_label(g_nk_context, "Choose scene", NK_TEXT_RIGHT);
+	nk_layout_row_dynamic(g_nk_context, 25, 2);
+	choosen_scene_name = render_scene_list(scenenames, scenesnum);
 	nk_layout_row_dynamic(g_nk_context, 25, 2);
 	if (nk_button_label(g_nk_context, "Cancel"))
-		return (FALSE);
+		render_widget = FALSE;
 	if (nk_button_label(g_nk_context, "Change") && choosen_scene_name != NULL)
 	{
 		scene_change(choosen_scene_name);
-		return (FALSE);
+		render_widget = FALSE;
 	}
-	return (TRUE);
+	nk_popup_end(g_nk_context);
+	return (render_widget);
 }
 
 static size_t		scenenames_length(void)
@@ -105,9 +106,9 @@ static char			*load_scenenames(int *num)
 
 void				gui_choose_scene(void)
 {
-	static int			scenesnum = 0;
-	static t_bool		render_chooser = FALSE;
-	static char			*scenenames = NULL;
+	static int		scenesnum = 0;
+	static t_bool	render_chooser = FALSE;
+	static char		*scenenames = NULL;
 
 	if (nk_button_label(g_nk_context, "Choose scene from file"))
 	{
@@ -122,6 +123,5 @@ void				gui_choose_scene(void)
 		render_chooser = render_pop_scenes(scenenames, scenesnum);
 		if (render_chooser == FALSE)
 			free(scenenames);
-		nk_popup_end(g_nk_context);
 	}
 }

@@ -17,7 +17,7 @@
 #include "scenerepository.h"
 #include "renderer.h"
 
-t_scene						*g_main_scene_ptr = NULL;
+t_scene						g_main_scene;
 
 static t_scenebuffer_meta	scene_meta(void)
 {
@@ -63,50 +63,45 @@ static void					scene_init_device_buffers(t_scene *scene)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
 
-t_scene						scene_create(void)
+void						scene_init_memory(void)
 {
-	t_scene	scene;
-
-	scene_init_device_buffers(&scene);
-	scene.host_shapebuffer = malloc(SHAPEBUFF_CAPACITY);
-	if (scene.host_shapebuffer == NULL)
+	scene_init_device_buffers(&g_main_scene);
+	g_main_scene.host_shapebuffer = malloc(SHAPEBUFF_CAPACITY);
+	if (g_main_scene.host_shapebuffer == NULL)
 		log_fatal("Failed to allocate memory for shape buffer", RT_MEM_ALLOC_ERROR);
-	scene.host_lightsourcebuffer = malloc(LIGHTSOURCEBUFF_CAPACITY);
-	if (scene.host_lightsourcebuffer == NULL)
+	g_main_scene.host_lightsourcebuffer = malloc(LIGHTSOURCEBUFF_CAPACITY);
+	if (g_main_scene.host_lightsourcebuffer == NULL)
 		log_fatal("Failed to allocate memory for lightsource buffer", RT_MEM_ALLOC_ERROR);
-	scene.host_materialbuffer = malloc(MATERIALBUFF_CAPACITY);
-	if (scene.host_materialbuffer == NULL)
+	g_main_scene.host_materialbuffer = malloc(MATERIALBUFF_CAPACITY);
+	if (g_main_scene.host_materialbuffer == NULL)
 		log_fatal("Failed to allocate memory for material buffer", RT_MEM_ALLOC_ERROR);
-	scene.config = scene_config();
-	scene.meta = scene_meta();
-	scene.mapped_device_buffer = NULL;
-	scene.mapped_host_buffer = NULL;
-	return (scene);
+	scene_rewind();
+	g_main_scene.mapped_device_buffer = NULL;
+	g_main_scene.mapped_host_buffer = NULL;
+}
+
+void						scene_rewind(void)
+{
+	g_main_scene.config = scene_config();
+	g_main_scene.meta = scene_meta();
+	// g_main_scene.mapped_device_buffer = NULL;
+	// g_main_scene.mapped_host_buffer = NULL;
 }
 
 void						scene_change(const char *scene_name)
 { //TODO: fixme
-	// t_err_code	err_code;
-	// t_scene		saved_scene;
-
-	// saved_scene = *g_main_scene_ptr;
-	g_main_scene_ptr->config = scene_config();
-	g_main_scene_ptr->meta = scene_meta();
-	// err_code = scene_load(g_main_scene_ptr, scene_name);
-	scene_load(g_main_scene_ptr, scene_name);
+	scene_rewind();
+	scene_load(&g_main_scene, scene_name);
+	log_notify("Scene was switched successfully");
 	g_should_redraw_scene = TRUE;
-	// if (err_code != 0)
-	// 	*g_main_scene_ptr = saved_scene;
 }
 
-void						scene_cleanup(t_scene *scene)
+void						scene_cleanup(void)
 {
-	clReleaseMemObject(scene->device_shapebuffer);
-	clReleaseMemObject(scene->device_lightsourcebuffer);
-	clReleaseMemObject(scene->device_materialbuffer);
-	// TODO: this is scene that is mapped on host
-	// for faster CPU access
-	free(scene->host_shapebuffer);
-	free(scene->host_lightsourcebuffer);
-	free(scene->host_materialbuffer);
+	clReleaseMemObject(g_main_scene.device_shapebuffer);
+	clReleaseMemObject(g_main_scene.device_lightsourcebuffer);
+	clReleaseMemObject(g_main_scene.device_materialbuffer);
+	free(g_main_scene.host_shapebuffer);
+	free(g_main_scene.host_lightsourcebuffer);
+	free(g_main_scene.host_materialbuffer);
 }

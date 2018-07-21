@@ -18,17 +18,17 @@ static t_buff_target	g_selected_buff_target = NONE_TARGET;
 void					gui_select_object(t_claddress addr, const t_buff_target target)
 {
 	// TODO: add texture buffer target
-	g_main_scene_ptr->config.selected_shape_addr = NONE_SELECTED_ADDR;
+	g_main_scene.config.selected_shape_addr = NONE_SELECTED_ADDR;
 	g_selected_buff_target = target;
 	if (target == SHAPEBUFF_TARGET)
 	{
-		g_main_scene_ptr->config.selected_shape_addr = addr;
-		g_selected_object = (const t_shape*)(g_main_scene_ptr->host_shapebuffer + addr);
+		g_main_scene.config.selected_shape_addr = addr;
+		g_selected_object = (const t_shape*)(g_main_scene.host_shapebuffer + addr);
 	}
 	else if (target == LIGHTSOURCEBUFF_TARGET)
-		g_selected_object = (const t_lightsource*)(g_main_scene_ptr->host_lightsourcebuffer + addr);
+		g_selected_object = (const t_lightsource*)(g_main_scene.host_lightsourcebuffer + addr);
 	else if (target == MATERIALBUFF_TARGET)
-		g_selected_object = (const t_material*)(g_main_scene_ptr->host_materialbuffer + addr);
+		g_selected_object = (const t_material*)(g_main_scene.host_materialbuffer + addr);
 }
 
 static const char		*obtain_caption(void)

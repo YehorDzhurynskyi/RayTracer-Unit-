@@ -10,15 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft.h"
 #include "window.h"
 #include "renderer.h"
 #include "scene.h"
-#include "sceneeditor.h"
-#include "scenerepository.h"
-#include "shape.h"
-#include <stdlib.h>
-#include "logger.h"
 
 void		atexit_callback(void)
 {
@@ -28,13 +22,14 @@ void		atexit_callback(void)
 
 int			main(void)
 {
+	scene_rewind();
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
 	}
 	window_create();
 	window_loop();
 	window_cleanup();
-	scene_cleanup(g_main_scene_ptr);
+	scene_cleanup();
 	// renderer_cleanup();
 	return (EXIT_SUCCESS);
 }

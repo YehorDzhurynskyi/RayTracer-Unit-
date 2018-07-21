@@ -17,8 +17,13 @@
 # include <SDL.h>
 # include <SDL_opengl.h>
 
+# define RT_APP_NAME	"RayTracer-Unit-"
+
 void	window_create(void);
 void	window_loop(void);
 void	window_cleanup(void);
+void	window_error(const char *title, const char *message);
+void	window_warning(const char *title, const char *message);
+void	window_info(const char *title, const char *message);
 
 #endif

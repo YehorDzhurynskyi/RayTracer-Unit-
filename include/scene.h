@@ -30,7 +30,9 @@
 #  define MATERIALBUFF_CAPACITY	1024 * 1
 # endif
 
-# define SCENE_DIR	RT_CWD "/scenes/"
+# define SCENE_DIR	RT_CWD "/assets/scenes/"
+
+# define NONE_SELECTED_ADDR	-1
 
 # define NONE_SELECTED_ADDR	-1
 
@@ -84,10 +86,11 @@ typedef struct
 	t_camera			camera;
 }	t_scene;
 
-t_scene					scene_create(void);
-void					scene_cleanup(t_scene *scene);
+void					scene_init_memory(void);
+void					scene_rewind(void);
+void					scene_cleanup(void);
 void					scene_change(const char *scene_name);
 
-extern t_scene			*g_main_scene_ptr;
+extern t_scene			g_main_scene;
 
 #endif

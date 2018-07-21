@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "renderer.h"
+#include "gui.h"
 #include "logger.h"
 
 static t_renderer	g_scene_renderer;
-static t_scene		g_main_scene;
 t_bool				g_should_redraw_scene = FALSE;
 
 static void	renderer_prepare(const t_scene *scene)
@@ -85,14 +85,14 @@ void	renderer_init(void)
 	opencl_init();
 	g_scene_renderer.rt_prgm = opencl_program_create(RT_CWD "/src/opencl/kernel/raytracer.cl", "trace");
 	g_scene_renderer.nfilters = 0;
-	g_main_scene = scene_create();
-	g_main_scene_ptr = &g_main_scene;
-	{
-		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
-		// g_scene_renderer.nfilters++;
-		// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
-		// g_scene_renderer.nfilters++;
-	}
+	scene_init_memory();
+	gui_loading_stop();
+	// {
+	// 	// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
+	// 	// g_scene_renderer.nfilters++;
+	// 	// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/bw_filter.cl", "filter");
+	// 	// g_scene_renderer.nfilters++;
+	// }
 }
 
 void	renderer_cleanup(void)

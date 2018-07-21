@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gui_events.c                                       :+:      :+:    :+:   */
+/*   window_msg_box.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,28 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "gui.h"
+#include "window.h"
 
-extern t_bool	g_window_should_close;
-
-void	gui_poll_events(t_scene *scene)
+void	window_error(const char *title, const char *message)
 {
-	SDL_Event	event;
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title, message, NULL);
+}
 
-	camera_key_handler(&scene->camera);
-	nk_input_begin(g_nk_context);
-	while (SDL_PollEvent(&event))
-	{
-		if (event.type == SDL_QUIT)
-			g_window_should_close = TRUE;
-		else if (event.type == SDL_KEYDOWN)
-		{
-			if (event.key.keysym.sym == SDLK_ESCAPE)
-				g_window_should_close = TRUE;
-		}
-		else if (event.type == SDL_MOUSEBUTTONDOWN)
-			pick_shape(&event.button, scene);
-		nk_sdl_handle_event(&event);
-	}
-	nk_input_end(g_nk_context);
+void	window_warning(const char *title, const char *message)
+{
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, title, message, NULL);
+}
+
+void	window_info(const char *title, const char *message)
+{
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, title, message, NULL);
 }
