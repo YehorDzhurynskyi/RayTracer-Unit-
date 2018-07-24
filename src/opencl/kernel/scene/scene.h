@@ -24,7 +24,7 @@ typedef struct	__attribute__ ((packed))
 {
 	int			trace_depth;
 	t_aa		aa;
-	t_bool		global_illumination;
+	t_bool		global_illumination_enabled;
 	t_scalar	ambient;
 	t_scalar	fov;
 	t_address	selected_shape_addr;
@@ -48,9 +48,11 @@ typedef struct			__attribute__ ((packed))
 
 typedef struct
 {
-	__constant t_byte	*shapebuffer;
-	__constant t_byte	*lightsourcebuffer;
-	__constant t_byte	*materialbuffer;
+	__constant t_byte			*shapebuffer;
+	__constant t_byte			*lightsourcebuffer;
+	__constant t_byte			*materialbuffer;
+	int							width;
+	int							height;
 }	t_scene_buffers;
 
 typedef struct

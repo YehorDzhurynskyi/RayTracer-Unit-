@@ -1,0 +1,49 @@
+target_sources(${PROJECT_NAME} PUBLIC
+	"${CMAKE_CURRENT_LIST_DIR}/upload.c"
+	"${CMAKE_CURRENT_LIST_DIR}/repo_camera.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_scene.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_lightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_material.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_shape.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_primitive.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_texture.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_skybox.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_vector.c"
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_orientation.c"
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_real.c"
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_bool.c"
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_color.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_shape.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_cone.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_cylinder.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_sphere.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_primitive.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_material.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/limitation/repo_limitation.c"
+	"${CMAKE_CURRENT_LIST_DIR}/limitation/repo_axial_limitation.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_lightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_pointlightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_dirlightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_spotlightsource.c"
+
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_bool.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_camera.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_color.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_common.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_lightsource.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_limitation.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_material.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_orientation.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_primitive.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_real.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_scene.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_shape.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_vector.c"
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")

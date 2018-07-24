@@ -12,12 +12,14 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/scene/scene.c"
 	"${CMAKE_CURRENT_LIST_DIR}/scene/camera.c"
 
+	"${CMAKE_CURRENT_LIST_DIR}/textures/load_surface.c"
+
 	"${CMAKE_CURRENT_LIST_DIR}/utilities/logger.c"
-	)
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
 
-include(${CMAKE_CURRENT_LIST_DIR}/scene/repository/CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/scene/repo/CMakeLists.txt)
 include(${CMAKE_CURRENT_LIST_DIR}/scene/editor/CMakeLists.txt)
 include(${CMAKE_CURRENT_LIST_DIR}/scene/iterator/CMakeLists.txt)
 include(${CMAKE_CURRENT_LIST_DIR}/raytracer/CMakeLists.txt)

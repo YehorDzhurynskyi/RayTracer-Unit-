@@ -26,9 +26,10 @@ static void	renderer_prepare(const t_scene *scene)
 	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 1, sizeof(cl_mem), &scene->device_shapebuffer);
 	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 2, sizeof(cl_mem), &scene->device_lightsourcebuffer);
 	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 3, sizeof(cl_mem), &scene->device_materialbuffer);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(t_scenebuffer_meta), &scene->meta);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_scene_config), &scene->config);
-	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 6, sizeof(t_camera), &scene->camera);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 4, sizeof(cl_mem), &scene->skybox);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 5, sizeof(t_scenebuffer_meta), &scene->meta);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 6, sizeof(t_scene_config), &scene->config);
+	err |= clSetKernelArg(g_scene_renderer.rt_prgm.kernel, 7, sizeof(t_camera), &scene->camera);
 	if (err)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }

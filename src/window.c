@@ -15,6 +15,7 @@
 #include "gui.h"
 #include "logger.h"
 #include "renderer.h"
+#include <SDL_image.h>
 
 static SDL_Window		*g_sdl_window = NULL;
 static SDL_GLContext	*g_sdl_gl_context = NULL;
@@ -57,6 +58,7 @@ void					window_create(void)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 			break ;
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG); // TODO: check error
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, TRUE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);

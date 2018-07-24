@@ -35,9 +35,11 @@ endif()
 ###
 
 ### Preparing dependecies
+find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(OpenCL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 include_directories(Dependencies/libft)
 add_subdirectory(Dependencies/libft)
@@ -59,16 +61,20 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 include(src/CMakeLists.txt)
 
 include_directories(
+	${Threads_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIRS}
 	${OpenCL_INCLUDE_DIRS}
 	${SDL2_INCLUDE_DIRS}
+	${SDL2_IMAGE_INCLUDE_DIRS}
 	./include
 )
 
 target_link_libraries(${PROJECT_NAME}
+	${Threads_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	${OpenCL_LIBRARIES}
 	${SDL2_LIBRARIES}
+	${SDL2_IMAGE_LIBRARIES}
 	ft
 	cson
 	nuklear

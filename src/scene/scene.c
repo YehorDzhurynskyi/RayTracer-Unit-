@@ -12,10 +12,12 @@
 
 #include "scene.h"
 #include "logger.h"
+#include "gui.h"
 #include "ft.h"
 #include <assert.h>
-#include "scenerepository.h"
+#include "scenerepo.h"
 #include "renderer.h"
+#include "window.h"
 
 t_scene						g_main_scene;
 
@@ -38,7 +40,7 @@ static t_scene_config		scene_config(void)
 
 	config.trace_depth = 20;
 	config.aa = NOAA;
-	config.global_illumination = FALSE;
+	config.global_illumination_enabled = FALSE;
 	config.ambient = 0.15;
 	config.fov = 60.0;
 	config.selected_shape_addr = NONE_SELECTED_ADDR;
@@ -75,25 +77,33 @@ void						scene_init_memory(void)
 	g_main_scene.host_materialbuffer = malloc(MATERIALBUFF_CAPACITY);
 	if (g_main_scene.host_materialbuffer == NULL)
 		log_fatal("Failed to allocate memory for material buffer", RT_MEM_ALLOC_ERROR);
-	scene_rewind();
+	scene_rewind(&g_main_scene);
 	g_main_scene.mapped_device_buffer = NULL;
 	g_main_scene.mapped_host_buffer = NULL;
 }
 
-void						scene_rewind(void)
+void						scene_rewind(t_scene *scene)
 {
-	g_main_scene.config = scene_config();
-	g_main_scene.meta = scene_meta();
-	// g_main_scene.mapped_device_buffer = NULL;
-	// g_main_scene.mapped_host_buffer = NULL;
+	scene->config = scene_config();
+	scene->meta = scene_meta();
+	scene->mapped_device_buffer = NULL;
+	scene->mapped_host_buffer = NULL;
+	clReleaseMemObject(scene->skybox);
 }
 
 void						scene_change(const char *scene_name)
-{ //TODO: fixme
-	scene_rewind();
-	scene_load(&g_main_scene, scene_name);
-	log_notify("Scene was switched successfully");
-	g_should_redraw_scene = TRUE;
+{
+	if (RT_NO_ERROR != load_scene(&g_main_scene, scene_name))
+	{
+		log_error("Failed to load scene", RT_RESOURCE_LOADING_ERROR);
+		window_warning("Scene loading error", "Scene file has some errors (see information log)");
+	}
+	else
+	{
+		log_notify("Scene was loaded successfully");
+		g_should_redraw_scene = TRUE;
+	}
+	gui_loading_stop();
 }
 
 void						scene_cleanup(void)

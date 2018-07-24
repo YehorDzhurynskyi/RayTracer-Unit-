@@ -68,21 +68,108 @@
 
 // // TODO: implement call stack :) https://github.com/RenatoUtsch/clTracer/blob/master/source/clSampler/cl/recursion.cl
 
-static t_rcolor		trace_ray(const t_scene *scene,
-const t_scene_buffers *buffers, const t_ray *ray)
+const sampler_t skyboxsampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP | CLK_FILTER_LINEAR;
+
+static t_rcolor		map_skybox(const t_scene *scene, __read_only image2d_array_t skybox, const t_ray *ray)
+{
+	float absX = fabs(ray->direction.x);
+	float absY = fabs(ray->direction.y);
+	float absZ = fabs(ray->direction.z);
+
+	int isXPositive = ray->direction.x > 0 ? 1 : 0;
+	int isYPositive = ray->direction.y > 0 ? 1 : 0;
+	int isZPositive = ray->direction.z > 0 ? 1 : 0;
+	
+	int index = 0;
+
+	float maxAxis, uc, vc;
+	
+	// POSITIVE X
+	if (isXPositive && absX >= absY && absX >= absZ) {
+	// u (0 to 1) goes from +z to -z
+	// v (0 to 1) goes from -y to +y
+	maxAxis = absX;
+	uc = -ray->direction.y;
+	vc = -ray->direction.z;
+	index = 0;
+		//return 0x88;
+	}
+	// NEGATIVE X
+	else if (!isXPositive && absX >= absY && absX >= absZ) {
+	// u (0 to 1) goes from -z to +z
+	// v (0 to 1) goes from -y to +y
+	maxAxis = absX;
+	uc = ray->direction.y;
+	vc = -ray->direction.z;
+	index = 1;
+		//return 0xFF;
+	}
+	// POSITIVE Y
+	else if (isYPositive && absY >= absX && absY >= absZ) {
+	// u (0 to 1) goes from -x to +x
+	// v (0 to 1) goes from +z to -z
+	maxAxis = absY;
+	uc = ray->direction.x;
+	vc = -ray->direction.z;
+	index = 2;
+		//return 0x8800;
+	}
+	// NEGATIVE Y
+	else if (!isYPositive && absY >= absX && absY >= absZ) {
+	// u (0 to 1) goes from -x to +x
+	// v (0 to 1) goes from -z to +z
+	maxAxis = absY;
+	uc = -ray->direction.x;
+	vc = -ray->direction.z;
+	index = 3;
+		//return 0xFF00;
+	}
+	// POSITIVE Z
+	else if (isZPositive && absZ >= absX && absZ >= absY) {
+	// u (0 to 1) goes from -x to +x
+	// v (0 to 1) goes from -y to +y
+	maxAxis = absZ;
+	uc = -ray->direction.y;
+	vc = ray->direction.x;
+	index = 4;
+		//return 0x880000;
+	}
+	// NEGATIVE Z
+	else if (!isZPositive && absZ >= absX && absZ >= absY) {
+	// u (0 to 1) goes from +x to -x
+	// v (0 to 1) goes from -y to +y
+	maxAxis = absZ;
+	uc = -ray->direction.y;
+	vc = -ray->direction.x;
+	index = 5;
+		//return 0xFF0000;
+	}
+	uc = 0.5f * (uc / maxAxis + 1.0f);
+	vc = 0.5f * (vc / maxAxis + 1.0f);
+	t_vec4 col = read_imagef(skybox, skyboxsampler, (float4)(uc, vc, (float)index, 0.0f));
+	col.x = 0.0f;
+	return (col.wzyx);
+}
+
+static t_rcolor		trace_ray(const t_scene *scene, const t_scene_buffers *buffers,
+__read_only image2d_array_t skybox, const t_ray *ray)
 {
 	t_scalar				t;
 	__constant t_shape	*nearest_shape;
 	t_ray				next_ray = *ray;
 	t_rcolor			result_color = 0.0f;
-	t_scalar				opacity = 1.0f;
+	t_scalar			opacity = 1.0f;
 	int					trace_depth = scene->config.trace_depth;
 	const t_scalar		bias = 0.005f;
 
 	do {
 		nearest_shape = cast_ray(scene, buffers, &next_ray, &t);
 		if (nearest_shape == NULL)
+		{
+			// TODO: check if skybox is enabled
+			result_color += map_skybox(scene, skybox, &next_ray);
 			break;
+		}
 		__constant t_material *material = get_material(buffers, nearest_shape);
 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
 		const t_scalar nearest_shape_opacity = get_opacity(material->diffuse_albedo.color);
@@ -101,13 +188,13 @@ const t_scene_buffers *buffers, const t_ray *ray)
 	return (result_color);
 }
 
-static t_ray		obtain_camera_ray(const t_scene *scene, int x, int y,
-int width, int height, t_scalar xbias, t_scalar ybias)
+static t_ray		obtain_camera_ray(const t_scene *scene, const t_scene_buffers *buffers,
+int x, int y, t_scalar xbias, t_scalar ybias)
 {
 	t_ray camera_ray = (t_ray){};
 	t_scalar fov = tan(scene->config.fov / 2.0f * M_PI / 180.0f);
-	t_scalar xd = (2.0f * ((x + xbias) / width) - 1.0) * fov * (width / (t_scalar)height);
-	t_scalar yd = (1.0 - 2.0 * ((y + ybias) / height)) * fov;
+	t_scalar xd = (2.0f * ((x + xbias) / buffers->width) - 1.0) * fov * (buffers->width / (t_scalar)buffers->height);
+	t_scalar yd = (1.0 - 2.0 * ((y + ybias) / buffers->height)) * fov;
 	camera_ray.origin = scene->camera.position;
 	camera_ray.direction = (t_vec4)(xd, yd, -1.0f, 0.0f);
 	camera_ray.direction = normalize(camera_ray.direction);
@@ -117,32 +204,32 @@ int width, int height, t_scalar xbias, t_scalar ybias)
 }
 
 static t_rcolor		trace_noaa(const t_scene *scene, const t_scene_buffers *buffers,
-int x, int y, int width, int height)
+__read_only image2d_array_t skybox, int x, int y)
 {
-	const t_ray camera_ray = obtain_camera_ray(scene, x, y, width, height, 0.5f, 0.5f);
-	return (trace_ray(scene, buffers, &camera_ray));
+	const t_ray camera_ray = obtain_camera_ray(scene, buffers, x, y, 0.5f, 0.5f);
+	return (trace_ray(scene, buffers, skybox, &camera_ray));
 }
 
 static t_rcolor		trace_ssaax4(const t_scene *scene, const t_scene_buffers *buffers,
-int x, int y, int width, int height)
+__read_only image2d_array_t skybox, int x, int y)
 {
-	const t_ray camera_ray1 = obtain_camera_ray(scene, x, y, width, height, 0.2f, 0.8f);
-	const t_rcolor pixelcolor1 = trace_ray(scene, buffers, &camera_ray1);
-	const t_ray camera_ray2 = obtain_camera_ray(scene, x, y, width, height, 0.4f, 0.4f);
-	const t_rcolor pixelcolor2 = trace_ray(scene, buffers, &camera_ray2);
-	const t_ray camera_ray3 = obtain_camera_ray(scene, x, y, width, height, 0.6f, 0.6f);
-	const t_rcolor pixelcolor3 = trace_ray(scene, buffers, &camera_ray3);
-	const t_ray camera_ray4 = obtain_camera_ray(scene, x, y, width, height, 0.8f, 0.2f);
-	const t_rcolor pixelcolor4 = trace_ray(scene, buffers, &camera_ray4);
+	const t_ray camera_ray1 = obtain_camera_ray(scene, buffers, x, y, 0.2f, 0.8f);
+	const t_rcolor pixelcolor1 = trace_ray(scene, buffers, skybox, &camera_ray1);
+	const t_ray camera_ray2 = obtain_camera_ray(scene, buffers, x, y, 0.4f, 0.4f);
+	const t_rcolor pixelcolor2 = trace_ray(scene, buffers, skybox, &camera_ray2);
+	const t_ray camera_ray3 = obtain_camera_ray(scene, buffers, x, y, 0.6f, 0.6f);
+	const t_rcolor pixelcolor3 = trace_ray(scene, buffers, skybox, &camera_ray3);
+	const t_ray camera_ray4 = obtain_camera_ray(scene, buffers, x, y, 0.8f, 0.2f);
+	const t_rcolor pixelcolor4 = trace_ray(scene, buffers, skybox, &camera_ray4);
 
 	return ((pixelcolor1 + pixelcolor2 + pixelcolor3 + pixelcolor4) / 4.0f);
 }
 
 static t_rcolor		trace_ssaax8(const t_scene *scene, const t_scene_buffers *buffers,
-int x, int y, int width, int height)
+__read_only image2d_array_t skybox, int x, int y)
 {
 	// TODO: implement 8xSSAA
-	return (trace_ssaax4(scene, buffers, x, y, width, height));
+	return (trace_ssaax4(scene, buffers, skybox, x, y));
 }
 
 __kernel void		trace(
@@ -150,6 +237,7 @@ __kernel void		trace(
 	__constant t_byte *shapebuffer,
 	__constant t_byte *lightsourcebuffer,
 	__constant t_byte *materialbuffer,
+	__read_only image2d_array_t skybox,
 	t_scenebuffer_meta meta,
 	t_scene_config config,
 	t_camera camera
@@ -171,14 +259,16 @@ __kernel void		trace(
 	buffers.shapebuffer = shapebuffer;
 	buffers.lightsourcebuffer = lightsourcebuffer;
 	buffers.materialbuffer = materialbuffer;
+	buffers.width = width;
+	buffers.height = height;
 
 	t_rcolor	pixelcolor;
 	if (config.aa == NOAA)
-		pixelcolor = trace_noaa(&scene, &buffers, x, y, width, height);
+		pixelcolor = trace_noaa(&scene, &buffers, skybox, x, y);
 	else if (config.aa == SSAAx4)
-		pixelcolor = trace_ssaax4(&scene, &buffers, x, y, width, height);
+		pixelcolor = trace_ssaax4(&scene, &buffers, skybox, x, y);
 	else if (config.aa == SSAAx8)
-		pixelcolor = trace_ssaax8(&scene, &buffers, x, y, width, height);
+		pixelcolor = trace_ssaax8(&scene, &buffers, skybox, x, y);
 
 	outputbuffer[x + y * width] = rcolor2color(pixelcolor);
 }

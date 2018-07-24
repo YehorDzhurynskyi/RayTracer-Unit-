@@ -2,6 +2,8 @@ camera:
 	position: [0.0 0.0 10.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
+skybox: "clouds"
+ambient: 0.4
 materials: [
 	{
 		"diffuse color": "0x00750e08"
@@ -34,43 +36,43 @@ shapes: [
 			position: [0.0 0.0 0.0]
 			# orientation: [0.0 0.0 30.0]
 			radius: 3.0
-			limitations: [
-				{
-					type: "y-axis"
-					"is relative": true
-					"apply if less": false
-					limit: 1.0
-				}
-				{
-					type: "y-axis"
-					"is relative": true
-					"apply if less": true
-					limit: -1.0
-				}
-				# {
-				# 	type: "x-axis"
-				# 	"is relative": true
-				# 	"apply if less": true
-				# 	limit: -1.0
-				# }
-				# {
-				# 	type: "x-axis"
-				# 	"is relative": true
-				# 	"apply if less": false
-				# 	limit: 1.0
-				# }
-			]
+			# limitations: [
+			# 	{
+			# 		type: "y-axis"
+			# 		"is relative": true
+			# 		"apply if less": false
+			# 		limit: 1.0
+			# 	}
+			# 	{
+			# 		type: "y-axis"
+			# 		"is relative": true
+			# 		"apply if less": true
+			# 		limit: -1.0
+			# 	}
+			# 	# {
+			# 	# 	type: "x-axis"
+			# 	# 	"is relative": true
+			# 	# 	"apply if less": true
+			# 	# 	limit: -1.0
+			# 	# }
+			# 	# {
+			# 	# 	type: "x-axis"
+			# 	# 	"is relative": true
+			# 	# 	"apply if less": false
+			# 	# 	limit: 1.0
+			# 	# }
+			# ]
 		}
 	}
-	{
-		relation: "union"
-		material: 1
-		primitive: {
-			type: "plane"
-			position: [0.0 0.0 -20.0]
-			orientation: [-90.0 0.0 0.0]
-		}
-	}
+	# {
+	# 	relation: "union"
+	# 	material: 1
+	# 	primitive: {
+	# 		type: "plane"
+	# 		position: [0.0 0.0 -20.0]
+	# 		orientation: [-90.0 0.0 0.0]
+	# 	}
+	# }
 ]
 lightsources: [
 	# {

@@ -100,6 +100,7 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
+t_bool				ft_str_ends_with(const char *str, const char *needle);
 char				*ft_itoa(int n);
 void				ft_itoa_cat(char *dest, size_t size, int n);
 void				ft_putchar(char c);

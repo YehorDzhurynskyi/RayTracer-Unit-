@@ -66,7 +66,7 @@
 # define SCENE_COOSE_POP_WIDTH	DEV_CHOOSE_POP_WIDTH
 # define SCENE_COOSE_POP_HEIGHT	400
 
-# define RT_GUI_RESOURCE_PATH_BUFF_LEN	1024
+# define RT_GUI_RESOURCE_PATH_BUFF_LEN	2048
 
 void	gui_init(SDL_Window *win, GLuint render_target);
 void	gui_poll_events(t_scene *scene);

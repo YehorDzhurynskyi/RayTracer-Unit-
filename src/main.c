@@ -22,7 +22,7 @@ void		atexit_callback(void)
 
 int			main(void)
 {
-	scene_rewind();
+	scene_rewind(&g_main_scene);
 	{ // TODO: replace on realease
 		atexit(atexit_callback);
 	}

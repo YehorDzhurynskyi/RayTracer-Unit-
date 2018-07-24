@@ -186,6 +186,7 @@ add_library(${PROJECT_NAME} STATIC
 # ftstr
 	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_strcat.c
 	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_strchr.c
+	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_str_ends_with.c
 	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_strchrn.c
 	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_strclr.c
 	${CMAKE_CURRENT_LIST_DIR}/ftstr/ft_strcmp.c

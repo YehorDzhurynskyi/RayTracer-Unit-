@@ -55,7 +55,11 @@ static const char	*get_error_message(t_err_code code)
 	else if (code == RT_BUFFER_OVERFLOW_ERROR)
 		return ("buffer overflow error");
 	else if (code == RT_RESOURCE_LOADING_ERROR)
-		return ("failed to load resource");
+		return ("resource loading error");
+	else if (code == RT_WRONG_VALUE_RANGE_ERROR)
+		return ("value range error");
+	else if (code == RT_WRONG_VALUE_TYPE_ERROR)
+		return ("wrong type error");
 	return (NULL);
 }
 

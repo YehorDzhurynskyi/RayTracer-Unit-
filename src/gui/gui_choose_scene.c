@@ -14,6 +14,7 @@
 #include "logger.h"
 #include <dirent.h>
 #include "scene.h"
+#include <pthread.h>
 
 static const char	*render_scene_list(const char *scenenames, int scenesnum)
 {
@@ -40,6 +41,7 @@ static t_bool		render_pop_scenes(const char *scenenames, int scenesnum)
 	int			scene_height;
 	const char	*choosen_scene_name;
 	t_bool		render_widget;
+	pthread_t	scene_change_thread;
 
 	render_widget = TRUE;
 	scene_height = (scenesnum / 2) * 30 + 65;
@@ -54,8 +56,10 @@ static t_bool		render_pop_scenes(const char *scenenames, int scenesnum)
 		render_widget = FALSE;
 	if (nk_button_label(g_nk_context, "Change") && choosen_scene_name != NULL)
 	{
-		scene_change(choosen_scene_name);
 		render_widget = FALSE;
+		gui_loading_start("Loading scene...");
+		pthread_create(&scene_change_thread, NULL, (void* (*)(void*))scene_change, (void*)choosen_scene_name);
+		pthread_detach(scene_change_thread);
 	}
 	nk_popup_end(g_nk_context);
 	return (render_widget);

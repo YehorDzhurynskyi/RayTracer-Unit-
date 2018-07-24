@@ -31,6 +31,7 @@
 # endif
 
 # define SCENE_DIR	RT_CWD "/assets/scenes/"
+# define SKYBOX_DIR	RT_CWD "/assets/skyboxes/"
 
 # define NONE_SELECTED_ADDR	-1
 
@@ -55,7 +56,7 @@ typedef struct			__attribute__ ((packed))
 {
 	cl_int				trace_depth;
 	t_aa				aa;
-	t_clbool			global_illumination;
+	t_clbool			global_illumination_enabled;
 	t_clscalar			ambient;
 	t_clscalar			fov;
 	t_claddress			selected_shape_addr;
@@ -84,10 +85,11 @@ typedef struct
 	t_scene_config		config;
 	t_scenebuffer_meta	meta;
 	t_camera			camera;
+	cl_mem				skybox;
 }	t_scene;
 
 void					scene_init_memory(void);
-void					scene_rewind(void);
+void					scene_rewind(t_scene *scene);
 void					scene_cleanup(void);
 void					scene_change(const char *scene_name);
 
