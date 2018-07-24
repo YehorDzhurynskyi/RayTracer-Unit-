@@ -1,8 +1,9 @@
 ambient: 0.15
-"anti aliasing": "NOAA"
-"global illumination": false
-"trace depth": 15
+"anti_aliasing": "NOAA"
+"global_illumination": false
+"trace_depth": 15
 fov: 60.0
+skybox: "default"
 camera:
 	position: [0.0 0.0 10.0]
 	forward: [0.0 0.0 -1.0]
@@ -10,7 +11,7 @@ camera:
 	up: [0.0 1.0 0.0]
 materials: [
 	{
-		color: "0x000000ff"
+		diffuse: "0x000000ff"
 		specularity: 0.3
 		glossiness: 0.4
 		ior: 1.0

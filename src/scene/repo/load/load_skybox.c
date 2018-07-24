@@ -96,7 +96,7 @@ cl_mem	load_skybox(const char *dirname)
 		i++;
 	}
 	mem_obj = clCreateImage(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
-	&format, &desc, (unsigned int[]){0x0}, &err);
+	&format, &desc, pixels, &err);
 	if (err != CL_SUCCESS)
 		log_error(opencl_get_error(err), RT_OPENCL_ERROR);
 	free(pixels);

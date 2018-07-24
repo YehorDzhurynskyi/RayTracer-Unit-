@@ -47,6 +47,22 @@ t_err_code err_code, const char *message)
 	return (err_code);
 }
 
+t_err_code		validation_failed_parent(const t_cson *cson, const char *key,
+t_err_code err_code, const char *message)
+{
+	size_t	offset;
+
+	assert(cson != NULL);
+	offset = compose_property_name(cson);
+	ft_strncpy(g_validation_buffer + offset, key, SIZE - offset);
+	offset += ft_strlen(key);
+	ft_strncpy(g_validation_buffer + offset, ": ", SIZE - offset);
+	offset += 2;
+	ft_strncpy(g_validation_buffer + offset, message, SIZE - offset);
+	log_error(g_validation_buffer, err_code);
+	return (err_code);
+}
+
 t_err_code		validation_set_optional(const t_cson *cson,
 const char *key, const char *default_value_str)
 {

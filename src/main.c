@@ -30,6 +30,6 @@ int			main(void)
 	window_loop();
 	window_cleanup();
 	scene_cleanup();
-	// renderer_cleanup();
+	// renderer_cleanup(); // TODO: uncomment on release
 	return (EXIT_SUCCESS);
 }
