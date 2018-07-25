@@ -18,5 +18,7 @@
 # include <SDL_image.h>
 
 SDL_Surface	*load_surface(const char *path);
+cl_mem		create_climage(const cl_image_format format,
+const cl_image_desc desc, void *pixels);
 
 #endif

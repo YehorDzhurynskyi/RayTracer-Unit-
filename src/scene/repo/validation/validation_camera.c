@@ -23,7 +23,7 @@ t_err_code	validate_camera(const t_cson *cson)
 
 	camera_cson = cson_valueof(cson, CSON_CAMERA_KEY);
 	if (camera_cson == NULL)
-		return (validation_failed(cson, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
+		return (validation_failed_parent(cson, CSON_CAMERA_KEY, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
 	if (cson_is_object(camera_cson) == FALSE)
 		return (validation_failed(camera_cson, RT_WRONG_VALUE_FORMAT_ERROR, FORMAT_MSG));
 	err = validate_vec3_required(camera_cson, CSON_POSITION_KEY, FALSE);

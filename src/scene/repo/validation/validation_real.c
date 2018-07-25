@@ -20,12 +20,12 @@
 
 t_err_code	validate_real_required(const t_cson *cson, const char *key)
 {
-	return (validate_real_required_ranged(cson, key, (double[2]){DBL_MIN, DBL_MAX}));
+	return (validate_real_required_ranged(cson, key, (double[2]){-DBL_MAX, DBL_MAX}));
 }
 
 t_err_code	validate_real_optional(const t_cson *cson, const char *key, const char *default_value_str)
 {
-	return (validate_real_optional_ranged(cson, key, (double[2]){DBL_MIN, DBL_MAX}, default_value_str));
+	return (validate_real_optional_ranged(cson, key, (double[2]){-DBL_MAX, DBL_MAX}, default_value_str));
 }
 
 t_err_code	validate_real_required_ranged(const t_cson *cson, const char *key, const double range[2])

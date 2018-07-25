@@ -15,7 +15,7 @@
 #include <dirent.h>
 #include "logger.h"
 
-static cl_image_format	image_format(void)
+static cl_image_format	skybox_image_format(void)
 {
 	cl_image_format	format;
 
@@ -24,14 +24,14 @@ static cl_image_format	image_format(void)
 	return (format);
 }
 
-static cl_image_desc	image_desc(const SDL_Surface *surface)
+static cl_image_desc	skybox_image_desc(int width, int height, int arr_size)
 {
 	cl_image_desc	desc;
 
 	desc.image_type = CL_MEM_OBJECT_IMAGE2D_ARRAY;
-	desc.image_width = surface->w;
-	desc.image_height = surface->h;
-	desc.image_array_size = 6;
+	desc.image_width = width;
+	desc.image_height = height;
+	desc.image_array_size = arr_size;
 	desc.image_row_pitch = 0;
 	desc.image_slice_pitch = 0;
 	desc.num_mip_levels = 0;
@@ -70,35 +70,32 @@ static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 	closedir(dir);
 }
 
-#include <assert.h>
+static cl_mem	null_skybox(void)
+{
+	return (create_climage(skybox_image_format(), skybox_image_desc(1, 1, 1), (unsigned int[]){0x0}));
+}
 
 cl_mem	load_skybox(const char *dirname)
 {
-	SDL_Surface		*surfaces[6];
-	void			*pixels;
-	int				i;
-	int				err;
-	cl_image_format	format;
-	cl_image_desc	desc;
-	cl_mem			mem_obj;
+	SDL_Surface	*surfaces[6];
+	void		*pixels;
+	int			i;
+	cl_mem		mem_obj;
+	size_t		tex_size;
 
-	assert(dirname != NULL);
+	if (dirname == NULL)
+		return (null_skybox());
 	load_skybox_surfaces(dirname, surfaces);
-	format = image_format();
-	desc = image_desc(surfaces[0]);
-	pixels = malloc(6 * 4 * desc.image_width * desc.image_height);
-	i = 0;
-	while (i < 6)
+	tex_size = 4 * surfaces[0]->w * surfaces[0]->h;
+	pixels = malloc(6 * tex_size);
+	i = -1;
+	while (++i < 6)
 	{
 		SDL_LockSurface(surfaces[i]);
-		ft_memcpy(pixels + i * (desc.image_width * 4 * desc.image_height), surfaces[i]->pixels, desc.image_width * 4 * desc.image_height);
+		ft_memcpy(pixels + i * tex_size, surfaces[i]->pixels, tex_size);
 		SDL_UnlockSurface(surfaces[i]);
-		i++;
 	}
-	mem_obj = clCreateImage(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
-	&format, &desc, (unsigned int[]){0x0}, &err);
-	if (err != CL_SUCCESS)
-		log_error(opencl_get_error(err), RT_OPENCL_ERROR);
+	mem_obj = create_climage(skybox_image_format(), skybox_image_desc(surfaces[0]->w, surfaces[0]->h, 6), pixels);
 	free(pixels);
 	i = 0;
 	while (i < 6)

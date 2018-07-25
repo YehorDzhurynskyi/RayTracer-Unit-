@@ -1,37 +1,38 @@
 ambient: 0.1
-# "anti aliasing": "4xSSAA"
+# "anti_aliasing": "4xSSAA"
+# skybox: "default"
 camera:
 	position: [0.0 2.0 30.0]
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
 materials: [
 	{
-		"diffuse color": "0x00ffd700"
-		"specular color": "0x00ffd700"
+		"diffuse_color": "0x00ffd700"
+		"specular_color": "0x00ffd700"
 		glossiness: 0.4
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x000000ff"
-		"specular color": "0x00555555"
+		"diffuse_color": "0x000000ff"
+		"specular_color": "0x00555555"
 		glossiness: 1.0
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00a1abba"
-		"specular color": "0x00a1abba"
+		"diffuse_color": "0x00a1abba"
+		"specular_color": "0x00a1abba"
 		glossiness: 0.3
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00555555"
-		"specular color": "0x00555555"
+		"diffuse_color": "0x00555555"
+		"specular_color": "0x00555555"
 		glossiness: 0.3
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00eeeeee"
-		"specular color": "0x00eeeeee"
+		"diffuse_color": "0x00eeeeee"
+		"specular_color": "0x00eeeeee"
 		glossiness: 0.5
 		ior: 1.0
 	}
@@ -49,38 +50,38 @@ shapes: [
 			limitations: [
 				{
 					type: "y-axis"
-					"is relative": true
-					"apply if less": true
+					"is_relative": true
+					"apply_if_less": true
 					limit: -1.0
 				}
 				{
 					type: "y-axis"
-					"is relative": true
-					"apply if less": false
+					"is_relative": true
+					"apply_if_less": false
 					limit: 1.0
 				}
 				{
 					type: "x-axis"
-					"is relative": true
-					"apply if less": false
+					"is_relative": true
+					"apply_if_less": false
 					limit: 1.0
 				}
 				{
 					type: "x-axis"
-					"is relative": true
-					"apply if less": true
+					"is_relative": true
+					"apply_if_less": true
 					limit: -1.0
 				}
 				{
 					type: "z-axis"
-					"is relative": true
-					"apply if less": true
+					"is_relative": true
+					"apply_if_less": true
 					limit: -1.0
 				}
 				{
 					type: "z-axis"
-					"is relative": true
-					"apply if less": false
+					"is_relative": true
+					"apply_if_less": false
 					limit: 1.0
 				}
 			]

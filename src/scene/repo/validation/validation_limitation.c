@@ -31,7 +31,7 @@ static t_err_code	validate_limitation_type(const t_cson *cson)
 		return (validation_failed(cson, RT_NO_REQUIRED_VALUE_ERROR, TYPE_ABSENT_MSG));
 	if (cson_is_string(type_cson) == FALSE)
 		return (validation_failed(type_cson, RT_WRONG_VALUE_FORMAT_ERROR, TYPE_FORMAT_MSG));
-	type = cson_get_string(cson);
+	type = cson_get_string(type_cson);
 	if (ft_strequ(type, CSON_X_AXIS_KEY)
 	|| ft_strequ(type, CSON_Y_AXIS_KEY)
 	|| ft_strequ(type, CSON_Z_AXIS_KEY))
@@ -41,15 +41,14 @@ static t_err_code	validate_limitation_type(const t_cson *cson)
 
 t_err_code	validate_limitation(const t_cson *cson)
 {
-	const char		*type;
-	t_err_code		err;
+	const char	*type;
+	t_err_code	err;
 
 	if (cson_is_object(cson) == FALSE)
 		return (validation_failed(cson, RT_WRONG_VALUE_FORMAT_ERROR, ITEM_FORMAT_MSG));
 	err = validate_limitation_type(cson);
 	err |= validate_bool_optional(cson, CSON_IS_RELATIVE_KEY, "TRUE");
 	err |= validate_bool_optional(cson, CSON_CUTTING_KEY, "TRUE");
-	err |= validate_bool_optional(cson, CSON_APPLY_IF_LESS_KEY, "FALSE");
 	type = cson_get_string(cson_valueof(cson, CSON_TYPE_KEY));
 	if (ft_strequ(type, CSON_X_AXIS_KEY)
 	|| ft_strequ(type, CSON_Y_AXIS_KEY)
@@ -60,7 +59,11 @@ t_err_code	validate_limitation(const t_cson *cson)
 
 t_err_code	validate_axial_limitation(const t_cson *cson)
 {
-	return (validate_real_required(cson, CSON_LIMIT_KEY));
+	t_err_code	err;
+
+	err = validate_bool_required(cson, CSON_APPLY_IF_LESS_KEY);
+	err |= validate_real_required(cson, CSON_LIMIT_KEY);
+	return (err);
 }
 
 t_err_code	validate_limitations(const t_cson *cson)

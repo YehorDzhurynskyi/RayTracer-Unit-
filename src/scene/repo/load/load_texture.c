@@ -13,7 +13,7 @@
 #include "texture.h"
 #include "logger.h"
 
-static cl_image_format	image_format(void)
+static cl_image_format	texture_image_format(void)
 {
 	cl_image_format	format;
 
@@ -22,13 +22,13 @@ static cl_image_format	image_format(void)
 	return (format);
 }
 
-static cl_image_desc	image_desc(const SDL_Surface *surface)
+static cl_image_desc	texture_image_desc(int width, int height)
 {
 	cl_image_desc	desc;
 
 	desc.image_type = CL_MEM_OBJECT_IMAGE2D;
-	desc.image_width = surface->w;
-	desc.image_height = surface->h;
+	desc.image_width = width;
+	desc.image_height = height;
 	desc.image_array_size = 0;
 	desc.image_row_pitch = 0;
 	desc.image_slice_pitch = 0;
@@ -38,22 +38,28 @@ static cl_image_desc	image_desc(const SDL_Surface *surface)
 	return (desc);
 }
 
-cl_mem	load_texture(const char *path)
+cl_mem	create_climage(const cl_image_format format,
+const cl_image_desc desc, void *pixels)
 {
-	SDL_Surface		*surface;
-	cl_image_format	format;
-	cl_image_desc	desc;
-	cl_mem			mem_obj;
-	int				err;
+	cl_mem	mem_obj;
+	int		err;
 
-	surface = load_surface(path);
-	format = image_format();
-	desc = image_desc(surface);
-	SDL_LockSurface(surface);
-	mem_obj = clCreateImage(g_clcontext.context, CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY | CL_MEM_COPY_HOST_PTR,
-	&format, &desc, surface->pixels, &err);
+	mem_obj = clCreateImage(g_clcontext.context, CL_MEM_READ_ONLY
+	| CL_MEM_HOST_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, &format, &desc,
+	pixels, &err);
 	if (err != CL_SUCCESS)
 		log_error(opencl_get_error(err), RT_OPENCL_ERROR);
+	return (mem_obj);
+}
+
+cl_mem	load_texture(const char *path)
+{
+	SDL_Surface	*surface;
+	cl_mem		mem_obj;
+
+	surface = load_surface(path);
+	SDL_LockSurface(surface);
+	mem_obj = create_climage(texture_image_format(), texture_image_desc(surface->w, surface->h), surface->pixels);
 	SDL_UnlockSurface(surface);
 	SDL_FreeSurface(surface);
 	return (mem_obj);

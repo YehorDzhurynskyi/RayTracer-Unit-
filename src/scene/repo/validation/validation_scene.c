@@ -58,7 +58,7 @@ t_err_code	validate_scene(const t_cson *cson)
 	t_err_code	err;
 
 	err = RT_NO_ERROR;
-	assert(cson_valueof(cson, CSON_SKYBOX_KEY) != NULL); // TODO: validate skybox textures
+	// TODO: validate skybox textures
 	err |= validate_real_optional_ranged(cson, CSON_AMBIENT_KEY, (double[2]){0.0, 1.0}, AMBIENT_STR);
 	err |= validate_real_optional_ranged(cson, CSON_FOV_KEY, (double[2]){0.0, 180.0}, FOV_STR);
 	err |= validate_array(cson_valueof(cson, CSON_MATERIALS_KEY), MATERIALBUFF_TARGET);

@@ -54,6 +54,7 @@ t_err_code	validate_orientation_required(const t_cson *cson, const char *key);
 t_err_code	validate_orientation_optional(const t_cson *cson, const char *key, const char *default_angles_str);
 
 t_err_code	validation_failed(const t_cson *cson, t_err_code err_code, const char *message);
+t_err_code	validation_failed_parent(const t_cson *cson, const char *key, t_err_code err_code, const char *message);
 t_err_code	validation_set_optional(const t_cson *cson, const char *key, const char *default_value_str);
 
 #endif

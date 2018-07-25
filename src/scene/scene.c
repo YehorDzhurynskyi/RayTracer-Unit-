@@ -93,10 +93,10 @@ void						scene_rewind(t_scene *scene)
 
 void						scene_change(const char *scene_name)
 {
+	g_should_redraw_scene = FALSE;
 	if (RT_NO_ERROR != load_scene(&g_main_scene, scene_name))
 	{
 		log_error("Failed to load scene", RT_RESOURCE_LOADING_ERROR);
-		window_warning("Scene loading error", "Scene file has some errors (see information log)");
 	}
 	else
 	{

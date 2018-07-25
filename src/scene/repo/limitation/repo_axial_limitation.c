@@ -24,8 +24,7 @@ t_axial_limitation	deserialize_axial_limitation(const t_cson *cson)
 {
 	t_axial_limitation	axial;
 
-	axial.apply_if_less = cson_get_default_boolean(
-		cson_valueof(cson, CSON_APPLY_IF_LESS_KEY), FALSE);
+	axial.apply_if_less = deserialize_bool_required(cson_valueof(cson, CSON_APPLY_IF_LESS_KEY));
 	axial.limit = deserialize_real_required(cson_valueof(cson, CSON_LIMIT_KEY));
 	return (axial);
 }
