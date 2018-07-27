@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
+/*   repo_int.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sceneiterator.h"
+#include "scenerepo.h"
 
-t_iterator			material_begin(const t_scene *scene)
+cl_int	deserialize_int_required(const t_cson *cson)
 {
-	return ((t_iterator){scene->meta.nmaterials, scene->host_materialbuffer});
+	return (cson_get_integer(cson));
 }
 
-const t_material	*material_next(t_iterator *iterator)
+cl_int	deserialize_int_optional(const t_cson *cson, const cl_int default_value)
 {
-	const t_material	*current;
-
-	current = (const t_material*)iterator->current;
-	iterator->current += sizeof(t_material);
-	--iterator->count;
-	return (current);
+	if (cson == NULL)
+		return (default_value);
+	return (deserialize_int_required(cson));
 }

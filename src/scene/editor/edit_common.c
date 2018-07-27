@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lightsource.c                                      :+:      :+:    :+:   */
+/*   edit_common.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -32,10 +32,24 @@ size_t *buffer_capacity, t_buff_target target)
 		*buffer_size = scene->meta.materials_size;
 		*buffer_capacity = MATERIALBUFF_CAPACITY;
 	}
+	else if (target == TEXTUREBUFF_TARGET)
+	{
+		*buffer_size = scene->meta.textures_size;
+		*buffer_capacity = TEXTUREBUFF_CAPACITY;
+	}
 	else
 	{
 		assert("Unrecognized target" == NULL);
 	}
+}
+
+void	scenebuffer_put(t_scene *scene, const void *data, int offset, size_t size)
+{
+	assert(scene->mapped_device_buffer != NULL);
+	assert(scene->mapped_host_buffer != NULL);
+
+	ft_memcpy(scene->mapped_device_buffer + offset, data, size);
+	ft_memcpy(scene->mapped_host_buffer + offset, data, size);
 }
 
 void	scenebuffer_append(t_scene *scene, const void *data, size_t size, t_buff_target target)
@@ -55,9 +69,10 @@ void	scenebuffer_append(t_scene *scene, const void *data, size_t size, t_buff_ta
 		scene->meta.lightsources_size += size;
 	else if (target == MATERIALBUFF_TARGET)
 		scene->meta.materials_size += size;
-	ft_memcpy(scene->mapped_device_buffer, data, size);
+	else if (target == TEXTUREBUFF_TARGET)
+		scene->meta.textures_size += size;
+	scenebuffer_put(scene, data, 0, size);
 	scene->mapped_device_buffer += size;
-	ft_memcpy(scene->mapped_host_buffer, data, size);
 	scene->mapped_host_buffer += size;
 }
 

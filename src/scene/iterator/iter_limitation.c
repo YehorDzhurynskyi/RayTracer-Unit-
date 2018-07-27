@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shader.h                                           :+:      :+:    :+:   */
+/*   iter_limitation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,23 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADER_H
-# define SHADER_H
+#include "sceneiterator.h"
 
-typedef struct s_fragment	t_fragment;
-struct			s_fragment
+t_iterator			limitation_begin(const t_primitive *primitive)
 {
-	t_vec4		point;
-	t_vec4		normal;
-	t_vec4		to_eye;
-	t_rcolor	diffuse_albedo;
-	t_rcolor	specular_albedo;
-	t_scalar	glossiness;
-};
+	return ((t_iterator){primitive->nlimitations, primitive_skip(primitive)});
+}
 
-t_rcolor		shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
-const t_scene_buffers *buffers, __read_only image2d_array_t textures, __constant t_shape *shape);
-void			obtain_uv(__constant t_primitive *primitive,
-const t_vec4 *point, const t_vec4 *normal, t_scalar *u, t_scalar *v);
+const t_limitation	*limitation_next(t_iterator *iterator)
+{
+	const t_limitation	*current = (const t_limitation*)iterator->current;
+	iterator->current = limitation_skip(current);
+	--iterator->count;
+	return (current);
+}
 
-#endif
+const t_byte		*limitation_get_actual(const t_limitation *limitation)
+{
+	return ((const t_byte*)++limitation);
+}

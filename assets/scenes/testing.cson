@@ -3,6 +3,7 @@ ambient: 0.15
 "global_illumination": false
 "trace_depth": 15
 fov: 60.0
+# skybox: "default"
 camera:
 	position: [0.0 0.0 10.0]
 	forward: [0.0 0.0 -1.0]
@@ -16,9 +17,9 @@ materials: [
 		ior: 1.0
 	}
 	{
-		"diffuse_color": "0x0000ffff"
-		"specular_color": "0x0000ffff"
-		glossiness: 0.0
+		"diffuse_color": "0xaa00ffff"
+		"specular_color": "0x00ffffff"
+		glossiness: 0.7
 		ior: 1.0
 	}
 ]

@@ -35,7 +35,6 @@ static t_err_code	validate_array(const t_cson *arr_cson, t_buff_target target)
 	i = 0;
 	while (i < count)
 	{
-		// TODO: add texture buffer target
 		cson_item = cson_at(arr_cson, i++);
 		if (cson_item == NULL)
 			err |= validation_failed(cson_item, RT_VALUE_PARSING_ERROR, ITEM_ABSNET);
@@ -47,6 +46,8 @@ static t_err_code	validate_array(const t_cson *arr_cson, t_buff_target target)
 			err |= validate_lightsource(cson_item);
 		else if (target == MATERIALBUFF_TARGET)
 			err |= validate_material(cson_item);
+		else if (target == TEXTUREBUFF_TARGET)
+			err |= validate_texture(cson_item);
 	}
 	return (err);
 }
@@ -64,6 +65,7 @@ t_err_code	validate_scene(const t_cson *cson)
 	err |= validate_array(cson_valueof(cson, CSON_MATERIALS_KEY), MATERIALBUFF_TARGET);
 	err |= validate_array(cson_valueof(cson, CSON_LIGHTSOURCES_KEY), LIGHTSOURCEBUFF_TARGET);
 	err |= validate_array(cson_valueof(cson, CSON_SHAPES_KEY), SHAPEBUFF_TARGET);
+	err |= validate_array(cson_valueof(cson, CSON_TEXTURES_KEY), TEXTUREBUFF_TARGET);
 	err |= validate_camera(cson);
 	return (err);
 }

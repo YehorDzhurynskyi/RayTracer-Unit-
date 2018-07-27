@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lightsource.c                                      :+:      :+:    :+:   */
+/*   edit_material.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,16 +11,15 @@
 /* ************************************************************************** */
 
 #include "sceneeditor.h"
-#include <assert.h>
 
-void	scenebuffer_add_shape(t_scene *scene, t_shape *shape, t_bool is_child)
+void	scenebuffer_add_material(t_scene *scene, t_material *material)
 {
-	shape->addr = scene->meta.shapes_size;
-	if (shape->material_addr < 0 || shape->material_addr >= scene->meta.nmaterials)
-		shape->material_addr = DEFAULT_MATERIAL_ID;
-	if (shape->material_addr != DEFAULT_MATERIAL_ID)
-		shape->material_addr *= sizeof(t_material);
-	scenebuffer_append(scene, shape, sizeof(t_shape), SHAPEBUFF_TARGET);
-	if (!is_child)
-		scene->meta.nshapes++;
+	material->addr = scene->meta.materials_size;
+	scenebuffer_append(scene, material, sizeof(t_material), MATERIALBUFF_TARGET);
+	scene->meta.nmaterials++;
+}
+
+void	scenebuffer_update_material(t_scene *scene, const t_material *material)
+{
+	scenebuffer_put(scene, (void*)material, material->addr, sizeof(t_material));
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shader.h                                           :+:      :+:    :+:   */
+/*   edit_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,23 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADER_H
-# define SHADER_H
+#include "sceneeditor.h"
+#include <assert.h>
 
-typedef struct s_fragment	t_fragment;
-struct			s_fragment
+static inline size_t	texture_sizeof(t_texture_type type)
 {
-	t_vec4		point;
-	t_vec4		normal;
-	t_vec4		to_eye;
-	t_rcolor	diffuse_albedo;
-	t_rcolor	specular_albedo;
-	t_scalar	glossiness;
-};
+	if (type == CHESS)
+		return (sizeof(t_chess_texture));
+	else if (type == CLIMAGE)
+		return (sizeof(t_climage_texture));
+	assert(FALSE && "Texture structure instance should have texture_type field");
+	return (0);
+}
 
-t_rcolor		shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
-const t_scene_buffers *buffers, __read_only image2d_array_t textures, __constant t_shape *shape);
-void			obtain_uv(__constant t_primitive *primitive,
-const t_vec4 *point, const t_vec4 *normal, t_scalar *u, t_scalar *v);
-
-#endif
+void	scenebuffer_add_texture(t_scene *scene,
+t_texture *texture, const void *actual_texture)
+{
+	texture->addr = scene->meta.textures_size;
+	scenebuffer_append(scene, texture, sizeof(t_texture), TEXTUREBUFF_TARGET);
+	scenebuffer_append(scene, actual_texture,
+	texture_sizeof(texture->texture_type), TEXTUREBUFF_TARGET);
+	scene->meta.ntextures++;
+}

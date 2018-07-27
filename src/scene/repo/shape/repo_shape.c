@@ -31,8 +31,7 @@ t_shape	deserialize_shape(const t_cson *cson)
 
 	shape.relation_type = recognize_relation_type(cson_valueof(cson, CSON_RELATION_KEY));
 	shape.nchildren = 0;
-	shape.material_addr = cson_get_default_integer(
-		cson_valueof(cson, CSON_MATERIAL_KEY), DEFAULT_MATERIAL_ID);
+	shape.material_addr = deserialize_int_optional(cson_valueof(cson, CSON_MATERIAL_KEY), DEFAULT_MATERIAL_ID);
 	return (shape);
 }
 

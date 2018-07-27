@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lightsource.c                                      :+:      :+:    :+:   */
+/*   iter_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,27 +12,19 @@
 
 #include "sceneiterator.h"
 
-t_iterator			lightsource_begin(const t_scene *scene)
+t_iterator		texture_begin(const t_scene *scene)
 {
-	return ((t_iterator){scene->meta.nlightsources, scene->host_lightsourcebuffer});
+	return ((t_iterator){scene->meta.ntextures, scene->host_texturebuffer});
 }
 
-const t_lightsource	*lightsource_next(t_iterator *iterator)
+const t_texture	*texture_next(t_iterator *iterator)
 {
-	const t_lightsource	*current = (const t_lightsource*)iterator->current;
-	iterator->current = lightsource_skip(current);
-	if (current->lightsource_type == POINTLIGHT || current->lightsource_type == SPOTLIGHT)
-	{
-		t_iterator limitation_iter = limitation_begin((const t_primitive*)iterator->current);
-		while (has_next(&limitation_iter))
-			limitation_next(&limitation_iter);
-		iterator->current = limitation_iter.current;
-	}
+	const t_texture	*current = (const t_texture*)iterator->current;
+	iterator->current = (const t_byte*)(current + 1);
+	if (current->texture_type == CHESS)
+		iterator->current += sizeof(t_chess_texture);
+	else if (current->texture_type == CLIMAGE)
+		iterator->current += sizeof(t_climage_texture);
 	--iterator->count;
 	return (current);
-}
-
-const t_byte		*lightsource_get_actual(const t_lightsource *lightsource)
-{
-	return ((const t_byte*)++lightsource);
 }

@@ -44,15 +44,16 @@ typedef struct			__attribute__ ((packed))
 	uint				lightsources_size;
 	int					nmaterials;
 	uint				materials_size;
+	int					ntextures;
+	uint				textures_size;
 }	t_scenebuffer_meta;
 
 typedef struct
 {
-	__constant t_byte			*shapebuffer;
-	__constant t_byte			*lightsourcebuffer;
-	__constant t_byte			*materialbuffer;
-	int							width;
-	int							height;
+	__constant t_byte	*shapebuffer;
+	__constant t_byte	*lightsourcebuffer;
+	__constant t_byte	*materialbuffer;
+	__constant t_byte	*texturebuffer;
 }	t_scene_buffers;
 
 typedef struct
@@ -60,6 +61,10 @@ typedef struct
 	t_scene_config		config;
 	t_scenebuffer_meta	meta;
 	t_camera			camera;
+	int					x;
+	int					y;
+	int					width;
+	int					height;
 }	t_scene;
 
 #endif

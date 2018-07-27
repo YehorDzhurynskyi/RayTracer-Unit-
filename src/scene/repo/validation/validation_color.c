@@ -38,7 +38,7 @@ static t_err_code	validate_color_str(const t_cson *color_cson)
 	return (RT_NO_ERROR);
 }
 
-t_err_code			validate_color_requried(const t_cson *cson, const char *key)
+t_err_code			validate_color_required(const t_cson *cson, const char *key)
 {
 	const t_cson	*color_cson;
 

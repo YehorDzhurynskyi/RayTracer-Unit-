@@ -15,6 +15,7 @@
 
 # include "scene.h"
 # include "limitation.h"
+# include "texture.h"
 
 typedef struct
 {
@@ -26,11 +27,13 @@ t_iterator			shape_begin(const t_scene *scene);
 t_iterator			lightsource_begin(const t_scene *scene);
 t_iterator			material_begin(const t_scene *scene);
 t_iterator			limitation_begin(const t_primitive *primitive);
+t_iterator			texture_begin(const t_scene *scene);
 
 const t_shape		*shape_next(t_iterator *iterator);
 const t_lightsource	*lightsource_next(t_iterator *iterator);
 const t_material	*material_next(t_iterator *iterator);
 const t_limitation	*limitation_next(t_iterator *iterator);
+const t_texture		*texture_next(t_iterator *iterator);
 
 t_bool				has_next(const t_iterator *iterator);
 

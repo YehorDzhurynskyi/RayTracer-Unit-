@@ -12,7 +12,6 @@
 
 #include "scenerepo.h"
 #include "sceneeditor.h"
-#include <assert.h>
 
 static void	load_actual_lightsource(t_scene *scene,
 const t_cson *lightsrc_cson, t_lightsource *lightsrc)

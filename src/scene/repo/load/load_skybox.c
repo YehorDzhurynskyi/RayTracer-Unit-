@@ -63,7 +63,7 @@ static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 		|| ft_str_ends_with(ent->d_name, ".png") || ft_str_ends_with(ent->d_name, ".PNG"))
 		{
 			ft_strncpy(path + dir_offset, ent->d_name, RT_GUI_RESOURCE_PATH_BUFF_LEN - dir_offset);
-			surfaces[i] = load_surface(path);
+			surfaces[i] = create_surface(path);
 			i++;
 		}
 	}
@@ -72,7 +72,7 @@ static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 
 static cl_mem	null_skybox(void)
 {
-	return (create_climage(skybox_image_format(), skybox_image_desc(1, 1, 1), (unsigned int[]){0x0}));
+	return (create_image(skybox_image_format(), skybox_image_desc(1, 1, 1), (unsigned int[]){0x0}));
 }
 
 cl_mem	load_skybox(const char *dirname)
@@ -95,7 +95,7 @@ cl_mem	load_skybox(const char *dirname)
 		ft_memcpy(pixels + i * tex_size, surfaces[i]->pixels, tex_size);
 		SDL_UnlockSurface(surfaces[i]);
 	}
-	mem_obj = create_climage(skybox_image_format(), skybox_image_desc(surfaces[0]->w, surfaces[0]->h, 6), pixels);
+	mem_obj = create_image(skybox_image_format(), skybox_image_desc(surfaces[0]->w, surfaces[0]->h, 6), pixels);
 	free(pixels);
 	i = 0;
 	while (i < 6)

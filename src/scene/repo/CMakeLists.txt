@@ -8,11 +8,13 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/load/load_shape.c"
 	"${CMAKE_CURRENT_LIST_DIR}/load/load_primitive.c"
 	"${CMAKE_CURRENT_LIST_DIR}/load/load_texture.c"
+	"${CMAKE_CURRENT_LIST_DIR}/load/load_cltextures.c"
 	"${CMAKE_CURRENT_LIST_DIR}/load/load_skybox.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/common/repo_vector.c"
 	"${CMAKE_CURRENT_LIST_DIR}/common/repo_orientation.c"
 	"${CMAKE_CURRENT_LIST_DIR}/common/repo_real.c"
+	"${CMAKE_CURRENT_LIST_DIR}/common/repo_int.c"
 	"${CMAKE_CURRENT_LIST_DIR}/common/repo_bool.c"
 	"${CMAKE_CURRENT_LIST_DIR}/common/repo_color.c"
 
@@ -31,9 +33,16 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_dirlightsource.c"
 	"${CMAKE_CURRENT_LIST_DIR}/lightsource/repo_spotlightsource.c"
 
+	"${CMAKE_CURRENT_LIST_DIR}/texture/repo_texture.c"
+	"${CMAKE_CURRENT_LIST_DIR}/texture/repo_chess_texture.c"
+	"${CMAKE_CURRENT_LIST_DIR}/texture/repo_climage_texture.c"
+
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_bool.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_string.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_int.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_camera.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_color.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_texture.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_common.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_lightsource.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_limitation.c"

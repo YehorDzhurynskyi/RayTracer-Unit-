@@ -69,7 +69,6 @@ void		gui_choose_opencl_device(void)
 		if (nk_button_label(g_nk_context, "Compile") && active >= 0)
 		{
 			render_widget = FALSE;
-			gui_loading_start("Compiling kernel...");
 			pthread_create(&renderer_init_thread, NULL, (void* (*)(void*))renderer_init, NULL);
 			pthread_detach(renderer_init_thread);
 		}

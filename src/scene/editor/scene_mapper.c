@@ -33,6 +33,11 @@ void ***host_buffer, t_buff_target target)
 		*device_buffer = &scene->device_materialbuffer;
 		*host_buffer = &scene->host_materialbuffer;
 	}
+	else if (target == TEXTUREBUFF_TARGET)
+	{
+		*device_buffer = &scene->device_texturebuffer;
+		*host_buffer = &scene->host_texturebuffer;
+	}
 	else
 	{
 		assert("Unrecognized target" == NULL);

@@ -66,7 +66,7 @@ t_err_code	validate_lightsource(const t_cson *cson)
 
 	err = validate_lightsource_type(cson);
 	err |= validate_primitive(cson);
-	err |= validate_color_requried(cson, CSON_COLOR_KEY);
+	err |= validate_color_required(cson, CSON_COLOR_KEY);
 	err |= validate_real_required(cson, CSON_INTENSITY_KEY);
 	type = cson_get_string(cson_valueof(cson, CSON_TYPE_KEY));
 	if (ft_strequ(type, CSON_LIGHT_DIRECTIONAL))

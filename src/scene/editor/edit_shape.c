@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lightsource.c                                      :+:      :+:    :+:   */
+/*   edit_shape.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,24 +13,14 @@
 #include "sceneeditor.h"
 #include <assert.h>
 
-static inline size_t	lightsource_sizeof(t_lightsource_type type)
+void	scenebuffer_add_shape(t_scene *scene, t_shape *shape, t_bool is_child)
 {
-	if (type == DIRLIGHT)
-		return (sizeof(t_dirlightsource));
-	else if (type == POINTLIGHT)
-		return (sizeof(t_pointlightsource));
-	else if (type == SPOTLIGHT)
-		return (sizeof(t_spotlightsource));
-	assert(FALSE && "Light structure instance should have lighttype field");
-	return (0);
-}
-
-void	scenebuffer_add_lightsource(t_scene *scene,
-t_lightsource *lightsource, const void *actual_lightsource)
-{
-	lightsource->addr = scene->meta.lightsources_size;
-	scenebuffer_append(scene, lightsource, sizeof(t_lightsource), LIGHTSOURCEBUFF_TARGET);
-	scenebuffer_append(scene, actual_lightsource,
-	lightsource_sizeof(lightsource->lightsource_type), LIGHTSOURCEBUFF_TARGET);
-	scene->meta.nlightsources++;
+	shape->addr = scene->meta.shapes_size;
+	if (shape->material_addr < 0 || shape->material_addr >= scene->meta.nmaterials)
+		shape->material_addr = DEFAULT_MATERIAL_ID;
+	if (shape->material_addr != DEFAULT_MATERIAL_ID)
+		shape->material_addr *= sizeof(t_material);
+	scenebuffer_append(scene, shape, sizeof(t_shape), SHAPEBUFF_TARGET);
+	if (!is_child)
+		scene->meta.nshapes++;
 }

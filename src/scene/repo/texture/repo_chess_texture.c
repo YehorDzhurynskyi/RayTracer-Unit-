@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load_texture.c                                     :+:      :+:    :+:   */
+/*   repo_chess_texture.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,15 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "texture.h"
+#include "scenerepo.h"
+#include "sceneeditor.h"
 
-SDL_Surface	*load_surface(const char *path)
+t_chess_texture	deserialize_chess_texture(const t_cson *cson)
 {
-	SDL_Surface	*surface;
-	SDL_Surface	*converted_surface;
+	t_chess_texture	tex;
 
-	surface = IMG_Load(path);
-	converted_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
-	SDL_FreeSurface(surface);
-	return (converted_surface);
+	tex.color1 = deserialize_color_required(cson_valueof(cson, CSON_COLOR1_KEY));
+	tex.color2 = deserialize_color_required(cson_valueof(cson, CSON_COLOR2_KEY));
+	return (tex);
 }

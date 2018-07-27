@@ -21,14 +21,16 @@ t_alst		*alst_create(size_t capacity)
 	alst = (t_alst *)malloc(sizeof(t_alst));
 	if (!alst)
 		return (NULL);
+	alst_init(alst, capacity);
+	return (alst);
+}
+
+void		alst_init(t_alst *alst, size_t capacity)
+{
 	alst->capacity = capacity;
 	alst->size = 0;
 	alst->array = (void **)malloc(sizeof(void *) * capacity);
 	if (!(alst->array))
-	{
-		free(alst);
-		return (NULL);
-	}
+		return ;
 	ft_memset(alst->array, 0, sizeof(void *) * capacity);
-	return (alst);
 }

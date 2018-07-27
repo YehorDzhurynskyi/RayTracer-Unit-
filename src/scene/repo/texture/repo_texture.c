@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shader.h                                           :+:      :+:    :+:   */
+/*   repo_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,23 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADER_H
-# define SHADER_H
+#include "scenerepo.h"
+#include "sceneeditor.h"
 
-typedef struct s_fragment	t_fragment;
-struct			s_fragment
+static t_texture_type	recognize_texture_type(const char *type)
 {
-	t_vec4		point;
-	t_vec4		normal;
-	t_vec4		to_eye;
-	t_rcolor	diffuse_albedo;
-	t_rcolor	specular_albedo;
-	t_scalar	glossiness;
-};
+	if (ft_strequ(type, CSON_TEXTURE_CHESS))
+		return (CHESS);
+	else if (ft_strequ(type, CSON_TEXTURE_RESOURCE))
+		return (CLIMAGE);
+	return (0);
+}
 
-t_rcolor		shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
-const t_scene_buffers *buffers, __read_only image2d_array_t textures, __constant t_shape *shape);
-void			obtain_uv(__constant t_primitive *primitive,
-const t_vec4 *point, const t_vec4 *normal, t_scalar *u, t_scalar *v);
+t_texture				deserialize_texture(const t_cson *cson)
+{
+	t_texture	texture;
 
-#endif
+	texture.scale = deserialize_real_optional(cson_valueof(cson, CSON_SCALE_KEY), SCALE);
+	texture.u_offset = deserialize_real_optional(cson_valueof(cson, CSON_UOFFSET_KEY), UOFFSET);
+	texture.v_offset = deserialize_real_optional(cson_valueof(cson, CSON_VOFFSET_KEY), VOFFSET);
+	texture.texture_type = recognize_texture_type(cson_get_string(cson_valueof(cson, CSON_TYPE_KEY)));
+	return (texture);
+}

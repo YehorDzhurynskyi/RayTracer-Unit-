@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shape.c                                            :+:      :+:    :+:   */
+/*   iter_material.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,33 +12,17 @@
 
 #include "sceneiterator.h"
 
-t_iterator			shape_begin(const t_scene *scene)
+t_iterator			material_begin(const t_scene *scene)
 {
-	return ((t_iterator){scene->meta.nshapes, scene->host_shapebuffer});
+	return ((t_iterator){scene->meta.nmaterials, scene->host_materialbuffer});
 }
 
-const t_shape		*shape_next(t_iterator *iterator)
+const t_material	*material_next(t_iterator *iterator)
 {
-	const t_shape	*current = (const t_shape*)iterator->current;
-	int nchildren = current->nchildren;
-	while (nchildren-- >= 0)
-	{
-		iterator->current += sizeof(t_shape);
-		t_iterator limitation_iter = limitation_begin((const t_primitive*)iterator->current);
-		while (has_next(&limitation_iter))
-			limitation_next(&limitation_iter);
-		iterator->current = limitation_iter.current;
-		if (nchildren >= 0)
-		{
-			const t_shape	*child = (const t_shape*)iterator->current;
-			nchildren += child->nchildren;
-		}
-	}
+	const t_material	*current;
+
+	current = (const t_material*)iterator->current;
+	iterator->current += sizeof(t_material);
 	--iterator->count;
 	return (current);
-}
-
-const t_primitive	*shape_get_primitive(const t_shape *shape)
-{
-	return ((const t_primitive*)++shape);
 }

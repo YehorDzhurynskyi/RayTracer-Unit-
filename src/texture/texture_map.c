@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   limitation.c                                       :+:      :+:    :+:   */
+/*   texture_map.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "sceneiterator.h"
+#include "texture.h"
+#include <assert.h>
 
-t_iterator			limitation_begin(const t_primitive *primitive)
+t_texture_map	texture_map_create(int capacity)
 {
-	return ((t_iterator){primitive->nlimitations, primitive_skip(primitive)});
+	t_texture_map	map;
+
+	alst_init(&map.data, capacity);
+	return (map);
 }
 
-const t_limitation	*limitation_next(t_iterator *iterator)
+const char		*texture_map_at(const t_texture_map *map, int index)
 {
-	const t_limitation	*current = (const t_limitation*)iterator->current;
-	iterator->current = limitation_skip(current);
-	--iterator->count;
-	return (current);
+	assert(index >= 0 && index < (int)map->data.size);
+	return (alst_get((t_alst*)&map->data, index));
 }
 
-const t_byte		*limitation_get_actual(const t_limitation *limitation)
+void			texture_map_add(t_texture_map *map, const char *value)
 {
-	return ((const t_byte*)++limitation);
+	alst_add(&map->data, ft_strdup(value));
+}
+
+void			texture_map_cleanup(t_texture_map *map)
+{
+	alst_clear(&map->data, ft_memdel);
+	ft_memdel((void**)&map->data.array);
 }

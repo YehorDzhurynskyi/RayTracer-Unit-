@@ -12,7 +12,9 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/scene/scene.c"
 	"${CMAKE_CURRENT_LIST_DIR}/scene/camera.c"
 
-	"${CMAKE_CURRENT_LIST_DIR}/textures/load_surface.c"
+	"${CMAKE_CURRENT_LIST_DIR}/texture/create_surface.c"
+	"${CMAKE_CURRENT_LIST_DIR}/texture/create_image.c"
+	"${CMAKE_CURRENT_LIST_DIR}/texture/texture_map.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/utilities/logger.c"
 )

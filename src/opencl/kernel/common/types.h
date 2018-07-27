@@ -18,8 +18,6 @@ typedef unsigned char	t_byte;
 typedef int		t_address;
 # define NULL	((void*)0)
 
-typedef int		t_resourceid;
-
 typedef int		t_bool;
 # define TRUE	1
 # define FALSE	0

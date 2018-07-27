@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   material.c                                         :+:      :+:    :+:   */
+/*   repo_climage_texture.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,11 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "scenerepo.h"
 #include "sceneeditor.h"
 
-void	scenebuffer_add_material(t_scene *scene, t_material *material)
+t_climage_texture	deserialize_climage_texture(t_scene *scene, const t_cson *cson)
 {
-	material->addr = scene->meta.materials_size;
-	scenebuffer_append(scene, material, sizeof(t_material), MATERIALBUFF_TARGET);
-	scene->meta.nmaterials++;
+	t_climage_texture	tex;
+
+	tex.tex_index = scene->texture_map.data.size;
+	texture_map_add(&scene->texture_map, cson_get_string(cson_valueof(cson, CSON_URI_KEY)));
+	return (tex);
 }

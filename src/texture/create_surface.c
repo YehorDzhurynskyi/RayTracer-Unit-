@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shader.h                                           :+:      :+:    :+:   */
+/*   create_surface.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,23 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADER_H
-# define SHADER_H
+#include "texture.h"
+#include <SDL_image.h>
 
-typedef struct s_fragment	t_fragment;
-struct			s_fragment
+SDL_Surface	*create_surface(const char *path)
 {
-	t_vec4		point;
-	t_vec4		normal;
-	t_vec4		to_eye;
-	t_rcolor	diffuse_albedo;
-	t_rcolor	specular_albedo;
-	t_scalar	glossiness;
-};
+	SDL_Surface	*surface;
+	SDL_Surface	*converted_surface;
 
-t_rcolor		shade(const t_vec4 *point, const t_ray *ray, const t_scene *scene,
-const t_scene_buffers *buffers, __read_only image2d_array_t textures, __constant t_shape *shape);
-void			obtain_uv(__constant t_primitive *primitive,
-const t_vec4 *point, const t_vec4 *normal, t_scalar *u, t_scalar *v);
-
-#endif
+	surface = IMG_Load(path);
+	if (surface == NULL)
+		return (NULL);
+	converted_surface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGBA8888, 0);
+	SDL_FreeSurface(surface);
+	return (converted_surface);
+}

@@ -18,10 +18,12 @@
 # include "material.h"
 # include "limitation.h"
 # include "lightsource.h"
+# include "texture.h"
 
 void	scenebuffer_map(t_scene *scene, int offset, size_t size, t_buff_target target);
 void	scenebuffer_unmap(t_scene *scene, t_buff_target target);
 
+void	scenebuffer_put(t_scene *scene, const void *data, int offset, size_t size);
 void	scenebuffer_append(t_scene *scene,
 const void *data, size_t size, t_buff_target target);
 
@@ -33,5 +35,9 @@ void	scenebuffer_add_material(t_scene *scene, t_material *material);
 void	scenebuffer_add_shape(t_scene *scene, t_shape *shape, t_bool is_child);
 void	scenebuffer_add_limitation(t_scene *scene, const t_limitation *limitation,
 const void *actual_limitation, t_buff_target target);
+void	scenebuffer_add_texture(t_scene *scene,
+t_texture *texture, const void *actual_texture);
+
+void	scenebuffer_update_material(t_scene *scene, const t_material *material);
 
 #endif
