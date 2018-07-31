@@ -30,7 +30,7 @@ t_bool	plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_
 		const t_vec4 to_plane = ray->origin - primitive->position;
 		*t = sign * dot(to_plane, plane_normal);
 		*t /= denom;
-		return (*t > 0.0);
+		return (limit(primitive, ray, t, *t));
 	}
 	return (FALSE);
 }

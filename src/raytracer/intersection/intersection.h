@@ -23,4 +23,6 @@ t_bool	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float 
 t_bool	cylinder_intersected(const t_primitive *primitive, const t_ray *ray, float *t);
 t_bool	cone_intersected(const t_primitive *primitive, const t_ray *ray, float *t);
 
+t_bool	limit(const t_primitive *primitive, const t_ray *ray, float *target_t, const float t);
+
 #endif

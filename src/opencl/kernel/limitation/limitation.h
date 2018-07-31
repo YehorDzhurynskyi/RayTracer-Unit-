@@ -38,4 +38,7 @@ typedef struct			__attribute__ ((packed))
 	t_bool				apply_if_less;
 }	t_axial_limitation;
 
+t_bool limit(__constant t_primitive *primitive,
+const t_ray *ray, t_scalar *target_t, const t_scalar t);
+
 #endif

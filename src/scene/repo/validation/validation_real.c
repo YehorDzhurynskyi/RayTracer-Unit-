@@ -34,7 +34,7 @@ t_err_code	validate_real_required_ranged(const t_cson *cson, const char *key, co
 
 	real_cson = cson_valueof(cson, key);
 	if (real_cson == NULL)
-		return (validation_failed(cson, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
+		return (validation_failed_parent(cson, key, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
 	return (validate_real_optional_ranged(cson, key, range, ""));
 }
 

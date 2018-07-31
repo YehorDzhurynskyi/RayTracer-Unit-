@@ -3,8 +3,8 @@ camera:
 	spot: [0.0 0.0 0.0]
 	up: [0.0 1.0 0.0]
 skybox: "clouds"
-anti_aliasing: "4xSSAA"
-ambient: 0.4
+# anti_aliasing: "4xSSAA"
+ambient: 0.1
 textures: [
 	{
 		type: "resource"
@@ -28,8 +28,8 @@ textures: [
 	}
 	{
 		type: "chess"
-		color1: "0x00ff68b4"
-		color2: "0x00222222"
+		color1: "0x0068ffb4"
+		color2: "0x88ff6644"
 		scale: 13.0
 	}
 ]
@@ -41,10 +41,19 @@ materials: [
 		ior: 1.0
 	}
 	{
-		diffuse_texture: 0
-		specular_texture: 1
-		# normal_map: 2
-		glossiness_texture: 3
+		diffuse_color: "0x00C0C0C0"
+		specular_color: "0x00C0C0C0"
+		glossiness: 0.1
+		# diffuse_texture: 0
+		# specular_texture: 1
+		normal_map_texture: 2
+		# glossiness_texture: 3
+		ior: 1.0
+	}
+	{
+		diffuse_color: "0x00C0C0C0"
+		specular_color: "0x00C0C0C0"
+		glossiness: 1.0
 		ior: 1.0
 	}
 ]
@@ -55,7 +64,49 @@ shapes: [
 		primitive: {
 			type: "sphere"
 			position: [0.0 0.0 0.0]
+			orientation: [30.0 0.0 30.0]
 			radius: 3.0
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -1.0
+					cutting: true
+				}
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 1.0
+					cutting: true
+				}
+			]
+		}
+	}
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "cone"
+			angle: 15.0
+			position: [15.0 5.0 -10.0]
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: false
+					apply_if_less: true
+					limit: -5.0
+					cutting: true
+				}
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: -2.0
+					cutting: true
+				}
+			]
 		}
 	}
 	{
@@ -63,10 +114,79 @@ shapes: [
 		material: 1
 		primitive: {
 			type: "plane"
-			position: [0.0 0.0 -20.0]
-			orientation: [-90.0 0.0 0.0]
+			position: [0.0 -5.0 0.0]
+			orientation: [0.0 0.0 0.0]
+			limitations: [
+				{
+					type: "z-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 10.0
+					cutting: true
+				}
+				{
+					type: "z-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -25.0
+					cutting: true
+				}
+				{
+					type: "x-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -15.0
+					cutting: true
+				}
+				{
+					type: "x-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 25.0
+					cutting: true
+				}
+			]
 		}
 	}
+	# {
+	# 	relation: "union"
+	# 	material: 2
+	# 	primitive: {
+	# 		type: "plane"
+	# 		position: [0.0 15.0 0.0]
+	# 		orientation: [0.0 0.0 0.0]
+	# 		limitations: [
+	# 			{
+	# 				type: "z-axis"
+	# 				is_relative: true
+	# 				apply_if_less: false
+	# 				limit: 10.0
+	# 				cutting: true
+	# 			}
+	# 			{
+	# 				type: "z-axis"
+	# 				is_relative: true
+	# 				apply_if_less: true
+	# 				limit: -25.0
+	# 				cutting: true
+	# 			}
+	# 			{
+	# 				type: "x-axis"
+	# 				is_relative: true
+	# 				apply_if_less: true
+	# 				limit: -15.0
+	# 				cutting: true
+	# 			}
+	# 			{
+	# 				type: "x-axis"
+	# 				is_relative: true
+	# 				apply_if_less: false
+	# 				limit: 25.0
+	# 				cutting: true
+	# 			}
+	# 		]
+	# 	}
+	# }
 	{
 		relation: "union"
 		material: 0
@@ -75,19 +195,76 @@ shapes: [
 			position: [0.0 0.0 -10.0]
 			orientation: [-30.0 0.0 -30.0]
 			radius: 4.0
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 3.0
+					cutting: true
+				}
+				{
+					type: "y-axis"
+					is_relative: false
+					apply_if_less: true
+					limit: -5.0
+					cutting: true
+				}
+			]
 		}
 	}
 ]
 lightsources: [
 	{
 		type: "point"
-		position: [10.0 10.0 0.0]
-		attenuation: [1.0 0.0 0.0]
+		position: [-5.0 0.0 -15.0]
+		attenuation: [1.0 0.002 0.0004]
+		intensity: 1.0
+		color: "0x003333ff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+	{
+		type: "point"
+		position: [10.0 -4.0 -10.0]
+		attenuation: [1.0 0.002 0.0004]
 		intensity: 1.0
 		color: "0x00ffffff"
 		primitive: {
 			type: "point"
 			position: [0.0 0.0 0.0]
 		}
+	}
+	# {
+	# 	type: "point"
+	# 	position: [0.0 0.0 0.0]
+	# 	attenuation: [1.0 0.002 0.0004]
+	# 	intensity: 1.0
+	# 	color: "0x000000ff"
+	# 	primitive: {
+	# 		type: "point"
+	# 		position: [0.0 0.0 0.0]
+	# 	}
+	# }
+	# {
+	# 	type: "spot"
+	# 	position: [15.0 0.0 -10.0]
+	# 	attenuation: [1.0 0.002 0.0004]
+	# 	intensity: 1.0
+	# 	direction: [0.0 1.0 0.0]
+	# 	angle: 5.0
+	# 	color: "0x00ff0000"
+	# 	primitive: {
+	# 		type: "point"
+	# 		position: [0.0 0.0 0.0]
+	# 	}
+	# }
+	{
+		type: "directional"
+		direction: [-1.0 -1.0 0.0]
+		intensity: 0.4
+		color: "0x00ffffff"
 	}
 ]

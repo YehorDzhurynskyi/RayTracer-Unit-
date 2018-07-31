@@ -14,8 +14,3 @@ __constant t_material	*get_material(const t_scene_buffers *buffers, __constant t
 {
 	return ((__constant t_material*)(buffers->materialbuffer + shape->material_addr));
 }
-
-t_scalar	get_opacity(t_color color)
-{
-	return (1.0f - color.a / 255.0f);
-}

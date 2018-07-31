@@ -37,7 +37,7 @@ t_err_code	validate_spotlightsource(const t_cson *cson)
 
 	err = validate_pointlightsource(cson);
 	err |= validate_vec3_required(cson, CSON_DIRECTION_KEY, TRUE);
-	err |= validate_real_required(cson, CSON_ANGLE_KEY);
+	err |= validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 179.0f});
 	return (err);
 }
 
@@ -65,15 +65,18 @@ t_err_code	validate_lightsource(const t_cson *cson)
 	const char	*type;
 
 	err = validate_lightsource_type(cson);
-	err |= validate_primitive(cson);
 	err |= validate_color_required(cson, CSON_COLOR_KEY);
 	err |= validate_real_required(cson, CSON_INTENSITY_KEY);
 	type = cson_get_string(cson_valueof(cson, CSON_TYPE_KEY));
 	if (ft_strequ(type, CSON_LIGHT_DIRECTIONAL))
 		err |= validate_dirlightsource(cson);
-	else if (ft_strequ(type, CSON_LIGHT_POINT))
-		err |= validate_pointlightsource(cson);
-	else if (ft_strequ(type, CSON_LIGHT_SPOT))
-		err |= validate_spotlightsource(cson);
+	else if (ft_strequ(type, CSON_LIGHT_POINT) || ft_strequ(type, CSON_LIGHT_SPOT))
+	{
+		err |= validate_primitive(cson);
+		if (ft_strequ(type, CSON_LIGHT_POINT))
+			err |= validate_pointlightsource(cson);
+		else
+			err |= validate_spotlightsource(cson);
+	}
 	return (err);
 }

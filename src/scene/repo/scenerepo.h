@@ -175,7 +175,7 @@ t_cson				*serialize_spotlightsource(const t_spotlightsource *spotlightsource);
 t_cson				*serialize_vec3(const t_clvec3 *vec);
 t_cson				*serialize_color(const t_clcolor *color);
 
-# define AMBIENT		0.15
+# define AMBIENT		0.1
 # define FOV			60.0
 # define INTENSITY		1.0
 # define SPOT_ANGLE		20.0

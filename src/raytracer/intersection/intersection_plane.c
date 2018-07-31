@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere.c                                           :+:      :+:    :+:   */
+/*   intersection_plane.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,27 +11,35 @@
 /* ************************************************************************** */
 
 #include "intersection.h"
-#include "sceneiterator.h"
-#include <math.h>
 
-t_bool	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+static t_vec3d	plane_get_normal(const t_primitive *primitive)
 {
-	const t_sphere	*sphere;
-	t_vec3d			to_orig;
-	t_vec3d			position;
-	float			b;
-	float			d;
+	return ((t_vec3d){primitive->orientation.s4, primitive->orientation.s5, primitive->orientation.s6});
+}
+
+t_bool			plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+{
+	t_vec3d	plane_normal;
+	t_vec3d	to_plane;
+	t_vec3d	position;
+	float	denom;
+	float	sign;
 
 	position = opencl_vec4_to_vec3(primitive->position);
-	sphere = (const t_sphere*)primitive_get_actual(primitive);
-	to_orig = vec3d_sub(&ray->origin, &position);
-	b = vec3d_dot(&ray->direction, &to_orig);
-	d = b * b - (vec3d_dot(&to_orig, &to_orig) - sphere->radius2);
-	if (d < 0.0)
-		return (FALSE);
-	d = sqrt(d);
-	*t = -b - d;
-	if (*t < 0.0)
-		*t = -b + d;
-	return (*t > 0.0);
+	plane_normal = plane_get_normal(primitive);
+	denom = -vec3d_dot(&ray->direction, &plane_normal);
+	sign = 1.0f;
+	if (denom < 0.0f)
+	{
+		denom = -denom;
+		sign = -sign;
+	}
+	if (denom > 1e-6)
+	{
+		to_plane = vec3d_sub(&ray->origin, &position);
+		*t = sign * vec3d_dot(&to_plane, &plane_normal);
+		*t /= denom;
+		return (limit(primitive, ray, t, *t));
+	}
+	return (FALSE);
 }

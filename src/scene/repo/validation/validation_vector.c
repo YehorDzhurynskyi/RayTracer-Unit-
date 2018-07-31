@@ -24,7 +24,7 @@ t_err_code	validate_vec3_required(const t_cson *cson, const char *key, t_bool no
 
 	vec_cson = cson_valueof(cson, key);
 	if (vec_cson == NULL)
-		return (validation_failed(cson, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
+		return (validation_failed_parent(cson, key, RT_NO_REQUIRED_VALUE_ERROR, ABSENT_MSG));
 	return (validate_vec3_optional(cson, key, normalize, ""));
 }
 

@@ -17,17 +17,18 @@
 #include "common/color.cl"
 #include "scene/scene.h"
 #include "shading/texture.h"
-#include "limitation/limitation.h"
 #include "shape/shape.h"
+#include "shading/material.h"
+#include "shading/material.cl"
 #include "shading/shader.h"
 #include "lightsource/lightsource.h"
 #include "lightsource/illumination.h"
+#include "limitation/limitation.h"
 #include "scene/sceneiterator.h"
 #include "scene/sceneiterator.cl"
+#include "limitation/limitation.cl"
 #include "shape/intersection.h"
 #include "shape/normal.h"
-#include "shading/material.h"
-#include "shading/material.cl"
 #include "shape/sphere.cl"
 #include "shape/plane.cl"
 #include "shape/cylinder.cl"
@@ -39,6 +40,7 @@
 #include "shape/normal.cl"
 #include "shape/intersection.cl"
 #include "lightsource/illumination.cl"
+#include "shading/fragment.cl"
 #include "shading/dimness.cl"
 #include "shading/texture.cl"
 #include "shading/uvcoords.cl"
@@ -157,7 +159,7 @@ static t_rcolor		map_skybox(__read_only image2d_array_t skybox, const t_ray *ray
 static t_rcolor		trace_ray(const t_scene *scene, const t_scene_buffers *buffers,
 __read_only image2d_array_t textures, __read_only image2d_array_t skybox, const t_ray *ray)
 {
-	t_scalar				t;
+	t_scalar			t;
 	__constant t_shape	*nearest_shape;
 	t_ray				next_ray = *ray;
 	t_rcolor			result_color = 0.0f;
@@ -169,25 +171,21 @@ __read_only image2d_array_t textures, __read_only image2d_array_t skybox, const 
 		nearest_shape = cast_ray(scene, buffers, &next_ray, &t);
 		if (nearest_shape == NULL)
 		{
-			// TODO: check if skybox is enabled
-			result_color = color_add(result_color, color_scalar(map_skybox(skybox, &next_ray), opacity));
+			result_color += map_skybox(skybox, &next_ray) * opacity;
 			break;
 		}
-		__constant t_material *material = get_material(buffers, nearest_shape);
-		const t_vec4 point = next_ray.direction * t + next_ray.origin;
-		const t_scalar nearest_shape_opacity = get_opacity(material->diffuse_albedo.color);
-		t_rcolor shape_color = shade(&point, &next_ray, scene, buffers, textures, nearest_shape);
+		const t_fragment fragment = compose_fragment(scene, buffers, textures, nearest_shape, &next_ray, t);
+		const t_scalar nearest_shape_opacity = 1.0f - fragment.diffuse_albedo.a;
+		t_rcolor shape_color = shade(scene, buffers, textures, &fragment);
 		if (scene->config.selected_shape_addr == nearest_shape->addr)
-			shape_color = color_add(shape_color, (t_rcolor)(0.1f, 0.2f, 0.5f, 0));
-		result_color = color_add(result_color, color_scalar(shape_color, opacity * nearest_shape_opacity));
-		if (nearest_shape_opacity == 1.0)
+			shape_color += (t_rcolor)(0.1f, 0.2f, 0.5f, 0.0f);
+		result_color += shape_color * (opacity * nearest_shape_opacity);
+		if (nearest_shape_opacity == 1.0f)
 			return (result_color);
 		opacity *= (1.0f - nearest_shape_opacity);
-		const t_vec4 normal = obtain_normal(&point, nearest_shape);
-		next_ray.direction = refract4(next_ray.direction, normal, material->ior);
-		next_ray.origin = point + next_ray.direction * bias;
-		--trace_depth;
-	} while (trace_depth > 0);
+		next_ray.direction = refract4(next_ray.direction, fragment.normal, fragment.ior);
+		next_ray.origin = fragment.point + next_ray.direction * bias;
+	} while (--trace_depth > 0);
 	return (result_color);
 }
 

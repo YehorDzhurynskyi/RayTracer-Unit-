@@ -55,7 +55,7 @@ static t_bool		render_pop_scenes(const char *scenenames, int scenesnum)
 	if (nk_button_label(g_nk_context, "Cancel"))
 		render_widget = FALSE;
 	if (nk_button_label(g_nk_context, "Change") && choosen_scene_name != NULL)
-	{
+	{//TODO: seg fault if before scene changing some shape being selected with mouse
 		render_widget = FALSE;
 		pthread_create(&scene_change_thread, NULL, (void* (*)(void*))scene_change, (void*)choosen_scene_name);
 		pthread_detach(scene_change_thread);

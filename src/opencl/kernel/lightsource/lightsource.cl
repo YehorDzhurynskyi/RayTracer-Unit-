@@ -16,16 +16,18 @@ static t_scalar	rgb2luma(t_rcolor color)
 	return ((1.0f - dot(color.xyz, luma)) * 255.0f);
 }
 
-t_rcolor			diffuse(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light)
+t_rcolor			diffuse(__constant t_lightsource *light, const t_fragment *fragment,
+const t_vec4 to_light)
 {
 	t_scalar ldotn = dot(to_light, fragment->normal);
 	if (ldotn < 0.0f)
 		ldotn = 0.0f;
-	const t_rcolor diffuse = color_mult(color2rcolor(light->color), fragment->diffuse_albedo);
-	return (color_scalar(diffuse, ldotn));
+	const t_rcolor diffuse = color2rcolor(light->color) * fragment->diffuse_albedo;
+	return (diffuse * ldotn);
 }
 
-t_rcolor			specular(__constant t_lightsource *light, const t_fragment *fragment, const t_vec4 to_light)
+t_rcolor			specular(__constant t_lightsource *light, const t_fragment *fragment,
+const t_vec4 to_light)
 {
 	const t_vec4 incident = to_light * -1.0f;
 	t_vec4	reflected = reflect4(incident, fragment->normal);
@@ -33,8 +35,8 @@ t_rcolor			specular(__constant t_lightsource *light, const t_fragment *fragment,
 	specfactor = max(0.0f, specfactor);
 	t_scalar luminosity = rgb2luma(fragment->specular_albedo);
 	specfactor = fragment->glossiness * pow(specfactor, luminosity);
-	const t_rcolor specular = color_mult(color2rcolor(light->color), fragment->specular_albedo);
-	return (color_scalar(specular, specfactor));
+	const t_rcolor specular = color2rcolor(light->color) * fragment->specular_albedo;
+	return (specular * specfactor);
 }
 
 t_scalar	attenuate(t_vec4 attenuation, t_scalar distance)

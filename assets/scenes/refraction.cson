@@ -5,74 +5,74 @@ camera:
 	up: [0.0 1.0 0.0]
 materials: [
 	{
-		"diffuse color": "0x2233ffff"
-		"specular color": "0x0033ffff"
+		"diffuse_color": "0x8833ffff"
+		"specular_color": "0x0033ffff"
 		glossiness: 0.8
 		ior: 1.1
 	}
 	{
-		"diffuse color": "0x4433ffff"
-		"specular color": "0x0033ffff"
+		"diffuse_color": "0xaa33ffff"
+		"specular_color": "0x0033ffff"
 		glossiness: 0.8
 		ior: 1.1
 	}
 	{
-		"diffuse color": "0x6633ffff"
-		"specular color": "0x0033ffff"
+		"diffuse_color": "0xbb33ffff"
+		"specular_color": "0x0033ffff"
 		glossiness: 0.8
 		ior: 1.1
 	}
 	{
-		"diffuse color": "0x8833ffff"
-		"specular color": "0x0033ffff"
+		"diffuse_color": "0xdd33ffff"
+		"specular_color": "0x0033ffff"
 		glossiness: 0.8
 		ior: 1.1
 	}
 	{
-		"diffuse color": "0xaaaa33ee"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0xaaaa33ee"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{ #5
-		"diffuse color": "0x002211aa"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x002211aa"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00ffff33"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x00ffff33"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00ffffff"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x00ffffff"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x003333ff"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x003333ff"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x0033ff33"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x0033ff33"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{ #10
-		"diffuse color": "0x00ff3333"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x00ff3333"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
 	{
-		"diffuse color": "0x00ff33ff"
-		"specular color": "0x00dddddd"
+		"diffuse_color": "0x00ff33ff"
+		"specular_color": "0x00dddddd"
 		glossiness: 0.8
 		ior: 1.0
 	}
@@ -191,8 +191,8 @@ lightsources: [
 	{
 		type: "point"
 		position: [0.0 3.0 -4.0]
-		attenuation: [0.45 0.001 0.0005]
-		intensity: 0.3
+		attenuation: [0.8 0.001 0.0005]
+		intensity: 0.7
 		color: "0x00ffffff"
 		primitive: {
 			type: "point"

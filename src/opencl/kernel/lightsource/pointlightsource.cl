@@ -29,5 +29,5 @@ __constant t_pointlightsource *pointlightsrc, const t_fragment *fragment)
 	to_light = normalize(to_light);
 	const t_rcolor diffcolor = diffuse(lightsrc, fragment, to_light);
 	const t_rcolor speccolor = specular(lightsrc, fragment, to_light);
-	return (color_scalar(color_add(diffcolor, speccolor), attenuation));
+	return ((diffcolor + speccolor) * attenuation);
 }

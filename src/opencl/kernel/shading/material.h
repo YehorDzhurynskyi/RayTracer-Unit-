@@ -51,6 +51,5 @@ typedef struct			__attribute__ ((packed))
 # define HAS_NORMAL_MAP(mask)		(mask & NORMAL_MAP_MASK)
 
 __constant t_material	*get_material(const t_scene_buffers *buffers, __constant t_shape *shape);
-t_scalar				get_opacity(t_color color);
 
 #endif

@@ -25,23 +25,3 @@ t_color		rcolor2color(t_rcolor color)
 	color.a = min(color.a, 255.0f);
 	return (convert_uchar4(color));
 }
-
-t_rcolor	color_mult(const t_rcolor a, const t_rcolor b)
-{
-	return (a * b);
-}
-
-t_rcolor	color_add(const t_rcolor a, const t_rcolor b)
-{
-	return (a + b);
-}
-
-t_rcolor	color_scalar(const t_rcolor color, const t_scalar factor)
-{
-	return (color * factor);
-}
-
-t_rcolor	color_mix(const t_rcolor a, const t_rcolor b, const t_scalar factor)
-{
-	return (color_add(color_scalar(a, factor), color_scalar(b, 1.0 - factor)));
-}

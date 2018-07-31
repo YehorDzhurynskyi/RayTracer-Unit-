@@ -29,10 +29,8 @@ t_bool	cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray,
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	*t = (-b - d) / a;
-	if (*t < 0.0)
-		*t = (-b + d) / a;
-	return (TRUE);
+	return (limit(primitive, ray, t, (-b - d) / a)
+	|| limit(primitive, ray, t, (-b + d) / a));
 }
 
 t_vec4	obtain_cylinder_normal(const t_vec4 *point, __constant t_primitive *primitive)
