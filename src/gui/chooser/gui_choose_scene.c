@@ -38,15 +38,15 @@ static const char	*render_scene_list(const char *scenenames, int scenesnum)
 
 static t_bool		render_pop_scenes(const char *scenenames, int scenesnum)
 {
-	int			scene_height;
+	int			pop_height;
 	const char	*choosen_scene_name;
 	t_bool		render_widget;
 	pthread_t	scene_change_thread;
 
 	render_widget = TRUE;
-	scene_height = (scenesnum / 2) * 30 + 65;
+	pop_height = ((scenesnum + 1) / 2) * 30 + 65;
 	nk_popup_begin(g_nk_context, NK_POPUP_STATIC, "Choose scene file", 0,
-						nk_rect(SCENE_COOSE_POP_X, SCENE_COOSE_POP_Y, SCENE_COOSE_POP_WIDTH, scene_height));
+						nk_rect(SCENE_CHOOSE_POP_X, SCENE_CHOOSE_POP_Y, SCENE_CHOOSE_POP_WIDTH, pop_height));
 	nk_layout_row_dynamic(g_nk_context, 25, 1);
 	nk_label(g_nk_context, "Choose scene", NK_TEXT_RIGHT);
 	nk_layout_row_dynamic(g_nk_context, 25, 2);
@@ -120,11 +120,16 @@ void				gui_choose_scene(void)
 			log_error("Couldn't allocate enough memory"
 			" to show scene list", RT_MEM_ALLOC_ERROR);
 		render_chooser = scenenames != NULL;
+		if (render_chooser)
+			gui_popup_start();
 	}
 	if (render_chooser)
 	{
 		render_chooser = render_pop_scenes(scenenames, scenesnum);
 		if (render_chooser == FALSE)
+		{
+			gui_popup_stop();
 			free(scenenames);
+		}
 	}
 }

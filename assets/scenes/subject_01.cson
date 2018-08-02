@@ -41,13 +41,13 @@ materials: [
 		ior: 1.0
 	}
 	{
-		diffuse_color: "0x00C0C0C0"
-		specular_color: "0x00C0C0C0"
-		glossiness: 0.1
-		# diffuse_texture: 0
-		# specular_texture: 1
+		# diffuse_color: "0x00C0C0C0"
+		# specular_color: "0x00C0C0C0"
+		# glossiness: 0.1
+		diffuse_texture: 0
+		specular_texture: 1
 		normal_map_texture: 2
-		# glossiness_texture: 3
+		glossiness_texture: 3
 		ior: 1.0
 	}
 	{
@@ -86,7 +86,7 @@ shapes: [
 	}
 	{
 		relation: "union"
-		material: 0
+		# material: 0
 		primitive: {
 			type: "cone"
 			angle: 15.0
@@ -248,19 +248,19 @@ lightsources: [
 	# 		position: [0.0 0.0 0.0]
 	# 	}
 	# }
-	# {
-	# 	type: "spot"
-	# 	position: [15.0 0.0 -10.0]
-	# 	attenuation: [1.0 0.002 0.0004]
-	# 	intensity: 1.0
-	# 	direction: [0.0 1.0 0.0]
-	# 	angle: 5.0
-	# 	color: "0x00ff0000"
-	# 	primitive: {
-	# 		type: "point"
-	# 		position: [0.0 0.0 0.0]
-	# 	}
-	# }
+	{
+		type: "spot"
+		position: [15.0 0.0 -10.0]
+		attenuation: [1.0 0.002 0.0004]
+		intensity: 1.0
+		direction: [0.0 1.0 0.0]
+		angle: 5.0
+		color: "0x00ff0000"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
 	{
 		type: "directional"
 		direction: [-1.0 -1.0 0.0]

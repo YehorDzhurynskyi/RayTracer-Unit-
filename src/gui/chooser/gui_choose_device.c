@@ -54,6 +54,7 @@ void		gui_choose_opencl_device(void)
 
 	if (render_widget == FALSE)
 		return ;
+	gui_popup_start();
 	err = clGetDeviceIDs(NULL, CL_DEVICE_TYPE_ALL, 0, NULL, (unsigned int*)&ndevices);
 	if (err != CL_SUCCESS)
 	{
@@ -69,6 +70,7 @@ void		gui_choose_opencl_device(void)
 		if (nk_button_label(g_nk_context, "Compile") && active >= 0)
 		{
 			render_widget = FALSE;
+			gui_popup_stop();
 			pthread_create(&renderer_init_thread, NULL, (void* (*)(void*))renderer_init, NULL);
 			pthread_detach(renderer_init_thread);
 		}

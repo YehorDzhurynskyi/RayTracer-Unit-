@@ -12,5 +12,7 @@
 
 __constant t_material	*get_material(const t_scene_buffers *buffers, __constant t_shape *shape)
 {
+	if (shape->material_addr == DEFAULT_MATERIAL_ID)
+		return (NULL);
 	return ((__constant t_material*)(buffers->materialbuffer + shape->material_addr));
 }

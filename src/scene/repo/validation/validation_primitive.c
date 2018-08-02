@@ -23,7 +23,7 @@
 
 t_err_code			validate_cone(const t_cson *cson)
 {	
-	return (validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 179.0f}));
+	return (validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 89.0f}));
 }
 
 t_err_code			validate_cylinder(const t_cson *cson)

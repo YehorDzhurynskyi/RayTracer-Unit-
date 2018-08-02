@@ -15,13 +15,28 @@
 
 # include "gui.h"
 
-void	render_shape_form(const t_shape *shape);
-void	render_primitive_form(const t_primitive *primitive);
-void	render_actual_primitive_form(const t_primitive *primitive);
-void	render_sphere_form(const t_sphere *sphere);
-void	render_cylinder_form(const t_cylinder *cylinder);
-void	render_cone_form(const t_cone *cone);
-void	render_lightsource_form(const t_lightsource *lightsource);
-void	render_material_form(const t_material *material);
+struct nk_color			to_nkcolor(t_clcolor color);
+t_clcolor				from_nkcolor(struct nk_color color);
+
+void					render_shape_form(const t_shape *shape);
+void					render_primitive_form(const t_shape *shape, const t_primitive *primitive);
+void					render_actual_primitive_form(const t_shape *shape, const t_primitive *primitive);
+void					render_sphere_form(const t_shape *shape, const t_sphere *sphere);
+void					render_cylinder_form(const t_shape *shape, const t_cylinder *cylinder);
+void					render_cone_form(const t_shape *shape, const t_cone *cone);
+void					render_material_form(const t_material *material);
+void					render_texture_form(const t_texture *texture);
+void					render_chess_texture_form(const t_texture *texture);
+void					render_climage_texture_form(const t_texture *texture);
+void					render_limitations(const t_shape *shape, const t_primitive *primitive);
+void					render_lightsource_form(const t_lightsource *lightsource);
+void					render_pointlightsource_form(const t_lightsource *lightsource,
+const t_pointlightsource *pointlightsrc);
+void					render_dirlightsource_form(const t_lightsource *lightsource,
+const t_dirlightsource *dirlightsrc);
+void					render_spotlightsource_form(const t_lightsource *lightsource,
+const t_spotlightsource *spotlightsrc);
+
+extern struct nk_color	property_color;
 
 #endif

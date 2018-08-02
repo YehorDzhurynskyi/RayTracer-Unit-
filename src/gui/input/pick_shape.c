@@ -53,6 +53,8 @@ const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene)
 		shape = cast_ray(scene, &ray, &t);
 		if (shape != NULL)
 			gui_select_object(shape->addr, SHAPEBUFF_TARGET);
+		else
+			gui_select_object(NONE_SELECTED_ADDR, NONE_TARGET);
 	}
 	return (shape);
 }

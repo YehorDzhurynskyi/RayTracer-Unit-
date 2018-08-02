@@ -64,7 +64,7 @@ void					window_create(void)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		g_sdl_window = SDL_CreateWindow(RT_APP_NAME,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		WINDOW_WIDTH, WINDOW_HEGHT, SDL_WINDOW_OPENGL);
+		WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 		if (g_sdl_window == NULL)
 			break ;
 		g_sdl_gl_context = SDL_GL_CreateContext(g_sdl_window);

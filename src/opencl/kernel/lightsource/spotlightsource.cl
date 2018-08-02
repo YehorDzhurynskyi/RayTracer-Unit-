@@ -20,14 +20,14 @@ t_bool	spotlightsource_is_in_shadow(__constant t_spotlightsource *spotlightsrc,
 const t_vec4 *to_light, t_scalar t)
 {
 	return (t <= length(*to_light)
-	&& spotlightsrc->cosangle <= -dot(*to_light, spotlightsrc->direction));
+	&& spotlightsrc->cosangle <= -dot(normalize(*to_light), spotlightsrc->direction));
 }
 
 t_rcolor	spotlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_spotlightsource *spotlightsrc, const t_fragment *fragment)
 {
 	t_vec4 to_light = to_spotlightsource(spotlightsrc, &fragment->point);
-	if (spotlightsrc->cosangle > -dot(to_light, spotlightsrc->direction))
+	if (spotlightsrc->cosangle > -dot(normalize(to_light), spotlightsrc->direction))
 		return (0);
 	const t_scalar	attenuation = attenuate(spotlightsrc->attenuation, length(to_light));
 	to_light = normalize(to_light);

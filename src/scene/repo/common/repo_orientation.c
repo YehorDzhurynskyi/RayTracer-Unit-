@@ -36,28 +36,34 @@ static inline t_clmat4x4	orientation_matrix(const t_clscalar *r)
 	return (orientation);
 }
 
-t_clmat4x4	to_matrix(t_clvec3 rotation)
+t_clmat4x4	to_orientation_matrix(float rx, float ry, float rz)
 {
 	t_clscalar	r[6];
 
-	rotation.x *= M_PI / 180.0;
-	rotation.y *= M_PI / 180.0;
-	rotation.z *= M_PI / 180.0;
-	r[0] = sin(rotation.x);
-	r[1] = cos(rotation.x);
-	r[2] = sin(rotation.y);
-	r[3] = cos(rotation.y);
-	r[4] = sin(rotation.z);
-	r[5] = cos(rotation.z);
+	rx *= M_PI / 180.0;
+	ry *= M_PI / 180.0;
+	rz *= M_PI / 180.0;
+	r[0] = sin(rx);
+	r[1] = cos(rx);
+	r[2] = sin(ry);
+	r[3] = cos(ry);
+	r[4] = sin(rz);
+	r[5] = cos(rz);
 	return (orientation_matrix(r));
 }
 
 t_clmat4x4	deserialize_orientation_required(const t_cson *cson)
 {
-	return (to_matrix(deserialize_vec3_required(cson_valueof(cson, CSON_ORIENTATION_KEY), FALSE)));
+	t_clvec3	rotation;
+
+	rotation = deserialize_vec3_required(cson_valueof(cson, CSON_ORIENTATION_KEY), FALSE);
+	return (to_orientation_matrix(rotation.x, rotation.y, rotation.z));
 }
 
 t_clmat4x4	deserialize_orientation_optional(const t_cson *cson, const t_vec3d default_angles)
 {
-	return (to_matrix(deserialize_vec3_optional(cson_valueof(cson, CSON_ORIENTATION_KEY), FALSE, default_angles)));
+	t_clvec3	rotation;
+
+	rotation = deserialize_vec3_optional(cson_valueof(cson, CSON_ORIENTATION_KEY), FALSE, default_angles);
+	return (to_orientation_matrix(rotation.x, rotation.y, rotation.z));
 }

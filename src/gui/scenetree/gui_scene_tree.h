@@ -18,5 +18,6 @@
 void	render_material_tree(void);
 void	render_lightsource_tree(void);
 void	render_shape_tree(void);
+void	render_texture_tree(void);
 
 #endif

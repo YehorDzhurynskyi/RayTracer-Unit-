@@ -27,31 +27,13 @@ static void				add_lightsource_treeitem(void)
 		nk_label(g_nk_context, "Spot", NK_TEXT_CENTERED);
 		nk_label(g_nk_context, "Directional", NK_TEXT_CENTERED);
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Point add\n");
+			gui_add_pointlightsource();
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Spot light add\n");
+			gui_add_spotlightsource();
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Directional light add\n");
+			gui_add_dirlightsource();
 		nk_tree_pop(g_nk_context);
 	}
-}
-
-static void				add_shapes_next_row(void)
-{
-	nk_layout_row_dynamic(g_nk_context, 75, 3);
-	nk_image(g_nk_context, g_gui_images[3]);
-	nk_image(g_nk_context, g_gui_images[4]);
-	nk_image(g_nk_context, g_gui_images[5]);
-	nk_layout_row_dynamic(g_nk_context, 20, 3);
-	nk_label(g_nk_context, "Pyramid", NK_TEXT_CENTERED);
-	nk_label(g_nk_context, "Cone", NK_TEXT_CENTERED);
-	nk_label(g_nk_context, "Plane", NK_TEXT_CENTERED);
-	if (nk_button_label(g_nk_context, "Add"))
-		ft_printf("Pyramid add\n");
-	if (nk_button_label(g_nk_context, "Add"))
-		ft_printf("Cone add\n");
-	if (nk_button_label(g_nk_context, "Add"))
-		ft_printf("Cone add\n");
 }
 
 static void				add_shapes_treeitem(void)
@@ -60,19 +42,25 @@ static void				add_shapes_treeitem(void)
 	{
 		nk_layout_row_dynamic(g_nk_context, 75, 3);
 		nk_image(g_nk_context, g_gui_images[0]);
-		nk_image(g_nk_context, g_gui_images[1]);
+		nk_image(g_nk_context, g_gui_images[4]);
 		nk_image(g_nk_context, g_gui_images[2]);
 		nk_layout_row_dynamic(g_nk_context, 20, 3);
 		nk_label(g_nk_context, "Sphere", NK_TEXT_CENTERED);
-		nk_label(g_nk_context, "Cube", NK_TEXT_CENTERED);
+		nk_label(g_nk_context, "Cone", NK_TEXT_CENTERED);
 		nk_label(g_nk_context, "Cylinder", NK_TEXT_CENTERED);
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Sphere add\n");
+			gui_add_sphere();
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Cube add\n");
+			gui_add_cone();
 		if (nk_button_label(g_nk_context, "Add"))
-			ft_printf("Cylinder add\n");
-		add_shapes_next_row();
+			gui_add_cylinder();
+		nk_layout_row_dynamic(g_nk_context, 75, 3);
+		nk_image(g_nk_context, g_gui_images[5]);
+		nk_layout_row_dynamic(g_nk_context, 20, 3);
+		nk_label(g_nk_context, "Plane", NK_TEXT_CENTERED);
+		nk_layout_row_dynamic(g_nk_context, 20, 3);
+		if (nk_button_label(g_nk_context, "Add"))
+			gui_add_plane();
 		nk_tree_pop(g_nk_context);
 	}
 }

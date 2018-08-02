@@ -15,16 +15,19 @@
 
 static t_bool	g_isloading = FALSE;
 static char		g_loading_message[128];
+t_bool			g_gui_interactive_enabled = TRUE;
 
 void			gui_loading_start(const char *message)
 {
 	g_isloading = TRUE;
+	g_gui_interactive_enabled = FALSE;
 	ft_strncpy(g_loading_message, message, 128);
 }
 
 void			gui_loading_stop(void)
 {
 	g_isloading = FALSE;
+	g_gui_interactive_enabled = TRUE;
 }
 
 void			gui_render_loading(void)

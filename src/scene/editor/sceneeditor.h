@@ -40,4 +40,15 @@ t_texture *texture, const void *actual_texture);
 
 void	scenebuffer_update_material(t_scene *scene, const t_material *material);
 
+t_vec3d				scenebuffer_default_position(void);
+t_shape				scenebuffer_default_shape(void);
+t_primitive			scenebuffer_default_primitive(void);
+t_sphere			scenebuffer_default_sphere(void);
+t_cylinder			scenebuffer_default_cylinder(void);
+t_cone				scenebuffer_default_cone(void);
+t_spotlightsource	scenebuffer_default_spotlightsource(void);
+t_pointlightsource	scenebuffer_default_pointlightsource(void);
+t_dirlightsource	scenebuffer_default_dirlightsource(void);
+t_lightsource		scenebuffer_default_lightsource(void);
+
 #endif

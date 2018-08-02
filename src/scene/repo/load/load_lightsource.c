@@ -38,6 +38,7 @@ void	load_lightsource(t_scene *scene, const t_cson *cson)
 	if (lightsource.lightsource_type == SPOTLIGHT || lightsource.lightsource_type == POINTLIGHT)
 	{
 		primitive_cson = cson_valueof(cson, CSON_PRIMITIVE_KEY);
+		// TODO: refactor primitive to shape
 		if (primitive_cson != NULL)
 			load_primitive(scene, primitive_cson, LIGHTSOURCEBUFF_TARGET);
 	}

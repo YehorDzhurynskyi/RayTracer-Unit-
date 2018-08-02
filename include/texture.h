@@ -63,4 +63,6 @@ const char		*texture_map_at(const t_texture_map *map, int index);
 void			texture_map_add(t_texture_map *map, const char *value);
 void			texture_map_cleanup(t_texture_map *map);
 
+extern const char	*g_texture_captions[];
+
 #endif

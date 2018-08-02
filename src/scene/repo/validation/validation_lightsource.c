@@ -37,7 +37,7 @@ t_err_code	validate_spotlightsource(const t_cson *cson)
 
 	err = validate_pointlightsource(cson);
 	err |= validate_vec3_required(cson, CSON_DIRECTION_KEY, TRUE);
-	err |= validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 179.0f});
+	err |= validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 89.0f});
 	return (err);
 }
 

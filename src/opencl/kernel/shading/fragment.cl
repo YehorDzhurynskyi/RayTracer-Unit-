@@ -10,6 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+static t_fragment	default_fragment(const t_scene *scene, __constant t_shape *shape, const t_ray *ray, t_scalar t)
+{
+	t_fragment				fragment;
+	__constant t_primitive	*primitive = (__constant t_primitive*)shape_get_primitive(shape);
+
+	fragment.point = ray->direction * t + ray->origin;
+	fragment.normal = obtain_normal(&fragment.point, shape);
+	fragment.to_eye = normalize(scene->camera.position - primitive->position);
+	t_scalar u, v;
+	obtain_uv(primitive, &fragment, &u, &v);
+	t_rcolor	albedo = ((int)round(v * 20.0f) & 1) ^ ((int)round(u * 20.0f) & 1) ? (t_vec4)(1.0f, 0.0f, 1.0f, 0.0f) : (t_vec4)(0.2f, 0.2f, 0.2f, 0.0f);
+	fragment.diffuse_albedo = albedo;
+	fragment.specular_albedo = albedo;
+	if (dot(fragment.normal, ray->direction) > 0.0)
+		fragment.normal = -fragment.normal;
+	fragment.glossiness = 1.0f;
+	fragment.ior = 1.0f;
+	return (fragment);
+}
+
 t_fragment	compose_fragment(const t_scene *scene, const t_scene_buffers *buffers,
 __read_only image2d_array_t textures, __constant t_shape *shape, const t_ray *ray, t_scalar t)
 {
@@ -17,6 +37,8 @@ __read_only image2d_array_t textures, __constant t_shape *shape, const t_ray *ra
 	__constant t_material	*material = get_material(buffers, shape);
 	__constant t_primitive	*primitive = (__constant t_primitive*)shape_get_primitive(shape);
 
+	if (material == NULL)
+		return (default_fragment(scene, shape, ray, t));
 	fragment.point = ray->direction * t + ray->origin;
 	fragment.normal = obtain_normal(&fragment.point, shape);
 	fragment.to_eye = normalize(scene->camera.position - primitive->position);

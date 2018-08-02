@@ -51,7 +51,7 @@
 // # define CMD_HEIGHT		TREE_HEIGHT
 
 # define WINDOW_WIDTH	(GAP + SCENEMENU_WIDTH + GAP + SCENE_WIDTH + GAP + OBJ_WIDTH + GAP)
-# define WINDOW_HEGHT	(OBJ_Y + OBJ_HEIGHT + GAP)
+# define WINDOW_HEIGHT	(OBJ_Y + OBJ_HEIGHT + GAP)
 
 # define DEV_CHOOSE_POP_X		(SCENE_WIDTH / 2 - DEV_CHOOSE_POP_WIDTH / 2)
 # define DEV_CHOOSE_POP_Y		(-SCENE_HEIGHT + SCENE_HEIGHT / 4)
@@ -61,10 +61,17 @@
 # define LOADING_POP_Y		DEV_CHOOSE_POP_Y
 # define LOADING_POP_WIDTH	DEV_CHOOSE_POP_WIDTH
 
-# define SCENE_COOSE_POP_X		50
-# define SCENE_COOSE_POP_Y		50
-# define SCENE_COOSE_POP_WIDTH	DEV_CHOOSE_POP_WIDTH
-# define SCENE_COOSE_POP_HEIGHT	400
+# define SCENE_CHOOSE_POP_X			50
+# define SCENE_CHOOSE_POP_Y			50
+# define SCENE_CHOOSE_POP_WIDTH		DEV_CHOOSE_POP_WIDTH
+
+# define TEXTURE_CHOOSE_POP_WIDTH	400
+# define TEXTURE_CHOOSE_POP_X		(-OBJ_WIDTH - TEXTURE_CHOOSE_POP_WIDTH / 1.3333)
+# define TEXTURE_CHOOSE_POP_Y		(WINDOW_HEIGHT / 2)
+
+# define MATERIAL_CHOOSE_POP_WIDTH	TEXTURE_CHOOSE_POP_WIDTH
+# define MATERIAL_CHOOSE_POP_X		TEXTURE_CHOOSE_POP_X
+# define MATERIAL_CHOOSE_POP_Y		TEXTURE_CHOOSE_POP_Y
 
 # define RT_GUI_RESOURCE_PATH_BUFF_LEN	2048
 
@@ -82,17 +89,33 @@ void	gui_screenshot(void);
 void	gui_choose_opencl_device(void);
 void	gui_choose_scene(void);
 void	gui_select_object(t_claddress addr, const t_buff_target target);
-void	gui_render_color_picker(struct nk_colorf *target_color);
+void	gui_render_color_picker(struct nk_color *target_color);
 void	gui_init_style(void);
 void	gui_loading_start(const char *message);
 void	gui_loading_stop(void);
 void	gui_info_log_notify(const char *message);
 void	gui_info_log_error(const char *message, const char *err_code_message);
+t_bool	gui_choose_texture(const t_texture **dest_texture);
+t_bool	gui_choose_material(const t_material **dest_material);
+
+void	gui_popup_start(void);
+void	gui_popup_stop(void);
+
+void	gui_add_sphere(void);
+void	gui_add_cylinder(void);
+void	gui_add_cone(void);
+void	gui_add_plane(void);
+
+void	gui_add_pointlightsource(void);
+void	gui_add_dirlightsource(void);
+void	gui_add_spotlightsource(void);
 
 // TODO: move in another header?
 void	camera_key_handler(t_camera *camera);
 const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene);
 
 extern struct nk_context	*g_nk_context;
+extern t_bool				g_scene_interactive_enabled;
+extern t_bool				g_gui_interactive_enabled;
 
 #endif

@@ -14,22 +14,32 @@
 
 void	gui_render_scene_tree(void)
 {
-	static	void (*render_tree_func)(void) = NULL;
-
-	if (nk_begin(g_nk_context, "Scene tree", nk_rect(TREE_X, TREE_Y, TREE_WIDTH,
+	if (nk_begin(g_nk_context, "Scene objects", nk_rect(TREE_X, TREE_Y, TREE_WIDTH,
 		TREE_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
 	{
-		nk_layout_row_dynamic(g_nk_context, 25, 3);
-		if (nk_button_label(g_nk_context, render_tree_func == render_shape_tree ? "-Shapes-" : "Shapes"))
-			render_tree_func = render_shape_tree;
-		if (nk_button_label(g_nk_context, render_tree_func == render_lightsource_tree ? "-Lights-" : "Lights"))
-			render_tree_func = render_lightsource_tree;
-		if (nk_button_label(g_nk_context, render_tree_func == render_material_tree ? "-Materials-" : "Materials"))
-			render_tree_func = render_material_tree;
-		if (render_tree_func != NULL)
+		if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+		"Shapes", NK_MINIMIZED, 0))
 		{
-			nk_layout_row_dynamic(g_nk_context, 25, 1);
-			render_tree_func();
+			render_shape_tree();
+			nk_tree_pop(g_nk_context);
+		}
+		if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+		"Lightsources", NK_MINIMIZED, 1))
+		{
+			render_lightsource_tree();
+			nk_tree_pop(g_nk_context);
+		}
+		if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+		"Materials", NK_MINIMIZED, 2))
+		{
+			render_material_tree();
+			nk_tree_pop(g_nk_context);
+		}
+		if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
+		"Textures", NK_MINIMIZED, 2))
+		{
+			render_texture_tree();
+			nk_tree_pop(g_nk_context);
 		}
 	}
 	nk_end(g_nk_context);

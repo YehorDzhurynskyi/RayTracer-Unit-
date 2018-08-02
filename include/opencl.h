@@ -58,6 +58,8 @@ t_vec3d					opencl_vec4_to_vec3(t_clvec4 vec);
 t_vec4d					opencl_vec4_to_vec4(t_clvec4 vec);
 t_mat4d					opencl_mat4x4_to_mat4x4(t_clmat4x4 mat);
 
+t_clmat4x4				to_orientation_matrix(float rx, float ry, float rz);
+
 extern t_opencl			g_clcontext;
 
 #endif
