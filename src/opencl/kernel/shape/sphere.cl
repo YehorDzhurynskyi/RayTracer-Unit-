@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t)
+int	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2)
 {
 	__constant t_sphere *sphere = (__constant t_sphere*)primitive_get_actual(primitive);
 	const t_vec4 to_orig = ray->origin - primitive->position;
@@ -19,8 +19,16 @@ t_bool	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	return (limit(primitive, ray, t, -b - d)
-	|| limit(primitive, ray, t, -b + d));
+	int nroots = 0;
+	if (limit(primitive, ray, t1, -b - d))
+		++nroots;
+	if (limit(primitive, ray, t2, -b + d))
+	{
+		if (nroots == 0)
+			*t1 = *t2;
+		++nroots;
+	}
+	return (nroots);
 }
 
 t_vec4	obtain_sphere_normal(const t_vec4 *point, __constant t_primitive *primitive)

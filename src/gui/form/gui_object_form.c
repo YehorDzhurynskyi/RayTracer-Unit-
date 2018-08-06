@@ -48,7 +48,7 @@ static const char		*obtain_caption(void)
 void					gui_render_object(void)
 {
 	if (nk_begin(g_nk_context, obtain_caption(), nk_rect(OBJ_X, OBJ_Y, OBJ_WIDTH, OBJ_HEIGHT),
-				NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+				g_nk_window_flags | NK_WINDOW_TITLE))
 	{
 		if (g_selected_buff_target == SHAPEBUFF_TARGET)
 			render_shape_form((const t_shape*)g_selected_object);

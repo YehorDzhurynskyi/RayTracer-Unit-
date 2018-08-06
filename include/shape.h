@@ -22,7 +22,8 @@ typedef enum
 	PLANE,
 	SPHERE,
 	CONE,
-	CYLINDER
+	CYLINDER,
+	TORUS
 }	t_primitive_type;
 
 # define ZERO_SIZE_PRIMITIVE(type) (type == POINT || type == COMPOSITE || type == PLANE)
@@ -64,5 +65,11 @@ typedef struct			__attribute__ ((packed))
 {
 	t_clscalar			cos2angle;
 }	t_cone;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_clscalar			far_radius;
+	t_clscalar			near_radius;
+}	t_torus;
 
 #endif

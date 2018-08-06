@@ -18,6 +18,7 @@
 struct nk_context	*g_nk_context = NULL;
 struct nk_image		g_gui_images[RT_GUI_IMG_NUM];
 struct nk_image		g_gui_render_target_image;
+int					g_nk_window_flags = NK_WINDOW_BORDER;
 
 static GLuint		g_gl_image_textures[RT_GUI_IMG_NUM];
 

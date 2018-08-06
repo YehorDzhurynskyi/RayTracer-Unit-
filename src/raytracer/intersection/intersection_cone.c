@@ -33,29 +33,34 @@ inline static t_bool	is_cutted_cone(const t_primitive *primitive, const t_ray *r
 	return (vec3d_dot(&point, &cone_direction) <= 0.0);
 }
 
-inline static float		find_scalar(const t_primitive *primitive, const t_ray *ray,
-const float t1, const float t2)
+inline static int		find_scalar(const t_primitive *primitive,
+const t_ray *ray, float *t1, float *t2)
 {
-	t_bool	t1_intersect;
-	t_bool	t2_intersect;
-	float	target_t;
+	int	nroots;
 
-	t1_intersect = TRUE;
-	t2_intersect = TRUE;
-	if (!limit(primitive, ray, &target_t, t1) || is_cutted_cone(primitive, ray, t1))
-		t1_intersect = FALSE;
-	if (!limit(primitive, ray, &target_t, t2) || is_cutted_cone(primitive, ray, t2))
-		t2_intersect = FALSE;
-	if (!t1_intersect && !t2_intersect)
-		return (-1.0f);
-	if (t1_intersect && t2_intersect)
-		target_t = t1 < t2 ? t1 : t2;
-	else if (t1_intersect)
-		target_t = t1_intersect ? t1 : t2;
-	return (target_t);
+	nroots = 0;
+	if (limit(primitive, ray, t1, *t1) && !is_cutted_cone(primitive, ray, *t1))
+	{
+		++nroots;
+	}
+	if (limit(primitive, ray, t2, *t2) && !is_cutted_cone(primitive, ray, *t2))
+	{
+		if (nroots == 0)
+			*t1 = *t2;
+		++nroots;
+	}
+	if (nroots == 0)
+		return (0);
+	if (nroots == 2)
+	{
+		*t1 = *t1 < *t2 ? *t1 : *t2;
+		*t2 = *t1 >= *t2 ? *t1 : *t2;
+	}
+	return (nroots);
 }
 
-t_bool					cone_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+int					cone_intersected(const t_primitive *primitive,
+const t_ray *ray, float *t1, float *t2)
 {
 	float	a;
 	float	b;
@@ -77,6 +82,7 @@ t_bool					cone_intersected(const t_primitive *primitive, const t_ray *ray, floa
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	*t = find_scalar(primitive, ray, (-b - d) / a, (-b + d) / a);
-	return (*t > 0.0f);
+	*t1 = (-b - d) / a;
+	*t2 = (-b + d) / a;
+	return (find_scalar(primitive, ray, t1, t2));
 }

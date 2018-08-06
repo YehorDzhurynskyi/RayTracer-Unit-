@@ -22,4 +22,8 @@ t_vec4	reflect4(const t_vec4 incident, const t_vec4 normal);
 t_vec3	refract3(t_vec3 incident, t_vec3 normal, t_scalar ior);
 t_vec4	refract4(t_vec4 incident, t_vec4 normal, t_scalar ior);
 
+int		solve_quadric(t_scalar c[3], t_scalar s[2]);
+int		solve_cubic(t_scalar c[4], t_scalar s[3]);
+int		solve_quartic(t_scalar c[5], t_scalar s[4]);
+
 #endif

@@ -22,10 +22,12 @@ typedef struct
 t_iterator					shape_begin(const t_scene *scene, const t_scene_buffers *buffers);
 t_iterator					lightsource_begin(const t_scene *scene, const t_scene_buffers *buffers);
 t_iterator					limitation_begin(__constant t_primitive *primitive);
+t_iterator					children_begin(__constant t_shape *shape);
 
 __constant t_shape			*shape_next(t_iterator *iterator);
 __constant t_lightsource	*lightsource_next(t_iterator *iterator);
 __constant t_limitation		*limitation_next(t_iterator *iterator);
+__constant t_shape			*children_next(t_iterator *iterator);
 
 t_bool						has_next(const t_iterator *iterator);
 

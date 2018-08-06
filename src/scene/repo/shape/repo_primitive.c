@@ -34,6 +34,8 @@ static t_primitive_type	recognize_primitive_type(const char *type)
 		return (CONE);
 	else if (ft_strequ(type, CSON_SHAPE_CYLINDER))
 		return (CYLINDER);
+	else if (ft_strequ(type, CSON_SHAPE_TORUS))
+		return (TORUS);
 	return (0);
 }
 

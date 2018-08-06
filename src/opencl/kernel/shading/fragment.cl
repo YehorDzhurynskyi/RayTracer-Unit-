@@ -23,7 +23,7 @@ static t_fragment	default_fragment(const t_scene *scene, __constant t_shape *sha
 	t_rcolor	albedo = ((int)round(v * 20.0f) & 1) ^ ((int)round(u * 20.0f) & 1) ? (t_vec4)(1.0f, 0.0f, 1.0f, 0.0f) : (t_vec4)(0.2f, 0.2f, 0.2f, 0.0f);
 	fragment.diffuse_albedo = albedo;
 	fragment.specular_albedo = albedo;
-	if (dot(fragment.normal, ray->direction) > 0.0)
+	if (dot(fragment.normal, ray->direction))
 		fragment.normal = -fragment.normal;
 	fragment.glossiness = 1.0f;
 	fragment.ior = 1.0f;

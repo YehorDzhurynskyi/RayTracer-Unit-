@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intersection.h                                     :+:      :+:    :+:   */
+/*   default_material.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INTERSECTION_H
-# define INTERSECTION_H
+#include "sceneeditor.h"
 
-# include "raytracer.h"
+t_material	scenebuffer_default_material(void)
+{
+	t_material	material;
 
-const t_shape	*shape_intersected(const t_shape *shape, const t_ray *ray, float *t);
-int				primitive_intersected(const t_shape *shape, const t_ray *ray, float *t1, float *t2);
-
-int				plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t);
-int				sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cylinder_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cone_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-
-t_bool			limit(const t_primitive *primitive, const t_ray *ray, float *target_t, const float t);
-
-#endif
+	material.mask = 0;
+	material.diffuse_albedo.color = (t_clcolor){{0x0, 0x0, 0x0, 0x0}};
+	material.specular_albedo.color = (t_clcolor){{0x0, 0x0, 0x0, 0x0}};
+	material.glossiness.value = 0.0f;
+	material.ior = 1.0f;
+	return (material);
+}

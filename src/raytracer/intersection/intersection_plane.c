@@ -17,7 +17,7 @@ static t_vec3d	plane_get_normal(const t_primitive *primitive)
 	return ((t_vec3d){primitive->orientation.s4, primitive->orientation.s5, primitive->orientation.s6});
 }
 
-t_bool			plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+int				plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
 {
 	t_vec3d	plane_normal;
 	t_vec3d	to_plane;

@@ -10,11 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_bool limit(__constant t_primitive *primitive,
+t_bool	limit(__constant t_primitive *primitive,
 const t_ray *ray, t_scalar *target_t, const t_scalar t)
 {
-	if (t < 0.0f)
-		return (FALSE);
 	t_iterator limit_iter = limitation_begin(primitive);
 	if (has_next(&limit_iter))
 	{

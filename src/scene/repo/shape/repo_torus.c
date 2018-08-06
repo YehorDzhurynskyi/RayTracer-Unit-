@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intersection.h                                     :+:      :+:    :+:   */
+/*   repo_torus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INTERSECTION_H
-# define INTERSECTION_H
+#include "scenerepo.h"
+#include <math.h>
 
-# include "raytracer.h"
+t_torus	deserialize_torus(const t_cson *cson)
+{
+	t_torus	torus;
 
-const t_shape	*shape_intersected(const t_shape *shape, const t_ray *ray, float *t);
-int				primitive_intersected(const t_shape *shape, const t_ray *ray, float *t1, float *t2);
-
-int				plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t);
-int				sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cylinder_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cone_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-
-t_bool			limit(const t_primitive *primitive, const t_ray *ray, float *target_t, const float t);
-
-#endif
+	torus.near_radius = deserialize_real_required(cson_valueof(cson, CSON_NEAR_RADIUS_KEY));
+	torus.far_radius = deserialize_real_required(cson_valueof(cson, CSON_FAR_RADIUS_KEY));
+	return (torus);
+}

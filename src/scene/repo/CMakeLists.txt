@@ -20,6 +20,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 
 	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_shape.c"
 	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_cone.c"
+	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_torus.c"
 	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_cylinder.c"
 	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_sphere.c"
 	"${CMAKE_CURRENT_LIST_DIR}/shape/repo_primitive.c"
@@ -50,6 +51,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_orientation.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_primitive.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_real.c"
+	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_torus.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_scene.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_shape.c"
 	"${CMAKE_CURRENT_LIST_DIR}/validation/validation_vector.c"

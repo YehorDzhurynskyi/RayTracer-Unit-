@@ -24,28 +24,34 @@ __constant t_cone *cone, t_scalar t)
 	return (dot(point, cone_direction) <= 0.0);
 }
 
-inline static t_bool	find_scalar(const t_ray *ray, __constant t_primitive *primitive,
-__constant t_cone *cone, t_scalar *target_t, const t_scalar t1, const t_scalar t2)
+inline static int	find_scalar(const t_ray *ray, __constant t_primitive *primitive,
+__constant t_cone *cone, t_scalar *target_t1, t_scalar *target_t2, const t_scalar t1, const t_scalar t2)
 {
-	t_bool	t1_intersect;
-	t_bool	t2_intersect;
+	int	nroots = 0;
 
-	t1_intersect = TRUE;
-	t2_intersect = TRUE;
-	if (!limit(primitive, ray, target_t, t1) || is_cutted_cone(ray, primitive, cone, t1))
-		t1_intersect = FALSE;
-	if (!limit(primitive, ray, target_t, t2) || is_cutted_cone(ray, primitive, cone, t2))
-		t2_intersect = FALSE;
-	if (!t1_intersect && !t2_intersect)
-		return (FALSE);
-	if (t1_intersect && t2_intersect)
-		*target_t = t1 < t2 ? t1 : t2;
-	else if (t1_intersect)
-		*target_t = t1_intersect ? t1 : t2;
-	return (TRUE);
+	if (limit(primitive, ray, target_t1, t1) && !is_cutted_cone(ray, primitive, cone, t1))
+	{
+		++nroots;
+	}
+	if (limit(primitive, ray, target_t2, t2) && !is_cutted_cone(ray, primitive, cone, t2))
+	{
+		if (nroots == 0)
+			*target_t1 = *target_t2;
+		++nroots;
+	}
+	if (nroots == 0)
+	{
+		return (0);
+	}
+	else if (nroots == 2)
+	{
+		*target_t1 = t1 < t2 ? t1 : t2;
+		*target_t2 = t1 >= t2 ? t1 : t2;
+	}
+	return (nroots);
 }
 
-t_bool	cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t)
+int	cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2)
 {
 	__constant t_cone *cone = (__constant t_cone*)primitive_get_actual(primitive);
 	const t_vec4 cone_direction = cone_get_direction(primitive);
@@ -59,7 +65,7 @@ t_bool	cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_s
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	return (find_scalar(ray, primitive, cone, t, (-b - d) / a, (-b + d) / a));
+	return (find_scalar(ray, primitive, cone, t1, t2, (-b - d) / a, (-b + d) / a));
 }
 
 t_vec4	obtain_cone_normal(const t_vec4 *point, __constant t_primitive *primitive)

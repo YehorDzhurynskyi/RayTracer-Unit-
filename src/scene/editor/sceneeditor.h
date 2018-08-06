@@ -50,5 +50,6 @@ t_spotlightsource	scenebuffer_default_spotlightsource(void);
 t_pointlightsource	scenebuffer_default_pointlightsource(void);
 t_dirlightsource	scenebuffer_default_dirlightsource(void);
 t_lightsource		scenebuffer_default_lightsource(void);
+t_material			scenebuffer_default_material(void);
 
 #endif

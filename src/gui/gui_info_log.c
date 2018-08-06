@@ -65,7 +65,7 @@ void			gui_render_info_log(void)
 	int		i;
 
 	if (nk_begin(g_nk_context, "Information log",
-	nk_rect(LOG_X, LOG_Y, LOG_WIDTH, LOG_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+	nk_rect(LOG_X, LOG_Y, LOG_WIDTH, LOG_HEIGHT), g_nk_window_flags | NK_WINDOW_TITLE))
 	{
 		gui_choose_opencl_device();
 		gui_render_loading();

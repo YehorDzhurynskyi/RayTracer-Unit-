@@ -14,7 +14,24 @@
 #include "sceneiterator.h"
 #include <math.h>
 
-t_bool	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t)
+static int	number_of_roots(t_bool t1_intersected, t_bool t2_intersected,
+float *t1, float *t2)
+{
+	int	nroots;
+
+	nroots = 0;
+	if (t1_intersected)
+		++nroots;
+	if (t2_intersected)
+	{
+		if (nroots == 0)
+			*t1 = *t2;
+		++nroots;
+	}
+	return (nroots);
+}
+
+int	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2)
 {
 	const t_sphere	*sphere;
 	t_vec3d			to_orig;
@@ -30,6 +47,6 @@ t_bool	sphere_intersected(const t_primitive *primitive, const t_ray *ray, float 
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	return (limit(primitive, ray, t, -b - d)
-	|| limit(primitive, ray, t, -b + d));
+	return (number_of_roots(limit(primitive, ray, t1, -b - d),
+	limit(primitive, ray, t2, -b + d), t1, t2));
 }

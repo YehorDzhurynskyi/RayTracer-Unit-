@@ -41,6 +41,8 @@
 # define CSON_RELATION_NEGATION_KEY		"negation"
 
 # define CSON_RADIUS_KEY				"radius"
+# define CSON_NEAR_RADIUS_KEY			"near_radius"
+# define CSON_FAR_RADIUS_KEY			"far_radius"
 # define CSON_ANGLE_KEY					"angle"
 # define CSON_DIRECTION_KEY				"direction"
 # define CSON_CHILDREN_KEY				"children"
@@ -72,6 +74,7 @@
 # define CSON_SHAPE_COMPOSITE			"composite"
 # define CSON_SHAPE_POINT				"point"
 # define CSON_SHAPE_SPHERE				"sphere"
+# define CSON_SHAPE_TORUS				"torus"
 # define CSON_SHAPE_PLANE				"plane"
 # define CSON_SHAPE_CONE				"cone"
 # define CSON_SHAPE_CYLINDER			"cylinder"
@@ -129,6 +132,7 @@ t_primitive			deserialize_primitive(const t_cson *cson);
 t_cone				deserialize_cone(const t_cson *cson);
 t_cylinder			deserialize_cylinder(const t_cson *cson);
 t_sphere			deserialize_sphere(const t_cson *cson);
+t_torus				deserialize_torus(const t_cson *cson);
 t_material			deserialize_material(const t_cson *cson);
 t_limitation		deserialize_limitation(const t_cson *cson);
 t_axial_limitation	deserialize_axial_limitation(const t_cson *cson);

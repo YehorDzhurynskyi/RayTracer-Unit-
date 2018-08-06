@@ -33,7 +33,7 @@ void					gui_render_scene(float mseconds)
 	struct nk_rect				rect;
 
 	if (nk_begin(g_nk_context, "Render Target", nk_rect(SCENE_X, SCENE_Y,
-	SCENE_WIDTH, SCENE_HEIGHT), NK_WINDOW_BORDER))
+	SCENE_WIDTH, SCENE_HEIGHT), g_nk_window_flags))
 	{
 		rect.x = SCENE_X + SCENE_PADDING;
 		rect.y = SCENE_Y + SCENE_PADDING;

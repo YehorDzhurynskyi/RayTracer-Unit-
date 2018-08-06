@@ -32,6 +32,7 @@
 #include "shape/sphere.cl"
 #include "shape/plane.cl"
 #include "shape/cylinder.cl"
+#include "shape/torus.cl"
 #include "shape/cone.cl"
 #include "lightsource/lightsource.cl"
 #include "lightsource/pointlightsource.cl"

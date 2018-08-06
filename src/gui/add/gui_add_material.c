@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gui_choose_scene.c                                 :+:      :+:    :+:   */
+/*   gui_add_material.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pzubar <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/29 18:07:32 by pzubar            #+#    #+#             */
-/*   Updated: 2018/05/29 18:07:35 by pzubar           ###   ########.fr       */
+/*   Created: 2018/05/29 17:34:37 by pzubar            #+#    #+#             */
+/*   Updated: 2018/05/29 17:34:39 by pzubar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "gui.h"
+#include "sceneeditor.h"
+#include "logger.h"
 
-void	gui_popup_start(void)
+void	gui_add_material(void)
 {
-	g_nk_window_flags |= NK_WINDOW_NOT_INTERACTIVE;
-}
+	t_material	material;
 
-void	gui_popup_stop(void)
-{
-	g_nk_window_flags &= ~NK_WINDOW_NOT_INTERACTIVE;
+	material = scenebuffer_default_material();
+	scenebuffer_map(&g_main_scene, g_main_scene.meta.materials_size,
+	sizeof(t_material), MATERIALBUFF_TARGET);
+	scenebuffer_add_material(&g_main_scene, &material);
+	scenebuffer_unmap(&g_main_scene, MATERIALBUFF_TARGET);
+	log_notify("Material was added to scene");
 }

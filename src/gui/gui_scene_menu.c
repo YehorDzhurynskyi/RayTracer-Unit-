@@ -65,12 +65,23 @@ static void				add_shapes_treeitem(void)
 	}
 }
 
+static void				add_material_treeitem(void)
+{
+	if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Add Material", NK_MAXIMIZED))
+	{
+		nk_layout_row_dynamic(g_nk_context, 20, 1);
+		if (nk_button_label(g_nk_context, "Add material"))
+			gui_add_material();
+		nk_tree_pop(g_nk_context);
+	}
+}
+
 void					gui_render_scene_menu(void)
 {
 	if (nk_begin(g_nk_context, "Scene", nk_rect(SCENEMENU_X, SCENEMENU_Y, SCENEMENU_WIDTH, SCENEMENU_HEIGHT),
-	NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+	g_nk_window_flags | NK_WINDOW_TITLE))
 	{
-		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Move to menubar", NK_MAXIMIZED))
+		if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Menu", NK_MAXIMIZED))
 		{
 			gui_choose_scene();
 			nk_layout_row_dynamic(g_nk_context, 25, 1);
@@ -80,6 +91,8 @@ void					gui_render_scene_menu(void)
 		}
 		add_shapes_treeitem();
 		add_lightsource_treeitem();
+		// TODO: add textures
+		add_material_treeitem();
 	}
 	nk_end(g_nk_context);
 }

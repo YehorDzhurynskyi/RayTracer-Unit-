@@ -16,7 +16,7 @@ static t_vec4	cylinder_get_direction(__constant t_primitive *primitive)
 	return (-direction);
 }
 
-t_bool	cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t)
+int	cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2)
 {
 	__constant t_cylinder *cylinder = (__constant t_cylinder*)primitive_get_actual(primitive);
 	const t_vec4 cylinder_direction = cylinder_get_direction(primitive);
@@ -29,8 +29,16 @@ t_bool	cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray,
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	return (limit(primitive, ray, t, (-b - d) / a)
-	|| limit(primitive, ray, t, (-b + d) / a));
+	int nroots = 0;
+	if (limit(primitive, ray, t1, (-b - d) / a))
+		++nroots;
+	if (limit(primitive, ray, t2, (-b + d) / a))
+	{
+		if (nroots == 0)
+			*t1 = *t2;
+		++nroots;
+	}
+	return (nroots);
 }
 
 t_vec4	obtain_cylinder_normal(const t_vec4 *point, __constant t_primitive *primitive)

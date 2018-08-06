@@ -14,6 +14,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/chooser/gui_choose_material.c"
 
 	"${CMAKE_CURRENT_LIST_DIR}/add/gui_add_sphere.c"
+	"${CMAKE_CURRENT_LIST_DIR}/add/gui_add_material.c"
 	"${CMAKE_CURRENT_LIST_DIR}/add/gui_add_cylinder.c"
 	"${CMAKE_CURRENT_LIST_DIR}/add/gui_add_cone.c"
 	"${CMAKE_CURRENT_LIST_DIR}/add/gui_add_plane.c"

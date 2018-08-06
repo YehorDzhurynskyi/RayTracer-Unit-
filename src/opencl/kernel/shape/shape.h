@@ -20,7 +20,8 @@ typedef enum
 	PLANE,
 	SPHERE,
 	CONE,
-	CYLINDER
+	CYLINDER,
+	TORUS
 }	t_primitive_type;
 
 typedef enum
@@ -66,5 +67,11 @@ typedef struct			__attribute__ ((packed))
 {
 	t_scalar			cos2angle;
 }	t_cone;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_scalar			far_radius;
+	t_scalar			near_radius;
+}	t_torus;
 
 #endif

@@ -16,12 +16,13 @@
 __constant t_shape	*cast_ray(const t_scene *scene,
 const t_scene_buffers *buffers, const t_ray *ray, t_scalar *nearest_t);
 
-t_bool	shape_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t);
-t_bool	primitive_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
+__constant t_shape	*shape_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t);
+int					primitive_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 
-t_bool	plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
-t_bool	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
-t_bool	cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
-t_bool	cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
+int					plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
+int					sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					torus_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 
 #endif

@@ -29,11 +29,10 @@ void	gui_poll_events(t_scene *scene)
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				g_window_should_close = TRUE;
 		}
-		else if (g_gui_interactive_enabled
-		&& g_scene_interactive_enabled && event.type == SDL_MOUSEBUTTONDOWN)
+		else if (!(g_nk_window_flags & NK_WINDOW_NOT_INTERACTIVE)
+		&& event.type == SDL_MOUSEBUTTONDOWN)
 			pick_shape(&event.button, scene);
-		if (g_gui_interactive_enabled)
-			nk_sdl_handle_event(&event);
+		nk_sdl_handle_event(&event);
 	}
 	nk_input_end(g_nk_context);
 }

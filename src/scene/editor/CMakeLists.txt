@@ -9,6 +9,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/default_position.c"
 	"${CMAKE_CURRENT_LIST_DIR}/default_shape.c"
 	"${CMAKE_CURRENT_LIST_DIR}/default_primitive.c"
+	"${CMAKE_CURRENT_LIST_DIR}/default_material.c"
 	"${CMAKE_CURRENT_LIST_DIR}/default_sphere.c"
 	"${CMAKE_CURRENT_LIST_DIR}/default_cylinder.c"
 	"${CMAKE_CURRENT_LIST_DIR}/default_cone.c"

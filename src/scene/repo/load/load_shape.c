@@ -24,11 +24,11 @@ t_bool is_child)
 
 	shape = deserialize_shape(cson);
 	children_cson = cson_valueof(cson, CSON_CHILDREN_KEY);
-	shape.nchildren = children_cson == NULL ? 0 : cson_size(children_cson);
+	shape.nchildren = children_cson == NULL || is_child ? 0 : cson_size(children_cson);
 	scenebuffer_add_shape(scene, &shape, is_child);
 	primitive_cson = cson_valueof(cson, CSON_PRIMITIVE_KEY);
 	load_primitive(scene, primitive_cson, SHAPEBUFF_TARGET);
-	if (children_cson != NULL)
+	if (children_cson != NULL && is_child == FALSE)
 	{
 		count = cson_size(children_cson);
 		i = 0;

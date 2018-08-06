@@ -42,6 +42,8 @@ static __constant t_byte	*primitive_skip(__constant t_primitive *primitive)
 		ptr += sizeof(t_cone);
 	else if (primitive->primitive_type == CYLINDER)
 		ptr += sizeof(t_cylinder);
+	else if (primitive->primitive_type == TORUS)
+		ptr += sizeof(t_torus);
 	return (ptr);
 }
 
@@ -91,15 +93,35 @@ __constant t_lightsource	*lightsource_next(t_iterator *iterator)
 	return (current);
 }
 
-t_iterator					limitation_begin(__constant t_primitive *primitive)
+t_iterator				limitation_begin(__constant t_primitive *primitive)
 {
 	return ((t_iterator){primitive->nlimitations, primitive_skip(primitive)});
 }
 
-__constant t_limitation		*limitation_next(t_iterator *iterator)
+__constant t_limitation	*limitation_next(t_iterator *iterator)
 {
 	__constant t_limitation	*current = (__constant t_limitation*)iterator->current;
 	iterator->current = limitation_skip(current);
+	--iterator->count;
+	return (current);
+}
+
+t_iterator				children_begin(__constant t_shape *shape)
+{
+	t_iterator limitation_iter = limitation_begin(shape_get_primitive(shape));
+	while (has_next(&limitation_iter))
+		limitation_next(&limitation_iter);
+	return ((t_iterator){shape->nchildren, limitation_iter.current});
+}
+
+__constant t_shape		*children_next(t_iterator *iterator)
+{
+	__constant t_shape	*current = (__constant t_shape*)iterator->current;
+	iterator->current += sizeof(t_shape);
+	t_iterator limitation_iter = limitation_begin((__constant t_primitive*)iterator->current);
+	while (has_next(&limitation_iter))
+		limitation_next(&limitation_iter);
+	iterator->current = limitation_iter.current;
 	--iterator->count;
 	return (current);
 }

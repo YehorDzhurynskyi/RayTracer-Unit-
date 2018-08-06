@@ -18,26 +18,36 @@ static const char	*g_primitive_captions[] = {
 	"Plane",
 	"Sphere",
 	"Cone",
-	"Cylinder"
+	"Cylinder",
+	"Torus"
 };
 
-static void			render_shape_tree_item(const t_shape *shape,
+static int			render_shape_tree_item(const t_shape *shape,
 const t_primitive *primitive, int tree_item_id)
 {
-	char	caption[255];
-	size_t	name_len;
+	char		caption[255];
+	size_t		name_len;
+	t_iterator	children_iter;
 
 	ft_strncpy(caption, g_primitive_captions[primitive->primitive_type - 1], 255);
 	ft_strlcat(caption, ", id : ", 255);
 	name_len = ft_strlen(caption);
 	ft_itoa_cat(caption + name_len, 255 - name_len, tree_item_id);
 	if (nk_tree_push_id(g_nk_context, NK_TREE_NODE,
-		caption, NK_MINIMIZED, tree_item_id))
+		caption, NK_MINIMIZED, tree_item_id++))
 	{
 		if (nk_button_label(g_nk_context, "Select"))
 			gui_select_object(shape->addr, SHAPEBUFF_TARGET);
+		children_iter = children_begin(shape);
+		while (has_next(&children_iter))
+		{
+			shape = shape_next(&children_iter);
+			primitive = shape_get_primitive(shape);
+			render_shape_tree_item(shape, primitive, tree_item_id++);
+		}
 		nk_tree_pop(g_nk_context);
 	}
+	return (tree_item_id);
 }
 
 void				render_shape_tree(void)
@@ -53,6 +63,6 @@ void				render_shape_tree(void)
 	{
 		shape = shape_next(&iter);
 		primitive = shape_get_primitive(shape);
-		render_shape_tree_item(shape, primitive, i++);
+		i = render_shape_tree_item(shape, primitive, i);
 	}
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intersection.h                                     :+:      :+:    :+:   */
+/*   validation_torus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INTERSECTION_H
-# define INTERSECTION_H
+#include "validation.h"
 
-# include "raytracer.h"
+t_err_code	validate_torus(const t_cson *cson)
+{
+	t_err_code	err;
 
-const t_shape	*shape_intersected(const t_shape *shape, const t_ray *ray, float *t);
-int				primitive_intersected(const t_shape *shape, const t_ray *ray, float *t1, float *t2);
-
-int				plane_intersected(const t_primitive *primitive, const t_ray *ray, float *t);
-int				sphere_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cylinder_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-int				cone_intersected(const t_primitive *primitive, const t_ray *ray, float *t1, float *t2);
-
-t_bool			limit(const t_primitive *primitive, const t_ray *ray, float *target_t, const float t);
-
-#endif
+	err = validate_real_required(cson, CSON_NEAR_RADIUS_KEY);
+	err |= validate_real_required(cson, CSON_FAR_RADIUS_KEY);
+	return (err);
+}

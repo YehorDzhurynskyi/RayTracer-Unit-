@@ -15,7 +15,7 @@ static t_vec4	plane_get_normal(__constant t_primitive *primitive)
 	return ((t_vec4)(primitive->orientation.s4, primitive->orientation.s5, primitive->orientation.s6, 0));
 }
 
-t_bool	plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t)
+int	plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t)
 {
 	const t_vec4 plane_normal = plane_get_normal(primitive);
 	float denom = -dot(ray->direction, plane_normal);
@@ -32,7 +32,7 @@ t_bool	plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_
 		*t /= denom;
 		return (limit(primitive, ray, t, *t));
 	}
-	return (FALSE);
+	return (0);
 }
 
 t_vec4	obtain_plane_normal(const t_vec4 *point, __constant t_primitive *primitive)

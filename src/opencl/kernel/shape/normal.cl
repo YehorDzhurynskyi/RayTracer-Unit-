@@ -14,7 +14,10 @@ t_vec4	obtain_normal(const t_vec4 *point, __constant t_shape *shape)
 {
 	// TODO: shape could be a composite so in this case need to handle relation types etc
 	__constant t_primitive *primitive = shape_get_primitive(shape);
-	return (obtain_primitive_normal(point, primitive));
+	t_vec4 normal = obtain_primitive_normal(point, primitive);
+	// if (shape->relation_type == NEGATION)
+	// 	normal = -normal;
+	return (normal);
 }
 
 t_vec4	obtain_primitive_normal(const t_vec4 *point, __constant t_primitive *primitive)
@@ -27,7 +30,7 @@ t_vec4	obtain_primitive_normal(const t_vec4 *point, __constant t_primitive *prim
 		return (obtain_cone_normal(point, primitive));
 	else if (primitive->primitive_type == CYLINDER)
 		return (obtain_cylinder_normal(point, primitive));
-	else if (primitive->primitive_type == COMPOSITE || primitive->primitive_type == POINT) // TODO: making an assumption that the point is infinitely small
-		return (0);
+	else if (primitive->primitive_type == TORUS)
+		return (obtain_torus_normal(point, primitive));
 	return (0);
 }

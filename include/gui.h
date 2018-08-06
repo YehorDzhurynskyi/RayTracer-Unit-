@@ -106,6 +106,8 @@ void	gui_add_cylinder(void);
 void	gui_add_cone(void);
 void	gui_add_plane(void);
 
+void	gui_add_material(void);
+
 void	gui_add_pointlightsource(void);
 void	gui_add_dirlightsource(void);
 void	gui_add_spotlightsource(void);
@@ -115,7 +117,6 @@ void	camera_key_handler(t_camera *camera);
 const t_shape	*pick_shape(const SDL_MouseButtonEvent *event, t_scene *scene);
 
 extern struct nk_context	*g_nk_context;
-extern t_bool				g_scene_interactive_enabled;
-extern t_bool				g_gui_interactive_enabled;
+extern int					g_nk_window_flags;
 
 #endif

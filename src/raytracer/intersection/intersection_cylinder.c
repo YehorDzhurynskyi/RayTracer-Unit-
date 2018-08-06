@@ -40,8 +40,25 @@ static t_vec3d	calc_vb(const t_primitive *primitive, const t_ray *ray)
 	return (vec3d_cross(&ray->direction, &cylinder_direction));
 }
 
-t_bool			cylinder_intersected(const t_primitive *primitive,
-const t_ray *ray, float *t)
+static int		number_of_roots(t_bool t1_intersected, t_bool t2_intersected,
+float *t1, float *t2)
+{
+	int	nroots;
+
+	nroots = 0;
+	if (t1_intersected)
+		++nroots;
+	if (t2_intersected)
+	{
+		if (nroots == 0)
+			*t1 = *t2;
+		++nroots;
+	}
+	return (nroots);
+}
+
+int			cylinder_intersected(const t_primitive *primitive,
+const t_ray *ray, float *t1, float *t2)
 {
 	t_vec3d	va;
 	t_vec3d	vb;
@@ -58,6 +75,6 @@ const t_ray *ray, float *t)
 	if (d < 0.0)
 		return (FALSE);
 	d = sqrt(d);
-	return (limit(primitive, ray, t, (-b - d) / a)
-	|| limit(primitive, ray, t, (-b + d) / a));
+	return (number_of_roots(limit(primitive, ray, t1, (-b - d) / a),
+	limit(primitive, ray, t2, (-b + d) / a), t1, t2));
 }

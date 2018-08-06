@@ -42,3 +42,24 @@ const t_primitive	*shape_get_primitive(const t_shape *shape)
 {
 	return ((const t_primitive*)++shape);
 }
+
+t_iterator			children_begin(const t_shape *shape)
+{
+	t_iterator limitation_iter = limitation_begin(shape_get_primitive(shape));
+	while (has_next(&limitation_iter))
+		limitation_next(&limitation_iter);
+	return ((t_iterator){shape->nchildren, limitation_iter.current});
+}
+
+const t_shape		*children_next(t_iterator *iterator)
+{
+	const t_shape	*current = (const t_shape*)iterator->current;
+	iterator->current += sizeof(t_shape);
+	t_iterator limitation_iter = limitation_begin((const t_primitive*)iterator->current);
+	while (has_next(&limitation_iter))
+		limitation_next(&limitation_iter);
+	iterator->current = limitation_iter.current;
+	--iterator->count;
+	return (current);
+}
+

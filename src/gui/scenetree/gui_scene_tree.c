@@ -15,7 +15,7 @@
 void	gui_render_scene_tree(void)
 {
 	if (nk_begin(g_nk_context, "Scene objects", nk_rect(TREE_X, TREE_Y, TREE_WIDTH,
-		TREE_HEIGHT), NK_WINDOW_BORDER | NK_WINDOW_TITLE))
+		TREE_HEIGHT), g_nk_window_flags | NK_WINDOW_TITLE))
 	{
 		if (nk_tree_push_id(g_nk_context, NK_TREE_TAB,
 		"Shapes", NK_MINIMIZED, 0))
