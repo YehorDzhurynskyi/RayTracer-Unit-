@@ -40,7 +40,7 @@ static cl_image_desc	skybox_image_desc(int width, int height, int arr_size)
 	return (desc);
 }
 
-static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
+static t_bool	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 {
 	char			path[RT_GUI_RESOURCE_PATH_BUFF_LEN];
 	DIR				*dir;
@@ -54,7 +54,8 @@ static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 	ft_strlcat(path, dirname, RT_GUI_RESOURCE_PATH_BUFF_LEN);
 	ft_strlcat(path, "/", RT_GUI_RESOURCE_PATH_BUFF_LEN);
 	dir_offset = ft_strlen(path);
-	dir = opendir(path);
+	if ((dir = opendir(path)) == NULL)
+		return (FALSE);
 	i = 0;
 	while((ent = readdir(dir)) != NULL)
 	{
@@ -68,6 +69,7 @@ static void	load_skybox_surfaces(const char *dirname, SDL_Surface **surfaces)
 		}
 	}
 	closedir(dir);
+	return (TRUE);
 }
 
 static cl_mem	null_skybox(void)
@@ -83,9 +85,8 @@ cl_mem	load_skybox(const char *dirname)
 	cl_mem		mem_obj;
 	size_t		tex_size;
 
-	if (dirname == NULL)
+	if (dirname == NULL || load_skybox_surfaces(dirname, surfaces) == FALSE)
 		return (null_skybox());
-	load_skybox_surfaces(dirname, surfaces);
 	tex_size = 4 * surfaces[0]->w * surfaces[0]->h;
 	pixels = malloc(6 * tex_size);
 	i = -1;
