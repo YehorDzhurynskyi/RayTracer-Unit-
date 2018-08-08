@@ -3,7 +3,7 @@ ambient: 0.30
 "global_illumination": false
 "trace_depth": 15
 fov: 60.0
-skybox: "clouds"
+skybox: "church"
 camera:
 	position: [0.0 0.0 15.0]
 	forward: [0.0 0.0 -1.0]
@@ -13,13 +13,13 @@ materials: [
 	{
 		"diffuse_color": "0x00d8bda1"
 		"specular_color": "0x00d8bda1"
-		glossiness: 0.2
+		glossiness: 0.0
 		ior: 1.0
 	}
 	{
 		"diffuse_color": "0x00111111"
 		"specular_color": "0x00111111"
-		glossiness: 0.5
+		glossiness: 0.0
 		ior: 1.0
 	}
 	{
@@ -31,13 +31,13 @@ materials: [
 	{
 		"diffuse_color": "0x00b67575"
 		"specular_color": "0x00b67575"
-		glossiness: 0.2
+		glossiness: 0.0
 		ior: 1.0
 	}
 	{
 		"diffuse_color": "0x007a4709"
 		"specular_color": "0x007a4709"
-		glossiness: 0.2
+		glossiness: 0.0
 		ior: 1.0
 	}
 ]

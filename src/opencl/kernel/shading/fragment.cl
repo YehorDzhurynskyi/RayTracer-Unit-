@@ -25,7 +25,7 @@ static t_fragment	default_fragment(const t_scene *scene, __constant t_shape *sha
 	fragment.specular_albedo = albedo;
 	if (dot(fragment.normal, ray->direction))
 		fragment.normal = -fragment.normal;
-	fragment.glossiness = 1.0f;
+	fragment.glossiness = 0.0f;
 	fragment.ior = 1.0f;
 	return (fragment);
 }

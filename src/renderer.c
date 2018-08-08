@@ -100,7 +100,6 @@ void	renderer_init(void)
 	while (!g_window_should_close)
 	{
 		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); 
-		// printf("rendering...\n");
 	}
 	// {
 	// 	// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
