@@ -54,7 +54,7 @@ void	scenebuffer_map(t_scene *scene, int offset, size_t size, t_buff_target targ
 	determine_target_buffers(scene, &device_buffer, &host_buffer, target);
 	scene->mapped_host_buffer = *host_buffer + offset;
 	scene->mapped_device_buffer = clEnqueueMapBuffer(g_clcontext.command_queue,
-	*device_buffer, CL_FALSE, CL_MAP_WRITE, offset, size, 0, NULL, NULL, &err);
+	*device_buffer, CL_TRUE, CL_MAP_WRITE, offset, size, 0, NULL, NULL, &err);
 	if (err != CL_SUCCESS)
 		log_error(opencl_get_error(err), RT_OPENCL_ERROR);
 }

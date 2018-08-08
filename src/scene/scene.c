@@ -144,6 +144,7 @@ void						scene_change(const char *scene_name)
 		log_error("Failed to load scene", RT_RESOURCE_LOADING_ERROR);
 	else
 	{
+		gui_select_object(NONE_SELECTED_ADDR, NONE_TARGET);
 		gui_loading_start("Loading scene...");
 		load_scene(&g_main_scene, scene_cson);
 		log_notify("Scene was loaded successfully");

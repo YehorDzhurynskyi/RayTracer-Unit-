@@ -64,8 +64,8 @@ static cl_mem	*enqueue_filters(int width, int height)
 
 void	renderer_render(const t_scene *scene, unsigned char *pixelbuffer, int width, int height)
 {
-	int			err;
-	cl_mem		*outputbuffer_ptr;
+	int		err;
+	cl_mem	*outputbuffer_ptr;
 
 	if (g_should_redraw_scene == FALSE)
 		return ;
@@ -76,12 +76,18 @@ void	renderer_render(const t_scene *scene, unsigned char *pixelbuffer, int width
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 	outputbuffer_ptr = enqueue_filters(width, height);
 	clFinish(g_clcontext.command_queue); // TODO: find out which is better clFinish or clFlush
+	// clFlush(g_clcontext.command_queue);
 	err = clEnqueueReadBuffer(g_clcontext.command_queue,
-		*outputbuffer_ptr, CL_FALSE /* TODO: find out which is better CL_TRUE or CL_FALSE */, 0, width * height * 4,
+		*outputbuffer_ptr, CL_TRUE /* TODO: find out which is better CL_TRUE or CL_FALSE */, 0, width * height * 4,
 		pixelbuffer, 0, NULL, NULL);
 	if (err != CL_SUCCESS)
 		log_fatal(opencl_get_error(err), RT_OPENCL_ERROR);
 }
+
+extern t_byte	*g_pixelbuffer;
+extern int		g_frame_width;
+extern int		g_frame_height;
+extern t_bool	g_window_should_close;
 
 void	renderer_init(void)
 {
@@ -91,6 +97,11 @@ void	renderer_init(void)
 	g_scene_renderer.nfilters = 0;
 	scene_init_memory();
 	gui_loading_stop();
+	while (!g_window_should_close)
+	{
+		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); 
+		// printf("rendering...\n");
+	}
 	// {
 	// 	// g_scene_renderer.filter_prgms[0] = opencl_program_create("src/opencl/kernel/filters/sepia_filter.cl", "filter");
 	// 	// g_scene_renderer.nfilters++;

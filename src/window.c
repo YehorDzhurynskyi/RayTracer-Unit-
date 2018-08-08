@@ -95,12 +95,12 @@ void					window_loop(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 		start = SDL_GetPerformanceCounter();
 		gui_poll_events(&g_main_scene);
-		renderer_render(&g_main_scene, g_pixelbuffer, g_frame_width, g_frame_height); // TODO: call this function every scene update
 		glBindTexture(GL_TEXTURE_2D, g_gl_render_target_name);
 		gui_render_scene(mseconds);
 		gui_render();
 		SDL_GL_SwapWindow(g_sdl_window);
 		mseconds = (SDL_GetPerformanceCounter() - start) / (float)freq * 1000.0f;
 	}
+	sleep(1);
 	gui_cleanup();
 }
