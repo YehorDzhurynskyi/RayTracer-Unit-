@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.h                                             :+:      :+:    :+:   */
+/*   queue.cl                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+t_bool	queue_pop(t_queue *queue, t_queue_elem *elem)
+{
+	const int	size = queue->end % QUEUE_MAX_SIZE - queue->begin % QUEUE_MAX_SIZE + 1;
+	if (size > 0) 
+	{
+		*elem = queue->data[queue->begin++ % QUEUE_MAX_SIZE];
+		return (TRUE);
+	}
+	return (FALSE);
+}
 
-t_vec3		mat4x4_mult_vec3(const t_mat4x4 mat, const t_vec3 vec);
-t_vec4		mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec);
+t_bool	queue_push(t_queue *queue, t_queue_elem *elem)
+{
+	const int	size = queue->end % QUEUE_MAX_SIZE - queue->begin % QUEUE_MAX_SIZE + 1;
+	if (size < QUEUE_MAX_SIZE) 
+	{
+		queue->data[++queue->end % QUEUE_MAX_SIZE] = *elem;
+		return (TRUE);
+	}
+	return (FALSE);
+}
 
-t_vec3		reflect3(const t_vec3 incident, const t_vec3 normal);
-t_vec4		reflect4(const t_vec4 incident, const t_vec4 normal);
+t_queue	queue_init(void)
+{
+	t_queue	queue;
 
-t_vec3		refract3(t_vec3 incident, t_vec3 normal, t_scalar ior);
-t_vec4		refract4(t_vec4 incident, t_vec4 normal, t_scalar ior);
-
-t_scalar	fresnel(const t_vec4 *incident, const t_vec4 *normal, const t_scalar ior);
-
-int			solve_quadric(t_scalar c[3], t_scalar s[2]);
-int			solve_cubic(t_scalar c[4], t_scalar s[3]);
-int			solve_quartic(t_scalar c[5], t_scalar s[4]);
-
-#endif
+	queue.begin = 0;
+	queue.end = -1;
+	return (queue);
+}

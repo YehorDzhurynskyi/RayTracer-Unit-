@@ -29,7 +29,7 @@ textures: [
 	{
 		type: "chess"
 		color1: "0x0068ffb4"
-		color2: "0x88ff6644"
+		color2: "0x00ff6644"
 		scale: 13.0
 	}
 ]
@@ -37,7 +37,7 @@ materials: [
 	{
 		diffuse_texture: 4
 		specular_color: "0x00C0C0C0"
-		glossiness: 1.0
+		glossiness: 0.5
 		ior: 1.0
 	}
 	{
@@ -86,7 +86,7 @@ shapes: [
 	}
 	{
 		relation: "union"
-		# material: 0
+		material: 0
 		primitive: {
 			type: "cone"
 			angle: 15.0

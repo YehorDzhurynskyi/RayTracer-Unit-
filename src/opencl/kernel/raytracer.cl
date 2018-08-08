@@ -12,6 +12,8 @@
 
 #include "common/types.h"
 #include "common/math.h"
+#include "common/queue.h"
+#include "common/queue.cl"
 #include "common/math.cl"
 #include "common/color.h"
 #include "common/color.cl"
@@ -46,33 +48,6 @@
 #include "shading/texture.cl"
 #include "shading/uvcoords.cl"
 #include "shading/shader.cl"
-
-// // static uchar4		trace_ray(const t_ray *ray, const t_scene *scene, int trace_depth)
-// // {
-// // 	t_scalar				t;
-// // 	__constant t_shape	*nearest_shape;
-// // 	t_ray				next_ray = *ray;
-// // 	uchar4				result_color = 0;
-// // 	t_scalar				reflectivity = 1.0f;
-
-// // 	do {
-// // 		nearest_shape = (__constant t_shape*)cast_ray(scene, &next_ray, &t);
-// // 		if (nearest_shape == NULL)
-// // 			break;
-// // 		const t_vec4 point = next_ray.direction * t + next_ray.origin;
-// // 		result_color = color_add(result_color, color_scalar(shade(&point, scene, nearest_shape), reflectivity * (1.0f - nearest_shape->reflectivity)));
-// // 		if (nearest_shape->reflectivity < 1.0e-6)
-// // 			break;
-// // 		reflectivity *= nearest_shape->reflectivity;
-// // 		const t_vec4 normal = obtain_normal(&point, nearest_shape);
-// // 		next_ray.direction = reflect(next_ray.direction, normal);
-// // 		const t_scalar bias = 0.005f;
-// // 		next_ray.origin = point + next_ray.direction * bias;
-// // 	} while (--trace_depth > 0);
-// // 	return (result_color);
-// // }
-
-// // TODO: implement call stack :) https://github.com/RenatoUtsch/clTracer/blob/master/source/clSampler/cl/recursion.cl
 
 const sampler_t skyboxsampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP | CLK_FILTER_LINEAR;
 
@@ -160,33 +135,51 @@ static t_rcolor		map_skybox(__read_only image2d_array_t skybox, const t_ray *ray
 static t_rcolor		trace_ray(const t_scene *scene, const t_scene_buffers *buffers,
 __read_only image2d_array_t textures, __read_only image2d_array_t skybox, const t_ray *ray)
 {
-	t_scalar			t;
-	__constant t_shape	*nearest_shape;
-	t_ray				next_ray = *ray;
-	t_rcolor			result_color = 0.0f;
-	t_scalar			opacity = 1.0f;
-	int					trace_depth = scene->config.trace_depth;
-	const t_scalar		bias = 0.005f;
+	t_queue			trace_queue = queue_init();
+	t_scalar		t;
+	t_rcolor		result_color = 0.0f;
+	// int			trace_depth = 3;// TODO: uncomment: scene->config.trace_depth;
+	const t_scalar	bias = 0.005f;
 
+	t_queue_elem	current_elem;
+	current_elem.ray = *ray;
+	current_elem.intensity = 1.0f;
 	do {
-		nearest_shape = cast_ray(scene, buffers, &next_ray, &t);
+		t_rcolor current_color = 0.0f;
+		__constant t_shape *nearest_shape = cast_ray(scene, buffers, &current_elem.ray, &t);
 		if (nearest_shape == NULL)
 		{
-			result_color += map_skybox(skybox, &next_ray) * opacity;
-			break;
+			current_color = map_skybox(skybox, &current_elem.ray) * current_elem.intensity;
 		}
-		const t_fragment fragment = compose_fragment(scene, buffers, textures, nearest_shape, &next_ray, t);
-		const t_scalar nearest_shape_opacity = 1.0f - fragment.diffuse_albedo.a;
-		t_rcolor shape_color = shade(scene, buffers, textures, &fragment);
-		if (scene->config.selected_shape_addr == nearest_shape->addr)
-			shape_color += (t_rcolor)(0.1f, 0.2f, 0.5f, 0.0f);
-		result_color += shape_color * (opacity * nearest_shape_opacity);
-		if (nearest_shape_opacity == 1.0f)
-			return (result_color);
-		opacity *= (1.0f - nearest_shape_opacity);
-		next_ray.direction = refract4(next_ray.direction, fragment.normal, fragment.ior);
-		next_ray.origin = fragment.point + next_ray.direction * bias;
-	} while (--trace_depth > 0);
+		else
+		{
+			const t_fragment fragment = compose_fragment(scene, buffers, textures, nearest_shape, &current_elem.ray, t);
+			current_color = shade(scene, buffers, textures, &fragment);
+			const t_scalar nearest_shape_opacity = 1.0f - fragment.diffuse_albedo.a;
+				// r <= o (1 - t - r <= 0.0)
+			current_color *= (nearest_shape_opacity - fragment.glossiness) * current_elem.intensity;
+			// fresnel
+			if (current_elem.intensity * fragment.glossiness > 1.0E-5f)
+			{
+				t_queue_elem	new_elem;
+				new_elem.ray.direction = reflect4(current_elem.ray.direction, fragment.normal);
+				new_elem.ray.origin = fragment.point + new_elem.ray.direction * bias;
+				new_elem.intensity = current_elem.intensity * fragment.glossiness;
+				queue_push(&trace_queue, &new_elem);
+			}
+			if (current_elem.intensity * (1.0f - nearest_shape_opacity) > 1.0E-5f)
+			{
+				t_queue_elem	new_elem;
+				new_elem.ray.direction = refract4(current_elem.ray.direction, fragment.normal, fragment.ior);
+				new_elem.ray.origin = fragment.point + new_elem.ray.direction * bias;
+				new_elem.intensity = current_elem.intensity * (1.0f - nearest_shape_opacity);
+				queue_push(&trace_queue, &new_elem);
+			}
+			if (scene->config.selected_shape_addr == nearest_shape->addr)
+				current_color += (t_rcolor)(0.1f, 0.2f, 0.5f, 0.0f);
+		}
+		result_color += current_color;
+	} while (queue_pop(&trace_queue, &current_elem) == TRUE);
 	return (result_color);
 }
 

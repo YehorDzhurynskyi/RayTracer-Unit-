@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.h                                             :+:      :+:    :+:   */
+/*   queue.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#ifndef QUEUE_H
+# define QUEUE_H
 
-t_vec3		mat4x4_mult_vec3(const t_mat4x4 mat, const t_vec3 vec);
-t_vec4		mat4x4_mult_vec4(const t_mat4x4 mat, const t_vec4 vec);
+# define QUEUE_MAX_SIZE	10
 
-t_vec3		reflect3(const t_vec3 incident, const t_vec3 normal);
-t_vec4		reflect4(const t_vec4 incident, const t_vec4 normal);
+typedef struct
+{
+	t_ray		ray;
+	t_scalar	intensity;
+}	t_queue_elem;
 
-t_vec3		refract3(t_vec3 incident, t_vec3 normal, t_scalar ior);
-t_vec4		refract4(t_vec4 incident, t_vec4 normal, t_scalar ior);
+typedef struct
+{
+	t_queue_elem	data[QUEUE_MAX_SIZE];
+	int				begin;
+	int				end;
+}	t_queue;
 
-t_scalar	fresnel(const t_vec4 *incident, const t_vec4 *normal, const t_scalar ior);
-
-int			solve_quadric(t_scalar c[3], t_scalar s[2]);
-int			solve_cubic(t_scalar c[4], t_scalar s[3]);
-int			solve_quartic(t_scalar c[5], t_scalar s[4]);
+t_queue	queue_init(void);
+t_bool	queue_pop(t_queue *queue, t_queue_elem *elem);
+t_bool	queue_push(t_queue *queue, t_queue_elem *elem);
 
 #endif

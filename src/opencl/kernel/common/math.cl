@@ -62,7 +62,35 @@ t_vec4	refract4(t_vec4 incident, t_vec4 normal, t_scalar ior)
 		snell = ior;
 	}
 	t_scalar	k = 1 - snell * snell * (1 - cosi * cosi); 
-	return (k < 0 ? 0 : snell * incident + (snell * cosi - sqrt(k)) * normal);
+	return (normalize(k < 0 ? 0 : snell * incident + (snell * cosi - sqrt(k)) * normal));
+}
+
+t_scalar	fresnel(const t_vec4 *incident, const t_vec4 *normal, const t_scalar ior)
+{
+	t_scalar	cosi = dot(*incident, *normal);
+	t_scalar	etai = 1.0f;
+	t_scalar	etat = ior;
+	if (cosi > 0)
+	{
+		t_scalar	temp;
+
+		temp = etai;
+		etai = etat;
+		etat = temp;
+	}
+	// Compute sini using Snell's law
+	const t_scalar	dc = 1 - cosi * cosi;
+	const t_scalar	sint = etai / etat * sqrt(dc < 0.0f ? 0.0f : dc);
+	// Total internal reflection
+	if (sint >= 1) {
+		return (1.0f);
+	}
+	const t_scalar	ds = 1 - sint * sint;
+	t_scalar cost = sqrt(ds < 0.0f ? 0.0f : ds);
+	cosi = fabs(cosi); 
+	const t_scalar Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost)); 
+	const t_scalar Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost)); 
+	return (1.0f - (Rs * Rs + Rp * Rp) / 2.0f);
 }
 
 int		solve_quadric(t_scalar c[3], t_scalar s[2])
