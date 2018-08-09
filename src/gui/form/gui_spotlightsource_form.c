@@ -28,25 +28,6 @@ const t_spotlightsource *new_spotlightsrc)
 	scenebuffer_unmap(&g_main_scene, LIGHTSOURCEBUFF_TARGET);
 }
 
-static void	render_spotlightsource_position(t_spotlightsource *spotlightsrc)
-{
-	float	xpos;
-	float	ypos;
-	float	zpos;
-
-	xpos = spotlightsrc->position.x;
-	ypos = spotlightsrc->position.y;
-	zpos = spotlightsrc->position.z;
-	nk_layout_row_dynamic(g_nk_context, 30, 1);
-	nk_label_colored(g_nk_context, "position", NK_TEXT_LEFT, property_color);
-	nk_property_float(g_nk_context, "#x:", -INFINITY, &xpos, INFINITY, 1.0f, 1.0f);
-	nk_property_float(g_nk_context, "#y:", -INFINITY, &ypos, INFINITY, 1.0f, 1.0f);
-	nk_property_float(g_nk_context, "#z:", -INFINITY, &zpos, INFINITY, 1.0f, 1.0f);
-	spotlightsrc->position.x = xpos;
-	spotlightsrc->position.y = ypos;
-	spotlightsrc->position.z = zpos;
-}
-
 static void	render_spotlightsource_attenuation(t_spotlightsource *spotlightsrc)
 {
 	float	c;
@@ -96,7 +77,6 @@ const t_spotlightsource *spotlightsrc)
 		nk_property_float(g_nk_context, "#value", 1.0f,
 			&angle, 89.0f, 1.0f, 1.0f);
 		new_spotlightsrc.cosangle = cos(angle * M_PI / 180.0);
-		render_spotlightsource_position(&new_spotlightsrc);
 		render_spotlightsource_attenuation(&new_spotlightsrc);
 		render_spotlightsource_direction(&new_spotlightsrc);
 		update_spotlightsource(lightsource, spotlightsrc, &new_spotlightsrc);

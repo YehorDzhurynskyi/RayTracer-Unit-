@@ -33,15 +33,14 @@ shapes: [
 		}
 		material: 0
 	}
-	# {
-	# 	relation: "union"
-	# 	primitive: {
-	# 		type: "sphere"
-	# 		radius: 2.0
-	# 		position: [0.0 0.0 5.0]
-	# 	}
-	# 	material: 1
-	# }
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [0.0 5.0 0.0]
+		}
+		material: 1
+	}
 ]
 lightsources: [
 	{
@@ -50,8 +49,9 @@ lightsources: [
 		intensity: 1.0
 		color: "0x00ffffff"
 		primitive: {
-			type: "point"
-			position: [0.0 0.0 0.0]
+			type: "sphere"
+			radius: 1.0
+			position: [0.0 -5.0 15.0]
 		}
 	}
 ]

@@ -32,6 +32,7 @@ __constant t_shape			*children_next(t_iterator *iterator);
 t_bool						has_next(const t_iterator *iterator);
 
 __constant t_primitive		*shape_get_primitive(__constant t_shape *shape);
+__constant t_primitive		*lightsource_get_primitive(__constant t_lightsource *lightsource);
 __constant t_byte			*primitive_get_actual(__constant t_primitive *primitive);
 __constant t_byte			*lightsource_get_actual(__constant t_lightsource *lightsource);
 __constant t_byte			*limitation_get_actual(__constant t_limitation *limitation);

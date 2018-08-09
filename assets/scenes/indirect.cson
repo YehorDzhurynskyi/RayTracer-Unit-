@@ -1,0 +1,98 @@
+ambient: 0.5
+camera:
+	position: [0.0 3.0 15.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse_color": "0x00aaaaaa"
+		"specular_color": "0x00aaaaaa"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00bbbbbb"
+		"specular_color": "0x00bbbbbb"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00228822"
+		"specular_color": "0x00228822"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00882222"
+		"specular_color": "0x00882222"
+		glossiness: 0.0
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [-4.0 0.0 0.0]
+		}
+		material: 0
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [4.0 5.0 0.0]
+		}
+		material: 0
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [0.0 -2.0 0.0]
+		}
+		material: 1
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -10.0]
+			orientation: [90.0 0.0 0.0]
+		}
+		material: 1
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [10.0 0.0 0.0]
+			orientation: [0.0 0.0 90.0]
+		}
+		material: 2
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [-10.0 0.0 0.0]
+			orientation: [0.0 0.0 90.0]
+		}
+		material: 3
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [0.0 10.0 0.0]
+		}
+	}
+]

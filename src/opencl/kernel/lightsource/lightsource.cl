@@ -31,7 +31,7 @@ const t_vec4 to_light)
 {
 	const t_vec4 incident = to_light * -1.0f;
 	t_vec4	reflected = reflect4(incident, fragment->normal);
-	t_scalar	specfactor = dot(normalize(fragment->to_eye), reflected);
+	t_scalar	specfactor = dot(fragment->to_origin, reflected);
 	specfactor = max(0.0f, specfactor);
 	t_scalar luminosity = rgb2luma(fragment->specular_albedo);
 	specfactor = fragment->glossiness * pow(specfactor, luminosity);
@@ -51,9 +51,9 @@ t_vec4		to_lightsource(__constant t_lightsource *lightsrc, const t_vec4 *point)
 {
 	__constant t_byte *actual = lightsource_get_actual(lightsrc);
 	if (lightsrc->lightsource_type == POINTLIGHT)
-		return (to_pointlightsource((__constant t_pointlightsource*)actual, point));
+		return (to_pointlightsource(lightsrc, point));
 	if (lightsrc->lightsource_type == SPOTLIGHT)
-		return (to_spotlightsource((__constant t_spotlightsource*)actual, point));
+		return (to_spotlightsource(lightsrc, point));
 	if (lightsrc->lightsource_type == DIRLIGHT)
 		return (to_dirlightsource((__constant t_dirlightsource*)actual));
 	return (0);

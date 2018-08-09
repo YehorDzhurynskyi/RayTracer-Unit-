@@ -34,16 +34,3 @@ t_lightsource				deserialize_lightsource(const t_cson *cson)
 		cson_valueof(cson, CSON_TYPE_KEY)));
 	return (lightsource);
 }
-
-t_cson						*serialize_light(t_cson *actual_lightsource_cson,
-const t_lightsource *lightsource)
-{
-	t_clcolor	color;
-
-	color = lightsource->color;
-	cson_put(actual_lightsource_cson, CSON_COLOR_KEY,
-	serialize_color(&color));
-	cson_put_real(actual_lightsource_cson, CSON_INTENSITY_KEY,
-	lightsource->intensity);
-	return (actual_lightsource_cson);
-}

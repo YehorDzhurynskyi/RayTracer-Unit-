@@ -159,26 +159,6 @@ t_clbool			deserialize_bool_optional(const t_cson *cson, const t_clbool default_
 t_clmat4x4			deserialize_orientation_required(const t_cson *cson);
 t_clmat4x4			deserialize_orientation_optional(const t_cson *cson, const t_vec3d default_angles);
 
-t_cson				*serialize_shape(const t_shape *shape);
-t_cson				*serialize_camera(const t_camera *camera);
-t_cson				*serialize_primitive(t_cson *actual_primitive_cson,
-const t_primitive *primitive);
-t_cson				*serialize_cone(const t_cone *cone);
-t_cson				*serialize_cylinder(const t_cylinder *cylinder);
-t_cson				*serialize_sphere(const t_sphere *sphere);
-t_cson				*serialize_material(const t_material *material);
-t_cson				*serialize_limitation(t_cson *actual_limitation_cson,
-const t_limitation *limitation);
-t_cson				*serialize_axial_limitation(t_cson *actual_limitation_cson,
-const t_axial_limitation *axial_limitation);
-t_cson				*serialize_lightsource(t_cson *actual_lightsource_cson,
-const t_lightsource *lightsource);
-t_cson				*serialize_pointlightsource(const t_pointlightsource *pointlightsource);
-t_cson				*serialize_dirlightsource(const t_dirlightsource *dirlightsource);
-t_cson				*serialize_spotlightsource(const t_spotlightsource *spotlightsource);
-t_cson				*serialize_vec3(const t_clvec3 *vec);
-t_cson				*serialize_color(const t_clcolor *color);
-
 # define AMBIENT		0.1
 # define FOV			60.0
 # define INTENSITY		1.0

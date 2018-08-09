@@ -38,13 +38,11 @@ typedef struct			__attribute__ ((packed))
 
 typedef struct			__attribute__ ((packed))
 {
-	t_clvec4			position;
 	t_clvec4			attenuation;
 }	t_pointlightsource;
 
 typedef struct			__attribute__ ((packed))
 {
-	t_clvec4			position;
 	t_clvec4			attenuation;
 	t_clvec4			direction;
 	t_clscalar			cosangle;

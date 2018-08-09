@@ -146,6 +146,13 @@ __constant t_byte			*lightsource_get_actual(__constant t_lightsource *lightsourc
 	return ((__constant t_byte*)++lightsource);
 }
 
+__constant t_primitive		*lightsource_get_primitive(__constant t_lightsource *lightsource)
+{
+	if (lightsource->lightsource_type == DIRLIGHT)
+		return (NULL);
+	return ((__constant t_primitive*)lightsource_skip(lightsource));
+}
+
 __constant t_byte			*limitation_get_actual(__constant t_limitation *limitation)
 {
 	return ((__constant t_byte*)++limitation);

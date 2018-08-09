@@ -19,6 +19,7 @@ __read_only image2d_array_t textures, const t_fragment *fragment)
 	{
 		__constant t_lightsource *lightsrc = lightsource_next(&lightsrc_iter);
 		const t_rcolor	ill = illuminate(lightsrc, fragment) * lightsrc->intensity;
+		// color += ill;
 		const t_rcolor	dim = dimness(scene, buffers, textures, lightsrc, fragment, ill);
 		color += dim;
 	}

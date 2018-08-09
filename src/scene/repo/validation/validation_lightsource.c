@@ -26,8 +26,7 @@ t_err_code	validate_pointlightsource(const t_cson *cson)
 {
 	t_err_code	err;
 
-	err = validate_vec3_required(cson, CSON_POSITION_KEY, FALSE);
-	err |= validate_vec3_optional(cson, CSON_ATTENUATION_KEY, FALSE, "[1 0 0]");
+	err = validate_vec3_optional(cson, CSON_ATTENUATION_KEY, FALSE, "[1 0 0]");
 	return (err);
 }
 

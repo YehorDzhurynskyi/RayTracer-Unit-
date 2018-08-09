@@ -25,7 +25,8 @@ t_scalar *union_t1, t_scalar *union_t2)
 			continue;
 		// t1 is always less then t2
 		t_scalar	t1, t2;
-		int nintersected_points = primitive_intersected(child, ray, &t1, &t2);
+		__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(child);
+		int nintersected_points = primitive_intersected(primitive, ray, &t1, &t2);
 		if (nintersected_points == 0)
 			continue;
 		if (nintersected_points == 1 && t1 < 1.0E-5)
@@ -75,7 +76,8 @@ const t_scalar union_t1, const t_scalar union_t2, t_scalar *negation_t1, t_scala
 			continue;
 		// t1 is always less then t2
 		t_scalar t1, t2;
-		int nintersected_points = primitive_intersected(child, ray, &t1, &t2);
+		__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(child);
+		int nintersected_points = primitive_intersected(primitive, ray, &t1, &t2);
 		// zero or only one intersected point are considered as infinitely small to negate
 		if (nintersected_points < 2)
 			continue;
@@ -101,7 +103,10 @@ __constant t_shape	*shape_intersected(__constant t_shape *shape, const t_ray *ra
 	if (shape->relation_type == NEGATION)
 		return (NULL);
 	if (shape->nchildren == 0)
-		return (0 != primitive_intersected(shape, ray, t, NULL) ? shape : NULL);
+	{
+		__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(shape);
+		return (0 != primitive_intersected(primitive, ray, t, NULL) ? shape : NULL);
+	}
 
 	// find nearest union t
 	t_scalar	union_t1, union_t2;
@@ -127,9 +132,8 @@ __constant t_shape	*shape_intersected(__constant t_shape *shape, const t_ray *ra
 	return (shape_is_negated ? nearest_negation_shape : nearest_union_shape);
 }
 
-int	primitive_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t1, t_scalar *t2)
+int	primitive_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2)
 {
-	__constant t_primitive *primitive = (__constant t_primitive*)shape_get_primitive(shape);
 	t_scalar	*pt1 = t1;
 	t_scalar	*pt2 = t2;
 	t_scalar	dummy_t1;
@@ -150,6 +154,28 @@ int	primitive_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar 
 	else if (primitive->primitive_type == TORUS)
 		return (torus_intersected(primitive, ray, pt1, pt2));
 	return (0);
+}
+
+__constant t_lightsource	*cast_lightsource_ray(const t_scene *scene,
+const t_scene_buffers *buffers, const t_ray *ray, t_scalar *nearest_t)
+{
+	__constant t_lightsource	*nearest_lightsource = NULL;
+	t_scalar					t;
+
+	t_iterator lightsource_iter = lightsource_begin(scene, buffers);
+	while (has_next(&lightsource_iter))
+	{
+		__constant t_lightsource *lightsource = lightsource_next(&lightsource_iter);
+		__constant t_primitive *primitive = (__constant t_primitive*)lightsource_get_primitive(lightsource);
+		if (primitive == NULL)
+			continue;
+		if (primitive_intersected(primitive, ray, &t, NULL) != 0 && t > 1.0E-5 && t < *nearest_t)
+		{
+			*nearest_t = t;
+			nearest_lightsource = lightsource;
+		}
+	}
+	return (nearest_lightsource);
 }
 
 __constant t_shape	*cast_ray(const t_scene *scene,

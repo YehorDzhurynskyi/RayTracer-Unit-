@@ -28,25 +28,6 @@ const t_pointlightsource *new_pointlightsrc)
 	scenebuffer_unmap(&g_main_scene, LIGHTSOURCEBUFF_TARGET);
 }
 
-static void	render_pointlightsource_position(t_pointlightsource *pointlightsrc)
-{
-	float	xpos;
-	float	ypos;
-	float	zpos;
-
-	xpos = pointlightsrc->position.x;
-	ypos = pointlightsrc->position.y;
-	zpos = pointlightsrc->position.z;
-	nk_layout_row_dynamic(g_nk_context, 30, 1);
-	nk_label_colored(g_nk_context, "position", NK_TEXT_LEFT, property_color);
-	nk_property_float(g_nk_context, "#x:", -INFINITY, &xpos, INFINITY, 1.0f, 1.0f);
-	nk_property_float(g_nk_context, "#y:", -INFINITY, &ypos, INFINITY, 1.0f, 1.0f);
-	nk_property_float(g_nk_context, "#z:", -INFINITY, &zpos, INFINITY, 1.0f, 1.0f);
-	pointlightsrc->position.x = xpos;
-	pointlightsrc->position.y = ypos;
-	pointlightsrc->position.z = zpos;
-}
-
 static void	render_pointlightsource_attenuation(t_pointlightsource *pointlightsrc)
 {
 	float	c;
@@ -74,7 +55,6 @@ const t_pointlightsource *pointlightsrc)
 	if (nk_tree_push(g_nk_context, NK_TREE_TAB, "Point lightsource", NK_MAXIMIZED))
 	{
 		new_pointlightsource = *pointlightsrc;
-		render_pointlightsource_position(&new_pointlightsource);
 		render_pointlightsource_attenuation(&new_pointlightsource);
 		update_pointlightsource(lightsource, pointlightsrc, &new_pointlightsource);
 		nk_tree_pop(g_nk_context);

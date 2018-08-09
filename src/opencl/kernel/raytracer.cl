@@ -147,19 +147,25 @@ __read_only image2d_array_t textures, __read_only image2d_array_t skybox, const 
 	do {
 		t_rcolor current_color = 0.0f;
 		__constant t_shape *nearest_shape = cast_ray(scene, buffers, &current_elem.ray, &t);
-		if (nearest_shape == NULL)
+		t_scalar light_t = t;
+		__constant t_lightsource *nearest_lightsource = cast_lightsource_ray(scene, buffers, &current_elem.ray, &light_t);
+		if (nearest_lightsource != NULL && light_t < t)
+		{
+			current_color = color2rcolor(nearest_lightsource->color);
+		}
+		else if (nearest_shape == NULL)
 		{
 			current_color = map_skybox(skybox, &current_elem.ray);
 		}
 		else
 		{
-			const t_fragment fragment = compose_fragment(scene, buffers, textures, nearest_shape, &current_elem.ray, t);
+			const t_fragment fragment = compose_fragment(buffers, textures, nearest_shape, &current_elem.ray, t);
 			current_color = shade(scene, buffers, textures, &fragment);
 			const t_scalar nearest_shape_opacity = 1.0f - fragment.diffuse_albedo.a;
 			// (t + r <= 1.0) -> (1.0 - o + r <= 1.0) -> (r - o <= 0.0) -> (r <= o)
 			current_color *= fragment.glossiness <= nearest_shape_opacity ? nearest_shape_opacity - fragment.glossiness : 0.0f;
 			// fresnel
-			if (current_elem.intensity * fragment.glossiness > 1.0E-5f)
+			if (current_elem.intensity * fragment.glossiness > 0.095f)
 			{
 				t_queue_elem	new_elem;
 				new_elem.ray.direction = reflect4(current_elem.ray.direction, fragment.normal);
@@ -167,7 +173,7 @@ __read_only image2d_array_t textures, __read_only image2d_array_t skybox, const 
 				new_elem.intensity = current_elem.intensity * fragment.glossiness;
 				queue_push(&trace_queue, &new_elem);
 			}
-			if (current_elem.intensity * (1.0f - nearest_shape_opacity) > 1.0E-5f)
+			if (current_elem.intensity * (1.0f - nearest_shape_opacity) > 0.095f)
 			{
 				t_queue_elem	new_elem;
 				new_elem.ray.direction = refract4(current_elem.ray.direction, fragment.normal, fragment.ior);

@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-t_vec4	to_pointlightsource(__constant t_pointlightsource *pointlightsrc,
-const t_vec4 *point)
+t_vec4	to_pointlightsource(__constant t_lightsource *lightsource, const t_vec4 *point)
 {
-	return (pointlightsrc->position - *point);
+__constant t_primitive *primitive = (__constant t_primitive*)lightsource_skip(lightsource);
+return (primitive->position - *point);
 }
 
 t_bool	pointlightsource_is_in_shadow(const t_vec4 *to_light, t_scalar t)
@@ -24,7 +24,7 @@ t_bool	pointlightsource_is_in_shadow(const t_vec4 *to_light, t_scalar t)
 t_rcolor	pointlightsource_illuminate(__constant t_lightsource *lightsrc,
 __constant t_pointlightsource *pointlightsrc, const t_fragment *fragment)
 {
-	t_vec4 to_light = to_pointlightsource(pointlightsrc, &fragment->point);
+	t_vec4 to_light = to_pointlightsource(lightsrc, &fragment->point);
 	const t_scalar	attenuation = attenuate(pointlightsrc->attenuation, length(to_light));
 	to_light = normalize(to_light);
 	const t_rcolor diffcolor = diffuse(lightsrc, fragment, to_light);

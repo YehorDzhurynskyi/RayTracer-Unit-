@@ -39,7 +39,7 @@ __constant t_lightsource *lightsrc, const t_fragment *fragment, const t_rcolor i
 			break;
 		else if (lightsrc->lightsource_type == SPOTLIGHT && spotlightsource_is_in_shadow((__constant t_spotlightsource*)lightsource_get_actual(lightsrc), &to_light, t) == FALSE)
 			break;
-		next_fragment = compose_fragment(scene, buffers, textures, nearest_shape, &next_ray, t);
+		next_fragment = compose_fragment(buffers, textures, nearest_shape, &next_ray, t);
 		const t_scalar nearest_shape_opacity = 1.0f - next_fragment.diffuse_albedo.a;
 		result_color += next_fragment.diffuse_albedo * opacity * nearest_shape_opacity;
 		result_color *= lightsrc_color * (1.0f - nearest_shape_opacity);

@@ -35,13 +35,11 @@ typedef struct			__attribute__ ((packed))
 
 typedef struct			__attribute__ ((packed))
 {
-	t_vec4				position;
 	t_vec4				attenuation;
 }	t_pointlightsource;
 
 typedef struct			__attribute__ ((packed))
 {
-	t_vec4				position;
 	t_vec4				attenuation;
 	t_vec4				direction;
 	t_scalar			cosangle;
@@ -49,10 +47,10 @@ typedef struct			__attribute__ ((packed))
 
 t_vec4					to_lightsource(__constant t_lightsource
 *lightsource, const t_vec4 *point);
-t_vec4					to_pointlightsource(__constant t_pointlightsource
-*pointlightsource, const t_vec4 *point);
+t_vec4					to_pointlightsource(__constant t_lightsource
+*lightsource, const t_vec4 *point);
 t_vec4					to_dirlightsource(__constant t_dirlightsource *dirlightsrc);
-t_vec4					to_spotlightsource(__constant t_spotlightsource *spotlightsource,
+t_vec4					to_spotlightsource(__constant t_lightsource *lightsource,
 const t_vec4 *point);
 
 t_bool					pointlightsource_is_in_shadow(const t_vec4 *to_light, t_scalar t);

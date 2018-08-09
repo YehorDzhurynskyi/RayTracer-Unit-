@@ -44,23 +44,3 @@ t_camera		deserialize_camera(const t_cson *cson)
 	else
 		return (deserialize_rotation_matrix(cson, &position, &up));
 }
-
-t_cson			*serialize_camera(const t_camera *camera)
-{
-	t_cson		*cson;
-	t_clvec3	vec;
-
-	cson = cson_object();
-	vec = camera->position;
-	cson_put(cson, CSON_POSITION_KEY, serialize_vec3(&vec));
-	vec = (t_clvec3){{camera->rotation_matrix.s0,
-	camera->rotation_matrix.s1, camera->rotation_matrix.s3}};
-	cson_put(cson, CSON_RIGHT_KEY, serialize_vec3(&vec));
-	vec = (t_clvec3){{camera->rotation_matrix.s4,
-	camera->rotation_matrix.s5, camera->rotation_matrix.s6}};
-	cson_put(cson, CSON_UP_KEY, serialize_vec3(&vec));
-	vec = (t_clvec3){{-camera->rotation_matrix.s8,
-	-camera->rotation_matrix.s9, -camera->rotation_matrix.sa}};
-	cson_put(cson, CSON_FORWARD_KEY, serialize_vec3(&vec));
-	return (cson);
-}

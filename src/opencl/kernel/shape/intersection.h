@@ -16,8 +16,11 @@
 __constant t_shape	*cast_ray(const t_scene *scene,
 const t_scene_buffers *buffers, const t_ray *ray, t_scalar *nearest_t);
 
+__constant t_lightsource	*cast_lightsource_ray(const t_scene *scene,
+const t_scene_buffers *buffers, const t_ray *ray, t_scalar *nearest_t);
+
 __constant t_shape	*shape_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t);
-int					primitive_intersected(__constant t_shape *shape, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					primitive_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 
 int					plane_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t);
 int					sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
