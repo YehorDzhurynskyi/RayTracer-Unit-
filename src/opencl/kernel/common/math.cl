@@ -93,187 +93,133 @@ t_scalar	fresnel(const t_vec4 *incident, const t_vec4 *normal, const t_scalar io
 	return (1.0f - (Rs * Rs + Rp * Rp) / 2.0f);
 }
 
-int		solve_quadric(t_scalar c[3], t_scalar s[2])
+typedef	struct			s_equation
 {
-	t_scalar p, q, D;
-	/* normal form: x^2 + px + q = 0 */
-	p = c[1] / (2 * c[2]);
-	q = c[0] / c[2];
-	D = p * p - q;
-	if (IsZero(D))
-	{
-		s[0] = -p;
-		return 1;
-	}
-	else if (D < 0)
-		return 0;
-	else
-	{
-		const t_scalar sqrt_D = sqrt(D);
-		s[0] = sqrt_D - p;
-		s[1] = -sqrt_D - p;
-		return 2;
-	}
-}
+	bool				flag;
+	double				aa;
+	double				pp;
+	double				rr;
+	double				q2;
+	double				c;
+	double				b;
+	double				br;
+	double				discr;
+	double				real1;
+	double				real2;
+	double				im1;
+	double				im2;
+	double2				l;
+}						t_equation;
 
-int		solve_cubic(t_scalar c[4], t_scalar s[3])
+static void sort(double3 *ua, double2 *l)
 {
-	int			i, num;
-	t_scalar	sub;
-	t_scalar	A, B, C;
-	t_scalar	sq_A, p, q;
-	t_scalar	cb_p, D;
-
-	/* normal form: x^3 + Ax^2 + Bx + C = 0 */
-
-	A = c[2] / c[3];
-	B = c[1] / c[3];
-	C = c[0] / c[3];
-
-	/*  substitute x = y - A/3 to eliminate quadric term:
-	x^3 +px + q = 0 */
-
-	sq_A = A * A;
-	p = 1.0f / 3.0f * (- 1.0f / 3.0f * sq_A + B);
-	q = 1.0f / 2.0f * (2.0f / 27.0f * A * sq_A - 1.0f / 3.0f * A * B + C);
-
-	/* use Cardano's formula */
-
-	cb_p = p * p * p;
-	D = q * q + cb_p;
-
-	if (IsZero(D))
+	if (fabs((*ua)[0]) > fabs((*ua)[1]) && fabs((*ua)[0]) > fabs((*ua)[2]))
 	{
-		if (IsZero(q)) /* one triple solution */
-		{
-			s[0] = 0;
-			num = 1;
-		}
-		else /* one single and one t_scalar solution */
-		{
-			t_scalar u = cbrt(-q);
-			s[0] = 2.0f * u;
-			s[1] = -u;
-			num = 2;
-		}
+		(*l)[0] = (*ua)[0];
+		(*l)[1] = fabs((*ua)[1]) > fabs((*ua)[2]) ? (*ua)[1] : (*ua)[2];
 	}
-	else if (D < 0) /* Casus irreducibilis: three real solutions */
+	else if (fabs((*ua)[1]) > fabs((*ua)[0]) && fabs((*ua)[1]) > fabs((*ua)[2]))
 	{
-		const t_scalar phi = 1.0f / 3.0f * acos(-q / sqrt(-cb_p));
-		const t_scalar t = 2.0f * sqrt(-p);
-
-		s[0] = t * cos(phi);
-		s[1] = -t * cos(phi + M_PI / 3.0f);
-		s[2] = -t * cos(phi - M_PI / 3.0f);
-		num = 3;
-	}
-	else /* one real solution */
-	{
-		const t_scalar sqrt_D = sqrt(D);
-		const t_scalar u = cbrt(sqrt_D - q);
-		const t_scalar v = - cbrt(sqrt_D + q);
-
-		s[0] = u + v;
-		num = 1;
-	}
-
-	/* resubstitute */
-
-	sub = 1.0f / 3.0f * A;
-
-	for (i = 0; i < num; ++i)
-		s[i] -= sub;
-	return num;
-}
-
-int		solve_quartic(t_scalar c[5], t_scalar s[4])
-{
-	t_scalar	coeffs[ 4 ];
-	t_scalar	z, u, v, sub;
-	t_scalar	A, B, C, D;
-	t_scalar	sq_A, p, q, r;
-	int			i, num;
-
-	/* normal form: x^4 + Ax^3 + Bx^2 + Cx + D = 0 */
-
-	A = c[3] / c[4];
-	B = c[2] / c[4];
-	C = c[1] / c[4];
-	D = c[0] / c[4];
-
-	/*  substitute x = y - A/4 to eliminate cubic term:
-	x^4 + px^2 + qx + r = 0 */
-
-	sq_A = A * A;
-	p = -3.0f / 8.0f * sq_A + B;
-	q = 1.0f / 8.0f * sq_A * A - 1.0f / 2.0f * A * B + C;
-	r = - 3.0f / 256.0f * sq_A * sq_A + 1.0f / 16.0f * sq_A * B - 1.0f / 4.0f * A * C + D;
-
-	if (IsZero(r))
-	{
-	/* no absolute term: y(y^3 + py + q) = 0 */
-
-		coeffs[0] = q;
-		coeffs[1] = p;
-		coeffs[2] = 0;
-		coeffs[3] = 1;
-
-		num = solve_cubic(coeffs, s);
-
-		s[num++] = 0;
+		(*l)[0] = (*ua)[1];
+		(*l)[1] = fabs((*ua)[0]) > fabs((*ua)[2]) ? (*ua)[0] : (*ua)[2];
 	}
 	else
 	{
-		/* solve the resolvent cubic ... */
-
-		coeffs[0] = 1.0f / 2.0f * r * p - 1.0f / 8.0f * q * q;
-		coeffs[1] = -r;
-		coeffs[2] = -1.0f / 2.0f * p;
-		coeffs[3] = 1.0f;
-
-		(void) solve_cubic(coeffs, s);
-
-		/* ... and take the one real solution ... */
-
-		z = s[0];
-
-		/* ... to build two quadric equations */
-
-		u = z * z - r;
-		v = 2.0f * z - p;
-
-		if (IsZero(u))
-			u = 0.0f;
-		else if (u > 0.0f)
-			u = sqrt(u);
-		else
-			return 0;
-
-		if (IsZero(v))
-			v = 0.0f;
-		else if (v > 0.0f)
-			v = sqrt(v);
-		else
-			return 0;
-
-		coeffs[0] = z - u;
-		coeffs[1] = q < 0.0f ? -v : v;
-		coeffs[2] = 1.0f;
-
-		num = solve_quadric(coeffs, s);
-
-		coeffs[0]= z + u;
-		coeffs[1] = q < 0.0f ? v : -v;
-		coeffs[2] = 1.0f;
-
-		num += solve_quadric(coeffs, s + num);
+		(*l)[0] = (*ua)[2];
+		(*l)[1] = fabs((*ua)[0]) > fabs((*ua)[1]) ? (*ua)[0] : (*ua)[1];
 	}
+}
 
-	/* resubstitute */
+static void negative_discr_solution(t_equation *e)
+{
+	double 		n;
+	double 		bq3;
+	double 		beta;
+	double 		a3;
+	double3 	ua;
+ 	n = sqrt(e->b);
+	bq3 = n * n * n;
+	beta = (e->br / bq3 < 1.0f) ? acos(e->br / bq3) : 0.0f;
+	a3 = -2.0f * n;
+	ua[0] = a3 * cos(beta / 3.0f) - e->c / 3.0f;
+	ua[1] = a3 * cos((beta + 2.0f * M_PI) / 3.0f) - e->c / 3.0f;
+	ua[2] = a3 * cos((beta - 2.0f * M_PI) / 3.0f) - e->c / 3.0f;
+	e->flag = false;
+	sort(&ua, &(e->l));
+	if (e->l[0] >= 0.0f)
+	{
+		e->real1 = sqrt(e->l[0]);
+		e->im1 = 0.0f;
+	}
+	else
+	{
+		e->im1 = sqrt(-e->l[0]);
+		e->real1 = 0.0f;
+	}
+	if (e->l[1] >= 0.0f)
+	{
+		e->im2 = 0.0f;
+		e->real2 = sqrt(e->l[1]);
+	}
+	else
+	{
+		e->real2 = 0.0f;
+		e->im2 = sqrt(-e->l[1]);
+	}
+}
+ static void positive_discr_solution(t_equation *e)
+{
+	double 		n;
+	double 		a3;
+	double3 	ua;
+	double 		n2;
+	double 		u2;
+ 	n = (e->br < 0.0f) ? -1.0f : 1.0f;
+	a3 = -n * cbrt(fabs(e->br) + sqrt(e->discr));
+	ua[0] = a3 + e->b / a3 - e->c / 3.0f;
+	ua[1] = -0.5f * ((a3 * a3 + e->b) / a3) - e->c / 3.0f;
+	ua[2] = -(sqrt(3.0f) / 2.0f) * fabs(a3 - (e->b / a3));
+	e->flag = true;
+	n2 = sqrt(sqrt(ua[1] * ua[1] + ua[2] * ua[2]));
+	u2 = atan2(ua[2], ua[1]);
+	e->real1 = n2 * cos(u2 * 0.5f);
+	e->im1 = n2 * sin(u2 * 0.5f);
+	e->real2 = e->real1;
+	e->im2 = -e->im1;
+}
+ static int	fourth_degree_equation(double (t[4]), double a[4])
+{
+	double			res;
+	double			im_re1;
+	double			im_re2;
+	double			komp;
+	t_equation 		e;
 
-	sub = 1.0f / 4.0f * A;
-
-	for (i = 0; i < num; ++i)
-		s[i] -= sub;
-	return num;
+ 	e.aa = a[0] * a[0];
+	e.pp = a[1] - 0.375f * e.aa;
+	e.rr = a[3] - 0.25f * (a[0] * a[2] - 0.25f * e.aa * (a[1] - 0.1875f * e.aa));
+	e.q2 = a[2] - 0.5f * a[0] * (a[1] - 0.25f * e.aa);
+	e.c = 0.5f * e.pp;
+	e.aa = 0.25f * (0.25f * e.pp * e.pp - e.rr);
+	e.b = e.c * e.c / 9.0f - e.aa / 3.0f;
+	e.br = e.c * e.c * e.c / 27.0f - e.c * e.aa / 6.0f - (0.125f * e.q2 * 0.125f * e.q2) / 2.0f;
+	e.discr = ((e.br * e.br) - (e.b * e.b * e.b));
+	if (e.discr < 0.0f)
+		negative_discr_solution(&e);
+	else
+		positive_discr_solution(&e);
+	im_re1 = e.im1 * e.im1 + e.real1 * e.real1;
+	im_re2 = e.im2 * e.im2 + e.real2 * e.real2;
+	komp = e.im1 * e.im2 - e.real1 * e.real2;
+	res = e.q2 * 0.125f * komp / im_re1 / im_re2;
+	(t)[0] = e.real1 + e.real2 + res - a[0] * 0.25f;
+	(t)[1] = -e.real1 - e.real2 + res - a[0] * 0.25f;
+	(t)[2] = -e.real1 + e.real2 - res - a[0] * 0.25f;
+	(t)[3] = e.real1 - e.real2 - res - a[0] * 0.25f;
+	if (!e.flag && e.l[0] >= 0.0f && e.l[1] >= 0.0f)
+		return (4);
+	else if (!e.flag)
+		return (0);
+	else
+		return (2);
 }

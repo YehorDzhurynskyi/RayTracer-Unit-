@@ -57,15 +57,15 @@ int	torus_intersected(__constant t_primitive *primitive, const t_ray *ray, t_sca
 	* torus->far_radius - torus->near_radius * torus->near_radius;
 	const t_scalar e = 4.0f * torus->far_radius * torus->far_radius;
 	const t_scalar f = 4.0f * dot(to_orig, ray_direction);
-	t_scalar	roots[4];
-	t_scalar	params[5];
+	double	roots[4];
+	double	params[5];
 
-	params[0] = d * d - e * c;
-	params[1] = f * d - e * b;
-	params[2] = 2.0f * d + f * f / 4.0f - e * a;
-	params[3] = f;
-	params[4] = 1.0f;
-	const int nroots = solve_quartic(params, roots);
+	params[3] = d * d - e * c;
+	params[2] = f * d - e * b;
+	params[1] = 2.0f * d + f * f / 4.0f - e * a;
+	params[0] = f;
+	//const int nroots = solve_quartic(params, roots);
+	const int nroots = fourth_degree_equation(&roots, params);
 	if (nroots == 0)
 		return (FALSE);
 
@@ -87,13 +87,11 @@ int	torus_intersected(__constant t_primitive *primitive, const t_ray *ray, t_sca
 
 t_vec4	obtain_torus_normal(const t_vec4 *point, __constant t_primitive *primitive)
 {
-	// __constant t_torus *torus = (__constant t_torus*)primitive_get_actual(primitive);
 	// // const t_vec4 to_orig = mat4x4_mult_vec4(primitive->orientation, *point - primitive->position);
-	// const t_vec4 to_orig = *point - primitive->position;
-	// const t_vec4 direction = torus_get_direction(primitive);
-	// const t_vec4 new_point = normalize(to_orig - dot(to_orig, direction) * direction) * torus->far_radius;
+	__constant t_torus *torus = (__constant t_torus*)primitive_get_actual(primitive);
+	const t_vec4 to_orig = *point - primitive->position;
+	const t_vec4 direction = torus_get_direction(primitive);
+	const t_vec4 new_point = normalize(to_orig - dot(to_orig, direction) * direction) * torus->far_radius;
 	// // printf("normal\n");
-	// return (normalize(to_orig - new_point));
-	return ((t_vec4)(1.0f, 0.0f, 0.0f, 0.0f));
-	// return (0);
+	return (normalize(to_orig - new_point));
 }
