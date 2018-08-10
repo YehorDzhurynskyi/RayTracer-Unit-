@@ -37,6 +37,10 @@ int target, t_primitive *primitive)
 		actual_primitive = (t_cone[]){deserialize_cone(cson)};
 	else if (primitive->primitive_type == TORUS)
 		actual_primitive = (t_torus[]){deserialize_torus(cson)};
+	else if (primitive->primitive_type == QUADRIC)
+		actual_primitive = (t_quadric_surface[]){deserialize_quadric_surface(cson)};
+	else if (primitive->primitive_type == PARALLELEPIPED)
+		actual_primitive = (t_parallelepiped[]){deserialize_parallelepiped(cson)};
 	else if (ZERO_SIZE_PRIMITIVE(primitive->primitive_type))
 		actual_primitive = NULL;
 	scenebuffer_add_primitive(scene, primitive, actual_primitive, target);

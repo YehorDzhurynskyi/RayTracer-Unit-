@@ -10,29 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// int	equation_4th_pow_for_tore(t_tore *tr, double *Q, double *abc, double *t, double *ray)
-// {
-// 	double  abcde[5];
-// 	double  d;
-// 	double  fore_R_2;
-// 	double  rots[4];
-// 	int     roots_num;
-
-// 	d = dot_product(Q, Q) + tr->R * tr->R - tr->r * tr->r;
-// 	fore_R_2 = 4 * tr->R * tr->R;
-// 	abcde[4] = 1;
-// 	abcde[3] = 4 * dot_product(Q, ray);
-// 	abcde[2] = 2 * d + abcde[3] * abcde[3] / 4 - fore_R_2 * abc[0];
-// 	abcde[1] = abcde[3] * d - fore_R_2 * abc[1];
-// 	abcde[0] = d * d - fore_R_2 * abc[2];
-// 	roots_num = SolveQuartic(abcde, rots);
-// 	*t = 1e-6;
-// 	for (int i = 0; i < roots_num; i++)
-// 		if (rots[i] > 1e-6 && (*t == 1e-6 || rots[i] < *t))
-// 			*t = rots[i];
-// 	return (*t > 1e-6);
-// }
-
 static t_vec4	torus_get_direction(__constant t_primitive *primitive)
 {
 	t_vec4 direction = (t_vec4)(primitive->orientation.s4, primitive->orientation.s5, primitive->orientation.s6, 0);

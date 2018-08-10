@@ -37,6 +37,8 @@ t_err_code	validate_sphere(const t_cson *cson);
 t_err_code	validate_cylinder(const t_cson *cson);
 t_err_code	validate_cone(const t_cson *cson);
 t_err_code	validate_torus(const t_cson *cson);
+t_err_code	validate_quadric_surface(const t_cson *cson);
+t_err_code	validate_parallelepiped(const t_cson *cson);
 
 t_err_code	validate_color_required(const t_cson *cson, const char *key);
 t_err_code	validate_color_optional(const t_cson *cson, const char *key, const char *default_value_str);

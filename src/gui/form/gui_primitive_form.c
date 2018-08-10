@@ -96,5 +96,7 @@ void		render_actual_primitive_form(const t_shape *shape, const t_primitive *prim
 	else if (primitive->primitive_type == CYLINDER)
 		render_cylinder_form(shape, (const t_cylinder*)actual);
 	else if (primitive->primitive_type == CONE)
-		render_cone_form(shape, (const t_cone*)actual);
+		render_cone_form(shape, (const t_cone*)actual);	// TODO: add torus
+	else if (primitive->primitive_type == QUADRIC)
+		render_quadric_form(shape, (const t_quadric_surface*)actual);
 }

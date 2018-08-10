@@ -153,6 +153,10 @@ int	primitive_intersected(__constant t_primitive *primitive, const t_ray *ray, t
 		return (cylinder_intersected(primitive, ray, pt1, pt2));
 	else if (primitive->primitive_type == TORUS)
 		return (torus_intersected(primitive, ray, pt1, pt2));
+	else if (primitive->primitive_type == QUADRIC)
+		return (quadric_surface_intersected(primitive, ray, pt1, pt2));
+	else if (primitive->primitive_type == PARALLELEPIPED)
+		return (parallelepiped_intersected(primitive, ray, pt1, pt2));
 	return (0);
 }
 

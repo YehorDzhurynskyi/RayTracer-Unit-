@@ -48,6 +48,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_primitive_form.c"
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_sphere_form.c"
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_cylinder_form.c"
+	"${CMAKE_CURRENT_LIST_DIR}/form/gui_quadric_form.c"
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_cone_form.c"
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_form_utilities.c"
 	"${CMAKE_CURRENT_LIST_DIR}/form/gui_limitations_form.c"

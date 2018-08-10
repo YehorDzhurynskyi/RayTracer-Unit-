@@ -16,8 +16,8 @@ int	sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, t_sc
 	const t_vec4 to_orig = ray->origin - primitive->position;
 	const t_scalar b = dot(ray->direction, to_orig);
 	t_scalar d = b * b - (dot(to_orig, to_orig) - sphere->radius2);
-	if (d < 0.0)
-		return (FALSE);
+	if (d < 0.0f)
+		return (0);
 	d = sqrt(d);
 	int nroots = 0;
 	if (limit(primitive, ray, t1, -b - d))

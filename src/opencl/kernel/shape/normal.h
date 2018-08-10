@@ -21,5 +21,7 @@ t_vec4	obtain_plane_normal(const t_vec4 *point, __constant t_primitive *primitiv
 t_vec4	obtain_cylinder_normal(const t_vec4 *point, __constant t_primitive *primitive);
 t_vec4	obtain_cone_normal(const t_vec4 *point, __constant t_primitive *primitive);
 t_vec4	obtain_torus_normal(const t_vec4 *point, __constant t_primitive *primitive);
+t_vec4	obtain_quadric_surface_normal(const t_vec4 *point, __constant t_primitive *primitive);
+t_vec4	obtain_parallelepiped_normal(const t_vec4 *point, __constant t_primitive *primitive);
 
 #endif

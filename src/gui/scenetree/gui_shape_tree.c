@@ -19,7 +19,8 @@ static const char	*g_primitive_captions[] = {
 	"Sphere",
 	"Cone",
 	"Cylinder",
-	"Torus"
+	"Torus",
+	"Quadric"
 };
 
 static int			render_shape_tree_item(const t_shape *shape,

@@ -217,24 +217,22 @@ shapes: [
 lightsources: [
 	{
 		type: "point"
-		position: [-5.0 0.0 -15.0]
 		attenuation: [1.0 0.002 0.0004]
 		intensity: 1.0
 		color: "0x003333ff"
 		primitive: {
 			type: "point"
-			position: [0.0 0.0 0.0]
+			position: [-5.0 0.0 -15.0]
 		}
 	}
 	{
 		type: "point"
-		position: [10.0 -4.0 -10.0]
 		attenuation: [1.0 0.002 0.0004]
 		intensity: 1.0
 		color: "0x00ffffff"
 		primitive: {
 			type: "point"
-			position: [0.0 0.0 0.0]
+			position: [10.0 -4.0 -10.0]
 		}
 	}
 	# {
@@ -250,7 +248,6 @@ lightsources: [
 	# }
 	{
 		type: "spot"
-		position: [15.0 0.0 -10.0]
 		attenuation: [1.0 0.002 0.0004]
 		intensity: 1.0
 		direction: [0.0 1.0 0.0]
@@ -258,7 +255,7 @@ lightsources: [
 		color: "0x00ff0000"
 		primitive: {
 			type: "point"
-			position: [0.0 0.0 0.0]
+			position: [15.0 0.0 -10.0]
 		}
 	}
 	{

@@ -23,7 +23,9 @@ typedef enum
 	SPHERE,
 	CONE,
 	CYLINDER,
-	TORUS
+	TORUS,
+	QUADRIC,
+	PARALLELEPIPED
 }	t_primitive_type;
 
 # define ZERO_SIZE_PRIMITIVE(type) (type == POINT || type == COMPOSITE || type == PLANE)
@@ -71,5 +73,17 @@ typedef struct			__attribute__ ((packed))
 	t_clscalar			far_radius;
 	t_clscalar			near_radius;
 }	t_torus;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_clmat4x4			coefs;
+}	t_quadric_surface;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_clscalar			half_width;
+	t_clscalar			half_height;
+	t_clscalar			half_depth;
+}	t_parallelepiped;
 
 #endif

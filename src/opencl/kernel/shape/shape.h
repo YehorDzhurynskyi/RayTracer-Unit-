@@ -21,7 +21,9 @@ typedef enum
 	SPHERE,
 	CONE,
 	CYLINDER,
-	TORUS
+	TORUS,
+	QUADRIC,
+	PARALLELEPIPED
 }	t_primitive_type;
 
 typedef enum
@@ -73,5 +75,17 @@ typedef struct			__attribute__ ((packed))
 	t_scalar			far_radius;
 	t_scalar			near_radius;
 }	t_torus;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_mat4x4			coefs;
+}	t_quadric_surface;
+
+typedef struct			__attribute__ ((packed))
+{
+	t_scalar			half_width;
+	t_scalar			half_height;
+	t_scalar			half_depth;
+}	t_parallelepiped;
 
 #endif

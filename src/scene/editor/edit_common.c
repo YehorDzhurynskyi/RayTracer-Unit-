@@ -88,6 +88,10 @@ static inline size_t	primitive_sizeof(t_primitive_type type)
 		return (sizeof(t_cylinder));
 	else if (type == TORUS)
 		return (sizeof(t_torus));
+	else if (type == QUADRIC)
+		return (sizeof(t_quadric_surface));
+	else if (type == PARALLELEPIPED)
+		return (sizeof(t_parallelepiped));
 	assert(FALSE && "Primitive structure instance should have primitivetype field");
 	return (0);
 }

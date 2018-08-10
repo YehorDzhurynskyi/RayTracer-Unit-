@@ -27,5 +27,7 @@ int					sphere_intersected(__constant t_primitive *primitive, const t_ray *ray, 
 int					cylinder_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 int					cone_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 int					torus_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					quadric_surface_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
+int					parallelepiped_intersected(__constant t_primitive *primitive, const t_ray *ray, t_scalar *t1, t_scalar *t2);
 
 #endif

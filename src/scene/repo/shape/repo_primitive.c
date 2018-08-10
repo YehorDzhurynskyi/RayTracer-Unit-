@@ -12,14 +12,6 @@
 
 #include "scenerepo.h"
 
-t_cson		*serialize_primitive(t_cson *actual_primitive_cson,
-const t_primitive *primitive)
-{
-	(void)actual_primitive_cson;
-	(void)primitive;
-	return (NULL);
-}
-
 static t_primitive_type	recognize_primitive_type(const char *type)
 {
 	if (ft_strequ(type, CSON_SHAPE_COMPOSITE))
@@ -36,6 +28,10 @@ static t_primitive_type	recognize_primitive_type(const char *type)
 		return (CYLINDER);
 	else if (ft_strequ(type, CSON_SHAPE_TORUS))
 		return (TORUS);
+	else if (ft_strequ(type, CSON_SHAPE_QUADRIC))
+		return (QUADRIC);
+	else if (ft_strequ(type, CSON_SHAPE_PARALLELEPIPED))
+		return (PARALLELEPIPED);
 	return (0);
 }
 

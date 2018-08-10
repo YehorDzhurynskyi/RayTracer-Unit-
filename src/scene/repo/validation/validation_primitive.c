@@ -21,6 +21,8 @@
 #define ABSENT_MSG	"Primitive is absent" TIP_MSG
 #define FORMAT_MSG	"Primitive isn't object" TIP_MSG
 
+// TODO: move to separate files
+
 t_err_code			validate_cone(const t_cson *cson)
 {	
 	return (validate_real_required_ranged(cson, CSON_ANGLE_KEY, (double[2]){1.0f, 89.0f}));
@@ -53,7 +55,9 @@ static t_err_code	validate_primitive_type(const t_cson *cson)
 	|| ft_strequ(type, CSON_SHAPE_PLANE)
 	|| ft_strequ(type, CSON_SHAPE_CONE)
 	|| ft_strequ(type, CSON_SHAPE_CYLINDER)
-	|| ft_strequ(type, CSON_SHAPE_TORUS))
+	|| ft_strequ(type, CSON_SHAPE_TORUS)
+	|| ft_strequ(type, CSON_SHAPE_QUADRIC)
+	|| ft_strequ(type, CSON_SHAPE_PARALLELEPIPED))
 		return (RT_NO_ERROR);
 	return (validation_failed(type_cson, RT_WRONG_VALUE_TYPE_ERROR, TYPE_TYPE_MSG));
 }
@@ -81,6 +85,10 @@ t_err_code			validate_primitive(const t_cson *cson)
 		err |= validate_cylinder(primitive_cson);
 	else if (ft_strequ(type, CSON_SHAPE_TORUS))
 		err |= validate_torus(primitive_cson);
+	else if (ft_strequ(type, CSON_SHAPE_QUADRIC))
+		err |= validate_quadric_surface(primitive_cson);
+	else if (ft_strequ(type, CSON_SHAPE_PARALLELEPIPED))
+		err |= validate_parallelepiped(primitive_cson);
 	err |= validate_limitations(cson_valueof(primitive_cson, CSON_LIMITATIONS_KEY));
 	return (err);
 }

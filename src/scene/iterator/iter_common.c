@@ -32,6 +32,12 @@ const t_byte	*primitive_skip(const t_primitive *primitive)
 		ptr += sizeof(t_cone);
 	else if (primitive->primitive_type == CYLINDER)
 		ptr += sizeof(t_cylinder);
+	else if (primitive->primitive_type == TORUS)
+		ptr += sizeof(t_torus);
+	else if (primitive->primitive_type == QUADRIC)
+		ptr += sizeof(t_quadric_surface);
+	else if (primitive->primitive_type == PARALLELEPIPED)
+		ptr += sizeof(t_parallelepiped);
 	return (ptr);
 }
 

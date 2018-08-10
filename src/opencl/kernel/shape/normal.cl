@@ -32,5 +32,9 @@ t_vec4	obtain_primitive_normal(const t_vec4 *point, __constant t_primitive *prim
 		return (obtain_cylinder_normal(point, primitive));
 	else if (primitive->primitive_type == TORUS)
 		return (obtain_torus_normal(point, primitive));
+	else if (primitive->primitive_type == QUADRIC)
+		return (obtain_quadric_surface_normal(point, primitive));
+	else if (primitive->primitive_type == PARALLELEPIPED)
+		return (obtain_parallelepiped_normal(point, primitive));
 	return (0);
 }

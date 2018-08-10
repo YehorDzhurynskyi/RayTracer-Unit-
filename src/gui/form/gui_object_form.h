@@ -24,6 +24,7 @@ void					render_actual_primitive_form(const t_shape *shape, const t_primitive *p
 void					render_sphere_form(const t_shape *shape, const t_sphere *sphere);
 void					render_cylinder_form(const t_shape *shape, const t_cylinder *cylinder);
 void					render_cone_form(const t_shape *shape, const t_cone *cone);
+void					render_quadric_form(const t_shape *shape, const t_quadric_surface *quadric_surface);
 void					render_material_form(const t_material *material);
 void					render_texture_form(const t_texture *texture);
 void					render_chess_texture_form(const t_texture *texture);
