@@ -96,22 +96,22 @@ t_scalar	fresnel(const t_vec4 *incident, const t_vec4 *normal, const t_scalar io
 typedef	struct			s_equation
 {
 	bool				flag;
-	double				aa;
-	double				pp;
-	double				rr;
-	double				q2;
-	double				c;
-	double				b;
-	double				br;
-	double				discr;
-	double				real1;
-	double				real2;
-	double				im1;
-	double				im2;
-	double2				l;
+	float				aa;
+	float				pp;
+	float				rr;
+	float				q2;
+	float				c;
+	float				b;
+	float				br;
+	float				discr;
+	float				real1;
+	float				real2;
+	float				im1;
+	float				im2;
+	float2				l;
 }						t_equation;
 
-static void sort(double3 *ua, double2 *l)
+static void sort(float3 *ua, float2 *l)
 {
 	if (fabs((*ua)[0]) > fabs((*ua)[1]) && fabs((*ua)[0]) > fabs((*ua)[2]))
 	{
@@ -132,12 +132,13 @@ static void sort(double3 *ua, double2 *l)
 
 static void negative_discr_solution(t_equation *e)
 {
-	double 		n;
-	double 		bq3;
-	double 		beta;
-	double 		a3;
-	double3 	ua;
- 	n = sqrt(e->b);
+	float		n;
+	float		bq3;
+	float		beta;
+	float		a3;
+	float3 	ua;
+
+	n = sqrt(e->b);
 	bq3 = n * n * n;
 	beta = (e->br / bq3 < 1.0f) ? acos(e->br / bq3) : 0.0f;
 	a3 = -2.0f * n;
@@ -169,11 +170,12 @@ static void negative_discr_solution(t_equation *e)
 }
  static void positive_discr_solution(t_equation *e)
 {
-	double 		n;
-	double 		a3;
-	double3 	ua;
-	double 		n2;
-	double 		u2;
+	t_scalar	n;
+	t_scalar	a3;
+	t_vec3		ua;
+	t_scalar	n2;
+	t_scalar	u2;
+
  	n = (e->br < 0.0f) ? -1.0f : 1.0f;
 	a3 = -n * cbrt(fabs(e->br) + sqrt(e->discr));
 	ua[0] = a3 + e->b / a3 - e->c / 3.0f;
@@ -187,13 +189,13 @@ static void negative_discr_solution(t_equation *e)
 	e->real2 = e->real1;
 	e->im2 = -e->im1;
 }
- static int	fourth_degree_equation(double (t[4]), double a[4])
+ static int	fourth_degree_equation(t_scalar (t[4]), t_scalar a[4])
 {
-	double			res;
-	double			im_re1;
-	double			im_re2;
-	double			komp;
-	t_equation 		e;
+	t_scalar	res;
+	t_scalar	im_re1;
+	t_scalar	im_re2;
+	t_scalar	komp;
+	t_equation	e;
 
  	e.aa = a[0] * a[0];
 	e.pp = a[1] - 0.375f * e.aa;

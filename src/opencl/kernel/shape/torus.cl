@@ -34,8 +34,8 @@ int	torus_intersected(__constant t_primitive *primitive, const t_ray *ray, t_sca
 	* torus->far_radius - torus->near_radius * torus->near_radius;
 	const t_scalar e = 4.0f * torus->far_radius * torus->far_radius;
 	const t_scalar f = 4.0f * dot(to_orig, ray_direction);
-	double	roots[4];
-	double	params[5];
+	t_scalar	roots[4];
+	t_scalar	params[5];
 
 	params[3] = d * d - e * c;
 	params[2] = f * d - e * b;

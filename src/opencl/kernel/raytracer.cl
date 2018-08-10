@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma OPENCL EXTENSION cl_khr_fp64 : enable
-
 #include "common/types.h"
 #include "common/math.h"
 #include "common/queue.h"
