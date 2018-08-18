@@ -13,12 +13,17 @@
 #ifndef WINDOW_H
 # define WINDOW_H
 
-# include "ft.h"
+# include "scene.h"
+# include <SDL.h>
+# include <SDL_opengl.h>
 
-typedef void	(*t_render_callback)(unsigned char *pixelbuffer,
-int width, int height, void *user_ptr);
+# define RT_APP_NAME	"RayTracer-Unit-"
 
-t_bool	window_create(void);
-void	window_loop(t_render_callback render_callback, void *user_ptr);
+void	window_create(void);
+void	window_loop(void);
+void	window_cleanup(void);
+void	window_error(const char *title, const char *message);
+void	window_warning(const char *title, const char *message);
+void	window_info(const char *title, const char *message);
 
 #endif

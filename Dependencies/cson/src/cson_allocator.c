@@ -26,7 +26,7 @@ t_cson	*cson_alloc(t_cson *parent)
 	return (cson);
 }
 
-void	cson_free(t_cson *cson)
+void	cson_eliminate(t_cson *cson)
 {
 	unsigned	i;
 	t_alst		*tuple;
@@ -39,11 +39,20 @@ void	cson_free(t_cson *cson)
 		tuple = cson->value.tuple;
 		i = 0;
 		while (i < tuple->size)
-			cson_free(alst_get(tuple, i++));
+			cson_eliminate(alst_get(tuple, i++));
 		alst_del(&tuple);
 	}
 	else if (cson->value_type == CSON_STRING_VALUE_TYPE)
 		free(cson->value.string);
 	free(cson->key);
 	free(cson);
+}
+
+void	cson_free(t_cson *cson)
+{
+	if (cson == NULL)
+		return ;
+	while (cson->parent != NULL)
+		cson = cson->parent;
+	cson_eliminate(cson);
 }

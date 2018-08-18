@@ -23,6 +23,7 @@ typedef struct
 }	t_alst;
 
 t_alst		*alst_create(size_t capacity);
+void		alst_init(t_alst *alst, size_t capacity);
 void		alst_add(t_alst *alst, void *content);
 void		*alst_get(t_alst *alst, unsigned int i);
 void		alst_iteri(t_alst *alst, void (*f)(void *content, unsigned int i));

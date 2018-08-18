@@ -17,8 +17,14 @@ double	ft_atod(const char *s)
 	double	n;
 	double	f;
 	double	d;
+	int		sign;
 
 	n = (double)ft_atoi(s);
+	sign = 1;
+	while ((*s >= '\t' && *s <= '\r') || *s == ' ')
+		s++;
+	if (*s == '-')
+		sign = -1;
 	s = ft_strchr(s, '.');
 	if (s == NULL)
 		return (n);
@@ -30,5 +36,5 @@ double	ft_atod(const char *s)
 		f += (*s++ - '0') / d;
 		d *= 10.0;
 	}
-	return (n < 0.0 ? n - f : n + f);
+	return (n + (f * sign));
 }

@@ -1,0 +1,239 @@
+fov: 60.0
+camera:
+	position: [0.0 0.0 -15.0]
+	forward: [0.0 0.0 1.0]
+	right: [-1.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+textures: [
+	{
+		type: "resource"
+		uri: "wall.jpg"
+		scale: 8.0
+	}
+	{
+		type: "resource"
+		uri: "wall_specular.jpg"
+		scale: 8.0
+	}
+	{
+		type: "resource"
+		uri: "wall_gloss.jpg"
+		scale: 8.0
+	}
+	{
+		type: "resource"
+		uri: "wall_normal.jpg"
+		scale: 8.0
+	}
+	{
+		type: "chess"
+		color1: "0x00C0C0C0"
+		color2: "0x00ffd700"
+		scale: 10.0
+	}
+	{
+		type: "wave"
+		scale: 10.0
+	}
+	{
+		type: "perlin"
+		size: 16
+		scale: 20.0
+	}
+]
+materials: [
+	{
+		diffuse_texture: 0
+		specular_texture: 1
+		glossiness_texture: 2
+		normal_map_texture: 3
+		ior: 1.0
+	}
+	{
+		diffuse_texture: 4
+		specular_texture: 4
+		glossiness: 0.1
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00d8bda1"
+		"specular_color": "0x00d8bda1"
+		glossiness: 0.0
+		normal_map_texture: 5
+		ior: 1.0
+	}
+	{
+		diffuse_texture: 6
+		specular_texture: 6
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00cccccc"
+		"specular_color": "0x00cccccc"
+		glossiness: 0.0
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [-15.0 0.0 0.0]
+		}
+		material: 0
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [-5.0 0.0 0.0]
+		}
+		material: 1
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [5.0 0.0 0.0]
+		}
+		material: 2
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [15.0 0.0 0.0]
+		}
+		material: 3
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [0.0 -2.0 0.0]
+			limitations: [
+				{
+					type: "z-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 25.0
+					cutting: true
+				}
+				{
+					type: "z-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -25.0
+					cutting: true
+				}
+				{
+					type: "x-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -25.0
+					cutting: true
+				}
+				{
+					type: "x-axis"
+					is_relative: true
+					apply_if_less: false
+					limit: 25.0
+					cutting: true
+				}
+			]
+		}
+		material: 4
+	}
+]
+lightsources: [
+	{
+		type: "spot"
+		intensity: 0.7
+		color: "0x00ffffff"
+		angle: 20.0
+		direction: [0.0 -0.75 0.65]
+		primitive: {
+			type: "cone"
+			angle: 15.0
+			orientation: [45.0 0.0 0.0]
+			position: [-15.0 10.0 -10.0]
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -2.0
+				}
+			]
+		}
+	}
+	{
+		type: "spot"
+		intensity: 0.7
+		color: "0x00ffffff"
+		angle: 20.0
+		direction: [0.0 -0.75 0.65]
+		primitive: {
+			type: "cone"
+			angle: 15.0
+			orientation: [45.0 0.0 0.0]
+			position: [-5.0 10.0 -10.0]
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -2.0
+				}
+			]
+		}
+	}
+	{
+		type: "spot"
+		intensity: 0.7
+		color: "0x00ffffff"
+		angle: 20.0
+		direction: [0.0 -0.75 0.65]
+		primitive: {
+			type: "cone"
+			angle: 15.0
+			orientation: [45.0 0.0 0.0]
+			position: [5.0 10.0 -10.0]
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -2.0
+				}
+			]
+		}
+	}
+	{
+		type: "spot"
+		intensity: 0.7
+		color: "0x00ffffff"
+		angle: 20.0
+		direction: [0.0 -0.75 0.65]
+		primitive: {
+			type: "cone"
+			angle: 15.0
+			orientation: [45.0 0.0 0.0]
+			position: [15.0 10.0 -10.0]
+			limitations: [
+				{
+					type: "y-axis"
+					is_relative: true
+					apply_if_less: true
+					limit: -2.0
+				}
+			]
+		}
+	}
+]

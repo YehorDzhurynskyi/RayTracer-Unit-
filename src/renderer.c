@@ -11,83 +11,48 @@
 /* ************************************************************************** */
 
 #include "renderer.h"
-#include "error.h"
+#include "gui.h"
+#include "logger.h"
 
-#include <math.h>
-#include <time.h>
-#include <stdio.h>
+t_renderer		g_scene_renderer;
+t_bool			g_should_redraw_scene = FALSE;
 
-static void	renderer_prepare(const t_renderer *renderer)
+extern t_bool	g_window_should_close;
+extern t_byte	*g_pixelbuffer;
+extern int		g_frame_width;
+extern int		g_frame_height;
+
+void			renderer_init(void)
 {
-	int	err;
-
-	err = clSetKernelArg(renderer->rt_prgm.kernel, 1, sizeof(cl_mem), &renderer->scene.shapebuffer);
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 2, sizeof(cl_int), &renderer->scene.nshapes);
-#if 0
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 3, sizeof(t_camera), &renderer->scene.camera);
-#else
-	static clock_t last = 0;
-	clock_t now = clock();
-	static float ellapsed = 0.0f;
-	ellapsed += ((now - last) / 1000000.0f) * 1000.0;
-	last = now;
-	double x = ((int)ellapsed) % 10000 / 10000.0 * 2.0 * M_PI;
-	double s = sin(x);
-	double c = cos(x);
-	t_clmat4x4 mat = {
-		{c, 0.0f, s, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		-s, 0.0f, c, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f}
-	};
-	const float d = 8.0;
-	t_clvec4	pos = {{s * d, 1.0, c * d, 0.0}};
-	t_camera	camera = (t_camera){mat, pos};
-	err |= clSetKernelArg(renderer->rt_prgm.kernel, 3, sizeof(t_camera), &camera); // TODO: replace with scene.camera
-#endif
-	if (err)
-		print_opencl_error("Failed to set kernel arguments...", err);
-	// TODO: add light related and other set kernel args
-}
-
-void	renderer_render(unsigned char *pixelbuffer, int width, int height, void *user_ptr)
-{
-	t_renderer	*renderer;
-	int			err;
-
-	renderer = (t_renderer*)user_ptr;
-	renderer_prepare(renderer);
-	err = clEnqueueNDRangeKernel(g_clcontext.command_queue, renderer->rt_prgm.kernel,
-	2, NULL, (size_t[]){width, height}, NULL, 0, NULL, NULL);
-	if (err)
-		print_opencl_error("Failed to run kernel...", err);
-
-	clFinish(g_clcontext.command_queue);
-	err = clEnqueueReadBuffer(g_clcontext.command_queue,
-		renderer->rt_prgm.outputbuffer, CL_TRUE, 0, width * height * 4,
-		pixelbuffer, 0, NULL, NULL);
-	if (err != CL_SUCCESS)
-		print_opencl_error("Failed to read output buffer...", err);
-}
-
-t_renderer	renderer_init(void)
-{
-	t_renderer	renderer;
-	int			err;
-
+	gui_loading_start("Compiling kernel...");
 	opencl_init();
-	renderer.rt_prgm = opencl_program_create("src/opencl/kernel/raytracer.cl", "trace"); // TODO: replace hardcoded values
-	renderer.filter_prgms = NULL;
-	err = clSetKernelArg(renderer.rt_prgm.kernel, 0,
-	sizeof(cl_mem), &renderer.rt_prgm.outputbuffer);
-	renderer.scene = scene_create();
-	return (renderer);
+	g_scene_renderer.vfx_mask = 0;
+	g_scene_renderer.rt_prgm = opencl_program_create(RT_CWD
+	"/src/opencl/kernel/raytracer.cl", "trace");
+	g_scene_renderer.filter_prgms[BW_ID] = opencl_program_create(RT_CWD
+	"/src/opencl/kernel/filters/bw_filter.cl", "filter");
+	g_scene_renderer.filter_prgms[SEPIA_ID] = opencl_program_create(RT_CWD
+	"/src/opencl/kernel/filters/sepia_filter.cl", "filter");
+	g_scene_renderer.filter_prgms[BLUR_ID] = opencl_program_create(RT_CWD
+	"/src/opencl/kernel/filters/blur_filter.cl", "filter");
+	scene_init_memory();
+	gui_loading_stop();
+	while (!g_window_should_close)
+	{
+		renderer_render(&g_main_scene, g_pixelbuffer,
+		g_frame_width, g_frame_height);
+	}
 }
 
-void		renderer_cleanup(t_renderer *renderer)
+void			renderer_cleanup(void)
 {
-	scene_cleanup(&renderer->scene);
-	opencl_program_cleanup(&renderer->rt_prgm);
-	//TODO: delete filters in loop
+	int	i;
+
+	opencl_program_cleanup(&g_scene_renderer.rt_prgm);
+	i = -1;
+	while (++i < RT_MAX_FILTERS)
+	{
+		opencl_program_cleanup(&g_scene_renderer.filter_prgms[i]);
+	}
 	opencl_cleanup();
 }

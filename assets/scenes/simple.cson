@@ -1,0 +1,57 @@
+ambient: 0.30
+"anti_aliasing": "NOAA"
+"global_illumination": false
+"trace_depth": 15
+fov: 60.0
+skybox: "clouds"
+camera:
+	position: [0.0 0.0 15.0]
+	forward: [0.0 0.0 -1.0]
+	right: [1.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse_color": "0x00d8bda1"
+		"specular_color": "0x00d8bda1"
+		glossiness: 1.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x003333a1"
+		"specular_color": "0x003333a1"
+		glossiness: 0.2
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		primitive: {
+			type: "sphere"
+			radius: 2.0
+			position: [0.0 0.0 0.0]
+		}
+		material: 0
+	}
+	{
+		relation: "union"
+		primitive: {
+			type: "plane"
+			position: [0.0 5.0 0.0]
+		}
+		material: 1
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [0.0 -5.0 15.0]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [0.0 -5.0 15.0]
+		}
+	}
+]

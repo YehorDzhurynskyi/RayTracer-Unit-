@@ -39,14 +39,39 @@ static void			fill_buff(char *s, long long n, size_t count)
 	}
 }
 
-static long long	get_fractional_part(long double n, unsigned precision)
+static void			round_nearest(char *dest, unsigned precision)
 {
-	int			p;
-	long double	f;
+	unsigned i;
 
-	f = n - (long long)n;
-	p = ft_powi(10, precision);
-	return ((long long)((float)(f * p)));
+	if (dest[precision - 1] <= '5')
+		return ;
+	dest[precision - 1]++;
+	i = precision;
+	while (i-- > 1)
+	{
+		if (dest[i] > '9')
+		{
+			dest[i] -= 10;
+			dest[i - 1]++;
+		}
+	}
+	if (dest[i] > '9')
+		dest[i] -= 10;
+}
+
+static void			fill_frac(char *dest, long double n, unsigned precision)
+{
+	int	i;
+
+	if (n < 0.0)
+		n = -n;
+	i = 0;
+	while (precision--)
+	{
+		n -= (long long)n;
+		n *= 10.0;
+		dest[i++] = (char)n + '0';
+	}
 }
 
 char				*ft_ldtoa(long double n, unsigned precision)
@@ -55,7 +80,6 @@ char				*ft_ldtoa(long double n, unsigned precision)
 	size_t		dec_length;
 	char		*src;
 	char		*s;
-	long long	rpart;
 
 	dec_length = ft_count_digits((long long)n);
 	length = dec_length + precision
@@ -65,14 +89,14 @@ char				*ft_ldtoa(long double n, unsigned precision)
 		return (NULL);
 	s[length] = '\0';
 	src = s;
-	if (n < 0)
+	if (n < 0.0L)
 		*s++ = '-';
 	fill_buff(s, (long long)n, dec_length);
 	if (precision > 0)
 	{
 		*(s + dec_length) = '.';
-		rpart = get_fractional_part(n, precision);
-		fill_buff(s + dec_length + 1, rpart, ft_count_digits(rpart));
+		fill_frac(s + dec_length + 1, n, precision);
+		round_nearest(s + dec_length + 1, precision);
 	}
 	return (src);
 }

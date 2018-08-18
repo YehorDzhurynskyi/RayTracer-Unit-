@@ -6,95 +6,100 @@
 /*   By: ydzhuryn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 15:08:24 by ydzhuryn          #+#    #+#             */
-/*   Updated: 2018/01/05 17:20:48 by ydzhuryn         ###   ########.fr       */
+/*   Updated: 2018/06/11 14:54:17 by pzubar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "window.h"
-#include <SDL.h>
-#include "error.h"
+#include "ft.h"
+#include "gui.h"
+#include "logger.h"
+#include "renderer.h"
+#include <SDL_image.h>
 
 static SDL_Window		*g_sdl_window = NULL;
-static SDL_Renderer		*g_sdl_renderer = NULL;
-static SDL_Texture		*g_sdl_texture = NULL;
-static unsigned char	*g_pixelbuffer = NULL;
-static t_bool			g_window_should_close = FALSE;
+static SDL_GLContext	*g_sdl_gl_context = NULL;
+static GLuint			g_gl_render_target_name;
 
-extern int				g_frame_width;
-extern int				g_frame_height;
+t_byte					*g_pixelbuffer = NULL;
+t_bool					g_window_should_close = FALSE;
 
-#define WINDOW_TITLE	"RT"
+const int				g_frame_width = 800;
+const int				g_frame_height = 600;
 
-static void				window_cleanup(void)
+void					window_cleanup(void)
 {
 	free(g_pixelbuffer);
-	SDL_DestroyTexture(g_sdl_texture);
-	SDL_DestroyRenderer(g_sdl_renderer);
-	SDL_DestroyWindow(g_sdl_window);
+	if (g_sdl_gl_context != NULL)
+		glDeleteTextures(1, &g_gl_render_target_name);
+	if (g_sdl_gl_context != NULL)
+		SDL_GL_DeleteContext(g_sdl_gl_context);
+	if (g_sdl_window != NULL)
+		SDL_DestroyWindow(g_sdl_window);
 	SDL_Quit();
 }
 
-t_bool					window_create(void)
+static void				generate_render_target(void)
+{
+	glGenTextures(1, &g_gl_render_target_name);
+	glBindTexture(GL_TEXTURE_2D, g_gl_render_target_name);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, g_frame_width,
+	g_frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+}
+
+void					window_create(void)
 {
 	while (TRUE)
 	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 			break ;
-		g_sdl_window = SDL_CreateWindow(WINDOW_TITLE,
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, TRUE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		g_sdl_window = SDL_CreateWindow(RT_APP_NAME,
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		g_frame_width, g_frame_height, 0);
-		if (g_sdl_window == NULL)
+		WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
+		if (g_sdl_window == NULL
+		|| (g_sdl_gl_context = SDL_GL_CreateContext(g_sdl_window)) == NULL)
 			break ;
-		g_sdl_renderer = SDL_CreateRenderer(g_sdl_window, -1,
-		SDL_RENDERER_ACCELERATED /*| SDL_RENDERER_PRESENTVSYNC*/); // uncomment it on release
-		if (g_sdl_renderer == NULL)
-			break ;
-		g_sdl_texture = SDL_CreateTexture(g_sdl_renderer, SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING, g_frame_width, g_frame_height);
-		if (g_sdl_texture == NULL)
-			break ;
-		g_pixelbuffer = (unsigned char*)malloc(g_frame_width * g_frame_height * 4);
+		g_pixelbuffer = (unsigned char*)malloc(g_frame_width
+		* g_frame_height * 4);
 		if (g_pixelbuffer == NULL)
 			break ;
-		return (TRUE);
+		ft_bzero(g_pixelbuffer, g_frame_width * g_frame_height * 4);
+		generate_render_target();
+		return ;
 	}
 	window_cleanup();
-	print_error(SDL_GetError());
-	return (FALSE);
+	log_fatal("SDL window creation was failed", RT_SDL_ERROR);
 }
 
-static void				poll_events(void)
-{
-	SDL_Event	event;
-
-	while (SDL_PollEvent(&event))
-	{
-		if (event.type == SDL_QUIT)
-			g_window_should_close = TRUE;
-		else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-			g_window_should_close = TRUE;
-	}
-}
-
-void					window_loop(t_render_callback render_callback, void *user_ptr)
+void					window_loop(void)
 {
 	Uint64	start;
 	Uint64	freq;
-	double	mseconds;
+	float	mseconds;
 
 	freq = SDL_GetPerformanceFrequency();
+	glClearColor(0.85f, 0.85f, 0.85f, 1.0f);
+	gui_init(g_sdl_window, g_gl_render_target_name);
 	while (!g_window_should_close)
 	{
+		glClear(GL_COLOR_BUFFER_BIT);
 		start = SDL_GetPerformanceCounter();
-		poll_events();
-		SDL_RenderClear(g_sdl_renderer);
-		ft_bzero(g_pixelbuffer, g_frame_width * g_frame_height * 4);
-		render_callback(g_pixelbuffer, g_frame_width, g_frame_height, user_ptr);
-		SDL_UpdateTexture(g_sdl_texture, NULL, g_pixelbuffer, g_frame_width * 4);
-		SDL_RenderCopy(g_sdl_renderer, g_sdl_texture, NULL, NULL);
-		SDL_RenderPresent(g_sdl_renderer);
-		mseconds = (SDL_GetPerformanceCounter() - start) / (double)freq * 1000.0;
-		ft_printf("FPS: %d, %fms\n", (int)(1000 / mseconds), mseconds);
+		gui_poll_events(&g_main_scene);
+		glBindTexture(GL_TEXTURE_2D, g_gl_render_target_name);
+		gui_render_scene(mseconds);
+		gui_render();
+		SDL_GL_SwapWindow(g_sdl_window);
+		mseconds = (SDL_GetPerformanceCounter() - start)
+		/ (float)freq * 1000.0f;
 	}
-	window_cleanup();
+	sleep(1);
+	gui_cleanup();
 }

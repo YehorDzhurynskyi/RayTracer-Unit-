@@ -1,0 +1,38 @@
+skybox: "city"
+camera:
+	position: [0.0 0.0 -5.0]
+	spot: [5.0 5.0 5.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		diffuse_color: "0x00ffd700"
+		specular_color: "0x00ffd700"
+		glossiness: 0.2
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "parallelepiped"
+			position: [5.0 5.0 5.0]
+			width: 1.0
+			height: 1.0
+			depth: 1.0
+		}
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		attenuation: [1.0 0.0 0.0]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 5.0 5.0]
+		}
+	}
+]

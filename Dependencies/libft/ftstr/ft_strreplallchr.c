@@ -14,28 +14,14 @@
 #include <string.h>
 #include "libft.h"
 
-char	*ft_strreplallchr(char const *s, char from, char to)
+void	ft_strreplallchr(char *src, char from, char to)
 {
-	char	*new;
-	char	*src;
-	size_t	len;
-
-	if (!from || !to || !s)
-		return (NULL);
-	len = ft_strlen(s);
-	new = (char *)malloc(sizeof(char) * (len + 1));
-	if (!new)
-		return (NULL);
-	src = new;
-	new[len] = '\0';
-	while (*s)
+	if (from == '\0' || to == '\0' || src == NULL)
+		return ;
+	while (*src)
 	{
-		if (*s == from)
-			*new = to;
-		else
-			*new = *s;
-		s++;
-		new++;
+		if (*src == from)
+			*src = to;
+		src++;
 	}
-	return (src);
 }

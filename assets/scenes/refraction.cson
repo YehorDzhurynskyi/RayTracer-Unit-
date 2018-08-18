@@ -1,0 +1,202 @@
+ambient: 0.15
+camera:
+	position: [-4.0 2.0 -4.0]
+	spot: [0.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse_color": "0x8833ffff"
+		"specular_color": "0x0033ffff"
+		glossiness: 0.8
+		ior: 1.1
+	}
+	{
+		"diffuse_color": "0xaa33ffff"
+		"specular_color": "0x0033ffff"
+		glossiness: 0.8
+		ior: 1.1
+	}
+	{
+		"diffuse_color": "0xbb33ffff"
+		"specular_color": "0x0033ffff"
+		glossiness: 0.8
+		ior: 1.1
+	}
+	{
+		"diffuse_color": "0xdd33ffff"
+		"specular_color": "0x0033ffff"
+		glossiness: 0.8
+		ior: 1.1
+	}
+	{
+		"diffuse_color": "0xaaaa33ee"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{ #5
+		"diffuse_color": "0x002211aa"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00ffff33"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00ffffff"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x003333ff"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x0033ff33"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{ #10
+		"diffuse_color": "0x00ff3333"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00ff33ff"
+		"specular_color": "0x00dddddd"
+		glossiness: 0.8
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [8.0 8.0 4.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [0.0 0.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 2
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [-8.0 -8.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 3
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [-16.0 -16.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "sphere"
+			position: [0.0 0.0 4.0]
+			radius: 0.8
+		}
+	}
+	{
+		relation: "union"
+		material: 5
+		primitive: {
+			type: "sphere"
+			position: [0.0 0.0 -4.0]
+			radius: 1.0
+		}
+	}
+# WALLS
+	{
+		relation: "union"
+		material: 6
+		primitive: {
+			type: "plane"
+			position: [0.0 -20.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 7
+		primitive: {
+			type: "plane"
+			position: [0.0 20.0 0.0]
+			orientation: [180.0 0.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 8
+		primitive: {
+			type: "plane"
+			position: [-20.0 0.0 0.0]
+			orientation: [0.0 0.0 90.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 9
+		primitive: {
+			type: "plane"
+			position: [20.0 0.0 0.0]
+			orientation: [0.0 0.0 -90.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 10
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 20.0]
+			orientation: [90.0 0.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 11
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -20.0]
+			orientation: [-90.0 0.0 0.0]
+		}
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [0.0 3.0 -4.0]
+		attenuation: [0.8 0.001 0.0005]
+		intensity: 0.7
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]

@@ -1,0 +1,154 @@
+ambient: 0.30
+"anti_aliasing": "NOAA"
+"global_illumination": false
+"trace_depth": 15
+fov: 60.0
+skybox: "church"
+camera:
+	position: [0.0 0.0 15.0]
+	forward: [0.0 0.0 -1.0]
+	right: [1.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		"diffuse_color": "0x00d8bda1"
+		"specular_color": "0x00d8bda1"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00111111"
+		"specular_color": "0x00111111"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00fafafa"
+		"specular_color": "0x00fafafa"
+		glossiness: 0.2
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x00b67575"
+		"specular_color": "0x00b67575"
+		glossiness: 0.0
+		ior: 1.0
+	}
+	{
+		"diffuse_color": "0x007a4709"
+		"specular_color": "0x007a4709"
+		glossiness: 0.0
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		primitive: {
+			type: "composite"
+			position: [0.0 0.0 0.0]
+		}
+		children: [
+			# head
+			{
+				relation: "union"
+				primitive: {
+					type: "sphere"
+					radius: 2.0
+					position: [0.0 0.0 0.0]
+				}
+				material: 0
+			}
+			# ears
+			{
+				relation: "union"
+				primitive: {
+					type: "sphere"
+					radius: 1.2
+					position: [1.5 2.0 0.0]
+				}
+				material: 1
+			}
+			{
+				relation: "union"
+				primitive: {
+					type: "sphere"
+					radius: 1.2
+					position: [-1.5 2.0 0.0]
+				}
+				material: 1
+			}
+			{
+				relation: "negation"
+				primitive: {
+					type: "cylinder"
+					radius: 0.2
+					position: [2.2 2.8 0.0]
+					orientation: [90.0 0.0 0.0]
+				}
+				material: 3
+			}
+			# eye pits
+			{
+				relation: "negation"
+				primitive: {
+					type: "sphere"
+					radius: 0.5
+					position: [0.5 0.5 2.0]
+				}
+				material: 2
+			}
+			{
+				relation: "negation"
+				primitive: {
+					type: "sphere"
+					radius: 0.5
+					position: [-0.5 0.5 2.0]
+				}
+				material: 2
+			}
+			# nose
+			{
+				relation: "union"
+				primitive: {
+					type: "sphere"
+					radius: 0.3
+					position: [0.0 -0.15 2.0]
+				}
+				material: 1
+			}
+			# mouth
+			{
+				relation: "negation"
+				primitive: {
+					type: "sphere"
+					radius: 0.5
+					position: [0.0 -0.8 1.4]
+				}
+				material: 3
+			}
+			# fire exit
+			{
+				relation: "negation"
+				primitive: {
+					type: "sphere"
+					radius: 0.2
+					position: [0.0 -1.5 -1.4]
+				}
+				material: 3
+			}
+		]
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [0.0 -5.0 15.0]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]

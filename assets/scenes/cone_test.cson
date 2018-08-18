@@ -1,0 +1,106 @@
+ambient: 0.15
+camera:
+	position: [0.0 0.0 20.0]
+	spot: [0.0 0.0 -10.0]
+	up: [0.0 1.0 0.0]
+shapes: [
+	{
+		type: "cone"
+		angle: 15.0
+		position: [0.0 0.0 -10.0]
+		direction: [0.0 0.0 -1.0]
+		color: "0x00ff0000"
+		shininess: 40.0
+		glossiness: 1.0
+	}
+	{
+		type: "cone"
+		angle: 15.0
+		position: [5.0 0.0 -10.0]
+		direction: [0.0 1.0 0.0]
+		color: "0x000000ff"
+		shininess: 40.0
+		glossiness: 1.0
+	}
+	{
+		type: "cone"
+		angle: 15.0
+		position: [-5.0 0.0 -10.0]
+		direction: [0.0 -1.0 0.0]
+		color: "0x0000ff00"
+		shininess: 40.0
+		glossiness: 1.0
+	}
+	{
+		type: "cone"
+		angle: 15.0
+		position: [-5.0 0.0 0.0]
+		direction: [-1.0 -1.0 0.0]
+		color: "0x00ffff00"
+		shininess: 40.0
+		glossiness: 1.0
+	}
+	{
+		type: "cone"
+		angle: 15.0
+		position: [5.0 0.0 0.0]
+		direction: [3.0 1.0 0.0]
+		color: "0x0000ffff"
+		shininess: 5.0
+		glossiness: 1.0
+	}
+# ROOM BOX
+	{
+		type: "plane"
+		position: [0.0 0.0 -15.0]
+		normal: [0.0 0.0 1.0]
+		color: "0x00808080"
+	}
+	{
+		type: "plane"
+		position: [10.0 0.0 0.0]
+		normal: [-1.0 0.0 0.0]
+		color: "0x00808080"
+	}
+	{
+		type: "plane"
+		position: [-10.0 0.0 0.0]
+		normal: [1.0 0.0 0.0]
+		color: "0x00808080"
+	}
+	{
+		type: "plane"
+		position: [0.0 5.0 0.0]
+		normal: [0.0 -1.0 0.0]
+		color: "0x00808080"
+	}
+	{
+		type: "plane"
+		position: [0.0 -5.0 0.0]
+		normal: [0.0 1.0 0.0]
+		color: "0x00808080"
+	}
+]
+lights: [
+	{
+		type: "point"
+		position: [5.0 0.0 -5.0]
+		attenuation: [0.44 0.05 0.002]
+		color: "0x00aaaaFF"
+		intensity: 0.5
+	}
+	{
+		type: "point"
+		position: [9.9 0.0 10.0]
+		attenuation: [0.44 0.05 0.002]
+		color: "0x00FFFFFF"
+		intensity: 0.5
+	}
+	{
+		type: "point"
+		position: [0.0 0.0 100.0]
+		attenuation: [0.44 0.05 0.002]
+		color: "0x00FFFFFF"
+		intensity: 0.5
+	}
+]

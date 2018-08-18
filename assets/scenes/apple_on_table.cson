@@ -1,0 +1,32 @@
+ambient: 0.15
+camera:
+	position: [0.0 50.0 50.0]
+	forward: [0.0 -0.707 -0.707]
+	right: [1.0 0.0 0.0]
+	up: [0.0 0.707 -0.707]
+	spot: [0.0 0.0 0.0]
+shapes: [
+	{
+		type: "sphere"
+		radius: 1.0
+		position: [0.0 3.0 0.0]
+		color: "0x000000ff"
+	}
+	{
+		type: "plane"
+		normal: [0.0 1.0 0.0]
+		position: [0.0 -5.0 0.0]
+		color: "0x00897b59"
+	}
+]
+lights: [
+	{
+		type: "spot"
+		position: [0.0 50.0 0.0]
+		attenuation: [0.75 0.001 0.0005]
+		intensity: 1.0
+		direction: [0.0 -1.0 0.0]
+		angle: 45.0
+		color: "0x00ffffff"
+	}
+]

@@ -13,50 +13,88 @@
 #ifndef SCENE_H
 # define SCENE_H
 
+# include "camera.h"
 # include "shape.h"
+# include "lightsource.h"
+# include "material.h"
+# include "texture.h"
 
-typedef struct	__attribute__ ((packed)) s_camera
-{
-	t_clmat4x4	rotation_matrix;
-	t_clvec4	position;
-}	t_camera;
+# define SHAPEBUFF_CAPACITY			1024 * 12
+# define LIGHTSOURCEBUFF_CAPACITY	1024 * 4
+# define MATERIALBUFF_CAPACITY		1024 * 1
+# define TEXTUREBUFF_CAPACITY		1024 * 1
 
-typedef struct
-{
-	cl_mem			shapebuffer;
-	void			*host_shapebuffer;
-	size_t			shapebuffer_size;
-	unsigned int	nshapes;
-	cl_mem			lightbuffer;
-	void			*host_lightbuffer;
-	size_t			lightbuffer_size;
-	unsigned int	nlights;
-	t_camera		camera;
-	// cube map texture
-}	t_scene;
+# define SCENE_DIR		RT_CWD "/assets/scenes/"
+# define SKYBOX_DIR		RT_CWD "/assets/skyboxes/"
+# define TEXTURE_DIR	RT_CWD "/assets/textures/"
+
+# define NONE_SELECTED_ADDR	-1
+
+# define NONE_SELECTED_ADDR	-1
 
 typedef enum
 {
-	SHAPE_BUFFER_TARGET = 1,
-	LIGHT_BUFFER_TARGET
-}	t_buffer_target;
+	NONE_TARGET = 0,
+	SHAPEBUFF_TARGET,
+	LIGHTSOURCEBUFF_TARGET,
+	MATERIALBUFF_TARGET,
+	TEXTUREBUFF_TARGET
+}	t_buff_target;
 
-t_scene	scene_create(void);
-void	scene_cleanup(t_scene *scene);
-void	scene_unmap(t_scene *scene, t_buffer_target target);
+typedef enum
+{
+	NOAA = 1,
+	SSAAx4,
+	SSAAx8
+}	t_aa;
 
-void	scene_add_sphere(t_scene *scene, t_shape *shape, const t_sphere *sphere);
-void	scene_update_sphere(t_scene *scene, const t_shape *shape, const t_sphere *sphere);
+typedef struct			__attribute__ ((packed))
+{
+	cl_int				trace_depth;
+	t_aa				aa;
+	t_clscalar			ambient;
+	t_clscalar			fov;
+	t_claddress			selected_shape_addr;
+	t_clbool			cartoon_vfx_enabled;
+}	t_scene_config;
 
-void	scene_add_plane(t_scene *scene, t_shape *shape, const t_plane *plane);
-void	scene_update_plane(t_scene *scene, const t_shape *shape, const t_plane *plane);
+typedef struct			__attribute__ ((packed))
+{
+	cl_int				nshapes;
+	cl_uint				shapes_size;
+	cl_int				nlightsources;
+	cl_uint				lightsources_size;
+	cl_int				nmaterials;
+	cl_uint				materials_size;
+	cl_int				ntextures;
+	cl_uint				textures_size;
+}	t_scene_meta;
 
-void	scene_add_cylinder(t_scene *scene, t_shape *shape, const t_cylinder *cylinder);
-void	scene_update_cylinder(t_scene *scene, const t_shape *shape, const t_cylinder *cylinder);
+typedef struct
+{
+	cl_mem				device_shapebuffer;
+	void				*host_shapebuffer;
+	cl_mem				device_lightsourcebuffer;
+	void				*host_lightsourcebuffer;
+	cl_mem				device_materialbuffer;
+	void				*host_materialbuffer;
+	cl_mem				device_texturebuffer;
+	void				*host_texturebuffer;
+	void				*mapped_device_buffer;
+	void				*mapped_host_buffer;
+	t_scene_config		config;
+	t_scene_meta		meta;
+	t_camera			camera;
+	cl_mem				skybox;
+	cl_mem				textures;
+	t_texture_map		texture_map;
+}	t_scene;
 
-void	scene_add_cone(t_scene *scene, t_shape *shape, const t_cone *cone);
-void	scene_update_cone(t_scene *scene, const t_shape *shape, const t_cone *cone);
+void					scene_init_memory(void);
+void					scene_rewind(t_scene *scene);
+void					scene_cleanup(void);
+void					scene_change(const char *scene_name);
 
-void	scene_remove(t_scene *scene, const t_shape *shape);
+extern t_scene			g_main_scene;
 
 #endif

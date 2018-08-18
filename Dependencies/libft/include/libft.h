@@ -15,7 +15,9 @@
 
 # include <string.h>
 
-typedef int			t_bool;
+typedef unsigned char	t_byte;
+
+typedef int				t_bool;
 
 # define TRUE 1
 # define FALSE 0
@@ -98,6 +100,7 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
+t_bool				ft_str_ends_with(const char *str, const char *needle);
 char				*ft_itoa(int n);
 void				ft_itoa_cat(char *dest, size_t size, int n);
 void				ft_putchar(char c);
@@ -130,7 +133,7 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *));
 char				*ft_str_format(const char *format, ...);
 void				*ft_lstreduce(t_list *lst, void *(*f)
 		(const void *, const void *));
-char				*ft_strreplallchr(char const *s, char from, char to);
+void				ft_strreplallchr(char *src, char from, char to);
 char				*ft_strreplallstr(char const *s, char const *from,
 		char const *to);
 int					mini(int *arr, size_t size);

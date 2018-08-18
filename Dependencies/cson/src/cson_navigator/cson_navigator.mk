@@ -5,6 +5,7 @@ CSON_CSON_NAVIGATOR_SRC	:=	cson_at.c\
 							cson_foreach.c\
 							cson_get_composite.c\
 							cson_get_primitive.c\
+							cson_get_default_primitive.c\
 							cson_root.c\
 							cson_size.c\
 							cson_type_composite.c\
@@ -16,4 +17,4 @@ CSON_CSON_NAVIGATOR		+=	$(addprefix $(CSON_CSON_NAVIGATOR_DIR), $(CSON_CSON_NAVI
 CSON_OBJ				+=	$(CSON_CSON_NAVIGATOR_OBJ)
 
 $(CSON_CSON_NAVIGATOR_OBJ): $(CSON_OBJ_DIR)%.o: $(CSON_CSON_NAVIGATOR_DIR)%.c
-	$(CC) $(CSON_CFLAGS) $(CSON_INCLUDE) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@

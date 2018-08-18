@@ -1,0 +1,107 @@
+camera:
+	position: [0.0 3.0 10.0]
+	spot: [0.0 1.0 0.0]
+	up: [0.0 1.0 0.0]
+materials: [
+	{
+		color: "0x00750e08"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		color: "0x00aaaaaa"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		color: "0x000000ff"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		color: "0x00ffff00"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
+	}
+	{
+		color: "0x00087508"
+		specularity: 0.5
+		glossiness: 0.3
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		relation: "union"
+		material: 0
+		primitive: {
+			type: "sphere"
+			position: [0.0 1.5 2.0]
+			radius: 1.5
+		}
+	}
+	{
+		relation: "union"
+		material: 1
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 2
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -15.0]
+			orientation: [-90.0 0.0 0.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 3
+		primitive: {
+			type: "cone"
+			angle: 35.0
+			position: [2.0 2.0 0.0]
+			orientation: [30.0 0.0 -30.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 3
+		primitive: {
+			type: "cone"
+			angle: 35.0
+			position: [2.0 2.0 0.0]
+			orientation: [210.0 0.0 30.0]
+		}
+	}
+	{
+		relation: "union"
+		material: 4
+		primitive: {
+			type: "cylinder"
+			radius: 1.0
+			position: [-4.0 0.0 4.0]
+			orientation: [30.0 0.0 30.0]
+		}
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [5.0 1.0 10.0]
+		attenuation: [0.8 0.005 0.008]
+		intensity: 1.0
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]

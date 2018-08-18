@@ -1,0 +1,124 @@
+camera:
+	position: [0.0 1.0 -4.0]
+	forward: [0.0 0.0 1.0]
+	right: [-1.0 0.0 0.0]
+	up: [0.0 1.0 0.0]
+ambient: 0.1
+materials: [
+	{
+		diffuse_color: "0x00ff3333"
+		specular_color: "0x00ff3333"
+		glossiness: 0.4
+		ior: 1.0
+	}
+	{
+		diffuse_color: "0x0033ff33"
+		specular_color: "0x0033ff33"
+		glossiness: 0.4
+		ior: 1.0
+	}
+	{
+		diffuse_color: "0x003333ff"
+		specular_color: "0x003333ff"
+		glossiness: 0.4
+		ior: 1.0
+	}
+	{
+		diffuse_color: "0x004e6993"
+		specular_color: "0x004e6993"
+		glossiness: 0.1
+		ior: 1.0
+	}
+	{
+		diffuse_color: "0x00111111"
+		specular_color: "0x00111111"
+		glossiness: 0.75
+		ior: 1.0
+	}
+]
+shapes: [
+	{
+		material: 0
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [0.0 0.0 0.0]
+		}
+	}
+	{
+		material: 1
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [1.0 -1.0 1.0]
+		}
+	}
+	{
+		material: 2
+		primitive: {
+			type: "sphere"
+			radius: 1.0
+			position: [-1.0 -1.0 1.0]
+		}
+	}
+#MIRRORS
+	{
+		material: 4
+		primitive: {
+			type: "plane"
+			position: [-5.0 0.0 0.0]
+			orientation: [0.0 0.0 90.0]
+		}
+	}
+	{
+		material: 4
+		primitive: {
+			type: "plane"
+			position: [5.0 0.0 0.0]
+			orientation: [0.0 0.0 90.0]
+		}
+	}
+	{
+		material: 4
+		primitive: {
+			type: "plane"
+			position: [0.0 5.0 0.0]
+		}
+	}
+	{
+		material: 3
+		primitive: {
+			type: "plane"
+			position: [0.0 -5.0 0.0]
+		}
+	}
+	{
+		material: 4
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 -5.0]
+			orientation: [90.0 0.0 0.0]
+		}
+	}
+	{
+		material: 4
+		primitive: {
+			type: "plane"
+			position: [0.0 0.0 5.0]
+			orientation: [90.0 0.0 0.0]
+		}
+	}
+]
+lightsources: [
+	{
+		type: "point"
+		position: [0.0 3.0 0.0]
+		attenuation: [0.40 0.005 0.001]
+		intensity: 0.8
+		color: "0x00ffffff"
+		primitive: {
+			type: "point"
+			position: [0.0 0.0 0.0]
+		}
+	}
+]
